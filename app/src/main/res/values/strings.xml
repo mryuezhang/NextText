@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">NextText</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_save_new_message_configure">Next</string>
+    <string name="action_confirm_new_message">Save</string>
+    <string name="action_cancel_confirm_new_message">Cancel</string>
+    <string name="action_cancel_new_message_configure">Cancel</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="sms">SMS</string>
+    <string name="email">E-mail</string>
+    <string name="choose_message_type">Choose message type: </string>
+    <string name="choose_message_base">Choose message base: </string>
+    <string name="message_time_base">Time Base</string>
+    <string name="message_location_base">Location Base</string>
+    <string name="message_weather_base">Weather Base</string>
+    <string name="message_title">enter message title</string>
+    <string name="meesage_content">Enter message content</string>
+    <string name="label_new_message">New Message</string>
+</resources>
