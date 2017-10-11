@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_configure.*
-import kotlinx.android.synthetic.main.fragment_email_layout.*
-import kotlinx.android.synthetic.main.fragment_sms_object.*
 
 /**
  * Created by yue on 2017-09-30.
@@ -41,10 +39,16 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            android.R.id.home -> NavUtils.navigateUpFromSameTask(this);
+            android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
+            R.id.action_save_new_message_configure -> createNewMesage()
             else -> super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    //MARK: Private methods
+    private fun createNewMesage(){
+
     }
 
     companion object {
@@ -71,7 +75,6 @@ class MessageConfigureActivity : AppCompatActivity() {
     class SMSObjectFragment: Fragment(){
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             val view = inflater?.inflate(R.layout.fragment_sms_object, container, false)
-            textView_sms_frag?.text = resources.getString(R.string.sms)
             return view
         }
     }
@@ -80,7 +83,6 @@ class MessageConfigureActivity : AppCompatActivity() {
     class EmailObjectFragment: Fragment(){
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             val view = inflater?.inflate(R.layout.fragment_email_layout, container, false)
-            textView_email_frag?.text = resources.getString(R.string.email)
             return view
         }
     }

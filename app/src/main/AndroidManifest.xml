@@ -19,21 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.yue.nexttext.UI.MessageConfigureActivity_Old"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/label_new_message"
-            >
-        </activity>
-        <activity android:name=".UI.MessageConfirmationActivity">
-        </activity>
-
         <activity android:name=".UI.MessageConfigureActivity"
-            android:label="@string/label_new_message"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".UI.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UI.MainActivity"/>
+            android:parentActivityName=".UI.MainActivity"
+            android:label="New Message"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".UI.NewEmailActivity"
+            android:label="New Email">
         </activity>
     </application>
 

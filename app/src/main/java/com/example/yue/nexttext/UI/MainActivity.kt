@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             1->{
                 when(resultCode){
                     Activity.RESULT_OK -> receiveMessageAndUpdateListView(data)
-                    Activity.RESULT_CANCELED -> cancel(data)
+                    //Activity.RESULT_CANCELED -> cancel(data)
                 }
             }
         }
@@ -78,12 +78,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
     private fun editMessage(i: Int){
         val intent = MessageConfigureActivity_Old.getStartActivityIntent(this)
         intent.putExtra("selected_message", message_ArrayList[i])
         message_ArrayList.removeAt(i)
         startActivityForResult(intent, 1)
     }
+    */
 
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val message: Message? = data?.getParcelableExtra<Message>("message")
@@ -107,3 +109,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(MessageConfigureActivity.getStartActivityIntent(this))
     }
 }
+
+

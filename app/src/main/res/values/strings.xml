@@ -17,4 +17,6 @@
     <string name="message_title">enter message title</string>
     <string name="meesage_content">Enter message content</string>
     <string name="label_new_message">New Message</string>
+    <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="findContact">Find Contact</string>
 </resources>
