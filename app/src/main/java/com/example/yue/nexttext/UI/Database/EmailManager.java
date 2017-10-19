@@ -20,6 +20,7 @@ public class EmailManager extends SQLiteOpenHelper {
     private static final String TABLE_EMAILS = "emails";
 
     private static final String KEY_ID = "id";
+    private static final String KEY_FROM = "from";
     private static final String KEY_TO = "to";
     private static final String KEY_SUBJECT = "subject";
     private static final String KEY_MESSAGE = "message";
@@ -31,7 +32,7 @@ public class EmailManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_EMAILS_TABLE = "CREATE TABLE " + TABLE_EMAILS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TO + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_FROM + " TEXT," + KEY_TO + " TEXT,"
                 + KEY_SUBJECT + " TEXT," + KEY_MESSAGE + " TEXT," + ")";
         db.execSQL(CREATE_EMAILS_TABLE);
     }
@@ -50,6 +51,7 @@ public class EmailManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_FROM, email.getFrom());
         values.put(KEY_TO, email.getTo());
         values.put(KEY_SUBJECT, email.getSubject());
         values.put(KEY_MESSAGE, email.getMessage());
@@ -70,7 +72,7 @@ public class EmailManager extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         Email email = new Email(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(3));
 
         return email;
     }
@@ -114,6 +116,7 @@ public class EmailManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_FROM, email.getFrom());
         values.put(KEY_TO, email.getTo());
         values.put(KEY_SUBJECT, email.getSubject());
         values.put(KEY_MESSAGE, email.getMessage());

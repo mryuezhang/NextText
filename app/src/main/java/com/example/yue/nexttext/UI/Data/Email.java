@@ -9,11 +9,12 @@ import android.os.Parcelable;
  */
 
 public class Email extends MessageCondition implements Parcelable {
-    private String to, subject, message;
+    private String from, to, subject, message;
     private int id;
 
-    public Email(int id, String to, String subject, String message){
+    public Email(int id, String from, String to, String subject, String message){
         this.id = id;
+        this.from = from;
         this.to = to;
         this.subject = subject;
         this.message = message;
@@ -22,6 +23,7 @@ public class Email extends MessageCondition implements Parcelable {
     public Email() {}
 
     protected Email(Parcel in) {
+        from = in.readString();
         to = in.readString();
         subject = in.readString();
         message = in.readString();
@@ -42,6 +44,8 @@ public class Email extends MessageCondition implements Parcelable {
 
     public int getId() { return id; }
     public void setId(int newId) { id = newId; }
+    public String getFrom(){ return from; }
+    public void setFrom(String newFrom) { this.to = newFrom; }
     public String getTo(){ return to; }
     public void setTo(String newTo) { this.to = newTo; }
     public String getSubject(){ return subject; }
