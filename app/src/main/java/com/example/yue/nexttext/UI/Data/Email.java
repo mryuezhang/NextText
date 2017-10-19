@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Data;
+package com.example.yue.nexttext.UI.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Created by jamesmulvenna on 2017-09-28.
  */
 
-public class Email implements Parcelable {
+public class Email extends MessageCondition implements Parcelable {
     private String to, subject, message;
     private int id;
 

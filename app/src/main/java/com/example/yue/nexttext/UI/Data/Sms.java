@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Data;
+package com.example.yue.nexttext.UI.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by jamesmulvenna on 2017-09-28.
  */
 
-public class Sms implements Parcelable{
+public class Sms extends MessageCondition implements Parcelable {
     private String name, phone, message;
     private int id;
 
@@ -52,6 +52,12 @@ public class Sms implements Parcelable{
     public void setPhone(String newPhone){this.phone = newPhone; }
     public String getMessage(){ return message; }
     public void setMessage(String newMessage) { this.message = newMessage; }
+    public Time getTime() { return time; }
+    public void setTime(Time newTime) { time = newTime;}
+    public Location getLocation(){return location; }
+    public void setLocation(Location newLocation) { location = newLocation; }
+    public Weather getWeather(){return weather; }
+    public void setWeather(Weather newWeather) { weather = newWeather; }
 
     @Override
     public String toString() {

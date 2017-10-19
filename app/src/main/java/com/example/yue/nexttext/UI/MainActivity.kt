@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val message: Message? = data?.getParcelableExtra<Message>("message")
         if(message == null){
-            Log.e(TAG, "Received Message object is Null!")
+            Log.e(TAG, "Received MessageCondition object is Null!")
         }
         else {
             message_ArrayList.add(0,message)

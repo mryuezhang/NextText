@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Database;
+package com.example.yue.nexttext.UI.Database;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,7 +7,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.yue.nexttext.Data.Email;
+import com.example.yue.nexttext.UI.Data.Email;
 
 /**
  * Created by jamesmulvenna on 2017-09-29.

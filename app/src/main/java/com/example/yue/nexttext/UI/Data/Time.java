@@ -1,4 +1,7 @@
-package com.example.yue.nexttext.Data;
+package com.example.yue.nexttext.UI.Data;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -7,7 +10,7 @@ import java.util.Calendar;
  * Created by jamesmulvenna on 2017-09-28.
  */
 
-public class Time implements Serializable {
+public class Time implements Parcelable {
     private String date;
     private String time;
     private int type;
@@ -19,6 +22,25 @@ public class Time implements Serializable {
     }
 
     public Time() {}
+
+    protected Time(Parcel in) {
+        date = in.readString();
+        time = in.readString();
+        type = in.readInt();
+        status = in.readInt();
+    }
+
+    public static final Creator<Time> CREATOR = new Creator<Time>() {
+        @Override
+        public Time createFromParcel(Parcel in) {
+            return new Time(in);
+        }
+
+        @Override
+        public Time[] newArray(int size) {
+            return new Time[size];
+        }
+    };
 
     public String getDate() {
         return date;
@@ -101,5 +123,18 @@ public class Time implements Serializable {
         System.out.println(calendar.getTime().toString());
 
         return calendar;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(date);
+        parcel.writeString(time);
+        parcel.writeInt(type);
+        parcel.writeInt(status);
     }
 }

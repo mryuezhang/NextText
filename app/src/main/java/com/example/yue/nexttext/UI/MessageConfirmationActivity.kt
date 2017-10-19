@@ -43,7 +43,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
     private fun confirmMessage(){
         val received_Message: Message? = intent.getParcelableExtra("message")
         if(received_Message == null){
-            Log.e(TAG, "Received Message object is Null!")
+            Log.e(TAG, "Received MessageCondition object is Null!")
         }
         else{
             val intent = Intent()

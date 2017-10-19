@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Database;
+package com.example.yue.nexttext.UI.Database;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,8 +7,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.yue.nexttext.Data.Email;
-import com.example.yue.nexttext.Data.Sms;
+import com.example.yue.nexttext.UI.Data.Sms;
 
 /**
  * Created by jamesmulvenna on 2017-09-29.
@@ -46,7 +45,7 @@ public class SmsManager extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Adding new email
+    // Adding new sms
     public void addSms(Sms sms) {
         SQLiteDatabase db = this.getWritableDatabase();
 
