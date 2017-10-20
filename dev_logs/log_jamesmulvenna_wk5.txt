@@ -1,0 +1,4 @@
+- Worked on db and basic classes, phone filter class (filters contacts)
+- Met with team to talk about how to pair ui and backend, need something feasible to start testing, next big step in this process
+
+Hours: 12

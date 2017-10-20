@@ -1,0 +1,4 @@
+- Realized the team needed structure, had some complications but set out plan for october, beginning to implement email sending service, weather api
+- assigned Devon map task
+
+Hours: 7
