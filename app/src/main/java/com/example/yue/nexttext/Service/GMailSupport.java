@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.UI.Service;
+package com.example.yue.nexttext.Service;
 
 /**
  * Created by jamesmulvenna on 2017-10-19.
@@ -26,7 +26,7 @@ public class GMailSupport extends javax.mail.Authenticator {
     private Session session;
 
     static {
-        Security.addProvider(new com.example.yue.nexttext.UI.Service.JSSEProvider());
+        Security.addProvider(new JSSEProvider());
     }
 
     public GMailSupport(String user, String password) {

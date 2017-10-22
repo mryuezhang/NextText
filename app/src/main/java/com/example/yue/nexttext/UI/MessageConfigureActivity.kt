@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_message_configure.*
 
 /**
  * Created by yue on 2017-09-30.
- * This class is used to display a collection of SMS and Email objects
+ * This class is used to display a collection of SMS and Message objects
  */
 class MessageConfigureActivity : AppCompatActivity() {
 
@@ -67,7 +67,7 @@ class MessageConfigureActivity : AppCompatActivity() {
 
         override fun getPageTitle(position: Int): CharSequence = when(position){
             0 -> "SMS"
-            else -> "Email"
+            else -> "Message"
         }
     }
 

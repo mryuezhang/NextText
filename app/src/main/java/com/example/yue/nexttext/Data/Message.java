@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.UI.Data;
+package com.example.yue.nexttext.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,44 +8,42 @@ import android.os.Parcelable;
  * Created by jamesmulvenna on 2017-09-28.
  */
 
-public class Email extends MessageCondition implements Parcelable {
-    private String from, to, subject, message;
-    private int id;
+public class Message implements Parcelable {
+    private String from, password, to, subject, message;
 
-    public Email(int id, String from, String to, String subject, String message){
-        this.id = id;
+    public Message() {}
+
+    public Message(String from, String password, String to, String subject, String message){
         this.from = from;
+        this.password = password;
         this.to = to;
         this.subject = subject;
         this.message = message;
     }
 
-    public Email() {}
-
-    protected Email(Parcel in) {
+    protected Message(Parcel in) {
         from = in.readString();
         to = in.readString();
         subject = in.readString();
         message = in.readString();
-        id = in.readInt();
     }
 
-    public static final Creator<Email> CREATOR = new Creator<Email>() {
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
         @Override
-        public Email createFromParcel(Parcel in) {
-            return new Email(in);
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
         }
 
         @Override
-        public Email[] newArray(int size) {
-            return new Email[size];
+        public Message[] newArray(int size) {
+            return new Message[size];
         }
     };
 
-    public int getId() { return id; }
-    public void setId(int newId) { id = newId; }
     public String getFrom(){ return from; }
-    public void setFrom(String newFrom) { this.to = newFrom; }
+    public void setFrom(String newFrom) { this.from = newFrom; }
+    public String getPassword(){ return password; }
+    public void setPassword(String newPassword) { this.password = newPassword; }
     public String getTo(){ return to; }
     public void setTo(String newTo) { this.to = newTo; }
     public String getSubject(){ return subject; }
@@ -63,6 +61,5 @@ public class Email extends MessageCondition implements Parcelable {
         parcel.writeString(to);
         parcel.writeString(subject);
         parcel.writeString(message);
-        parcel.writeInt(id);
     }
 }

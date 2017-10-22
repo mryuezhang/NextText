@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.UI.Service;
+package com.example.yue.nexttext.Service;
 
 /**
  * Created by jamesmulvenna on 2017-10-19.
