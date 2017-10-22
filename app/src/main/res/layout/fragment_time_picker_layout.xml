@@ -13,13 +13,13 @@
         android:gravity="end|center"
         android:textAlignment="gravity"
         android:padding="8dp"
-        android:TAG="@string/date"
+        android:tag="@string/date"
         android:text="@string/dummy_date"
         android:textSize="@dimen/larger_text_size"
         android:textStyle="bold"/>
 
     <com.example.yue.nexttext.UI.TextViewWithPrefix
-        android:TAG="@string/time"
+        android:tag="@string/time"
         android:gravity="end|center"
         android:id="@+id/time_display"
         android:layout_width="match_parent"

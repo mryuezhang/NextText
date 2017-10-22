@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:padding="16dp"
-        android:TAG="To " />
+        android:tag="To " />
 
     <EditText
         android:id="@+id/editText_emailSubject"
