@@ -1,8 +1,15 @@
-package com.example.yue.nexttext.UI.Service;
+package com.example.yue.nexttext.Service;
 
 /**
  * Created by jamesmulvenna on 2017-10-19.
  */
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.Security;
+import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -12,12 +19,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.Security;
-import java.util.Properties;
 
 public class GMailSupport extends javax.mail.Authenticator {
     private String mailhost = "smtp.gmail.com";
@@ -26,7 +27,7 @@ public class GMailSupport extends javax.mail.Authenticator {
     private Session session;
 
     static {
-        Security.addProvider(new com.example.yue.nexttext.UI.Service.JSSEProvider());
+        Security.addProvider(new JSSEProvider());
     }
 
     public GMailSupport(String user, String password) {

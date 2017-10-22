@@ -1,7 +1,10 @@
-package com.example.yue.nexttext.UI.Data;
+package com.example.yue.nexttext.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,9 +13,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by jamesmulvenna on 2017-10-13.
@@ -90,11 +90,8 @@ public class Weather implements Parcelable {
     public boolean isGreater(int originalTemperature, String originalHost) throws IOException, JSONException {
         int currentTemperature = getTemperature(originalHost);
 
-        if (currentTemperature >= originalTemperature){
-            return true;
-        }
+        return currentTemperature >= originalTemperature;
 
-        return false;
     }
 
 

@@ -24,8 +24,10 @@
             android:label="New Message"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".UI.NewEmailActivity"
-            android:label="New Email">
+        <activity android:name=".UI.MessageConfirmationActivity"
+            android:parentActivityName=".UI.MessageConfigureActivity"
+            android:label="Trigger Picker"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.UI.Data;
+package com.example.yue.nexttext.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,7 +12,7 @@ public class Email extends MessageCondition implements Parcelable {
     private String from, to, subject, message;
     private int id;
 
-    public Email(int id, String from, String to, String subject, String message){
+    public Email(int id, String from, String to, String subject, String message) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -20,7 +20,8 @@ public class Email extends MessageCondition implements Parcelable {
         this.message = message;
     }
 
-    public Email() {}
+    public Email() {
+    }
 
     protected Email(Parcel in) {
         from = in.readString();
@@ -42,16 +43,45 @@ public class Email extends MessageCondition implements Parcelable {
         }
     };
 
-    public int getId() { return id; }
-    public void setId(int newId) { id = newId; }
-    public String getFrom(){ return from; }
-    public void setFrom(String newFrom) { this.to = newFrom; }
-    public String getTo(){ return to; }
-    public void setTo(String newTo) { this.to = newTo; }
-    public String getSubject(){ return subject; }
-    public void setSubject(String newSubject) { this.subject = newSubject; }
-    public String getMessage(){ return message; }
-    public void setMessage(String newMessage) { this.message = newMessage; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int newId) {
+        id = newId;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String newFrom) {
+        this.to = newFrom;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String newTo) {
+        this.to = newTo;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String newSubject) {
+        this.subject = newSubject;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String newMessage) {
+        this.message = newMessage;
+    }
 
     @Override
     public int describeContents() {

@@ -19,4 +19,8 @@
     <string name="label_new_message">New Message</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="findContact">Find Contact</string>
+    <string name="dummy_date">Friday, October, 21, 2017</string>
+    <string name="dummy_time">7:00 PM</string>
+    <string name="date">Date: </string>
+    <string name="time">Time: </string>
 </resources>

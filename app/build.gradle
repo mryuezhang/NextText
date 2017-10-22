@@ -33,9 +33,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     apply plugin: 'kotlin-android-extensions'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
-    compile files('/Users/jamesmulvenna/Desktop/NextTextProjectFinal/NextText/libs/activation.jar')
-    compile files('/Users/jamesmulvenna/Desktop/NextTextProjectFinal/NextText/libs/additionnal.jar')
-    compile files('/Users/jamesmulvenna/Desktop/NextTextProjectFinal/NextText/libs/mail.jar')
     compile  'javax.mail:javax.mail-api:1.5.3'
 }
 repositories {

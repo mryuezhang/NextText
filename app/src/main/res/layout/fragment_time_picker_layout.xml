@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:weightSum="2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.yue.nexttext.UI.TextViewWithPrefix
+        android:id="@+id/date_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end|center"
+        android:textAlignment="gravity"
+        android:padding="8dp"
+        android:TAG="@string/date"
+        android:text="@string/dummy_date"
+        android:textSize="@dimen/larger_text_size"
+        android:textStyle="bold"/>
+
+    <com.example.yue.nexttext.UI.TextViewWithPrefix
+        android:TAG="@string/time"
+        android:gravity="end|center"
+        android:id="@+id/time_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:text="@string/dummy_time"
+        android:textAlignment="gravity"
+        android:textSize="@dimen/larger_text_size"
+        android:textStyle="bold"/>
+
+</LinearLayout>

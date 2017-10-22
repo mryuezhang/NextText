@@ -26,8 +26,8 @@ class MessageConfigureActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val messageCollectionPaperAdapter = MessageCollectionPagerAdapter(supportFragmentManager)
-        viewPager.adapter = messageCollectionPaperAdapter
-        tabs.setupWithViewPager(viewPager)
+        viewPager_message_configure.adapter = messageCollectionPaperAdapter
+        tabs.setupWithViewPager(viewPager_message_configure)
 
     }
 
@@ -48,7 +48,7 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     //MARK: Private methods
     private fun createNewMesage(){
-
+        startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), 122)
     }
 
     companion object {
@@ -73,17 +73,13 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     //MARK: SMSObjectFragment class
     class SMSObjectFragment: Fragment(){
-        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val view = inflater?.inflate(R.layout.fragment_sms_object, container, false)
-            return view
-        }
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_sms_object, container, false)
     }
 
     //MARK: EmailObjectFragment class
     class EmailObjectFragment: Fragment(){
-        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val view = inflater?.inflate(R.layout.fragment_email_layout, container, false)
-            return view
-        }
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_email_layout, container, false)
     }
 }

@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_cancel_confirm_new_message"
-        android:orderInCategory="100"
-        android:title="@string/action_cancel_new_message_configure"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/action_confirm_new_message"
         android:orderInCategory="100"
         android:title="@string/action_confirm_new_message"
