@@ -7,40 +7,38 @@ import android.os.Parcelable;
  * Created by jamesmulvenna on 2017-09-28.
  */
 
-public class Sms extends MessageCondition implements Parcelable {
-    private String name, phone, message;
+public class PhoneData implements Parcelable {
+    private String name, phone;
     private int id;
 
-    public Sms() {}
+    public PhoneData() {}
 
-    public Sms(String name, String phone){
+    public PhoneData(String name, String phone){
         this.name = name;
         this.phone = phone;
     }
 
-    public Sms(int id, String name, String phone, String message){
+    public PhoneData(int id, String name, String phone){
         this.id = id;
         this.name = name;
         this.phone = phone;
-        this.message = message;
     }
 
-    protected Sms(Parcel in) {
+    protected PhoneData(Parcel in) {
         name = in.readString();
         phone = in.readString();
-        message = in.readString();
         id = in.readInt();
     }
 
-    public static final Creator<Sms> CREATOR = new Creator<Sms>() {
+    public static final Creator<PhoneData> CREATOR = new Creator<PhoneData>() {
         @Override
-        public Sms createFromParcel(Parcel in) {
-            return new Sms(in);
+        public PhoneData createFromParcel(Parcel in) {
+            return new PhoneData(in);
         }
 
         @Override
-        public Sms[] newArray(int size) {
-            return new Sms[size];
+        public PhoneData[] newArray(int size) {
+            return new PhoneData[size];
         }
     };
 
@@ -50,14 +48,6 @@ public class Sms extends MessageCondition implements Parcelable {
     public void setName(String newName){this.name = newName; }
     public String getPhone(){ return phone; }
     public void setPhone(String newPhone){this.phone = newPhone; }
-    public String getMessage(){ return message; }
-    public void setMessage(String newMessage) { this.message = newMessage; }
-    public Time getTime() { return time; }
-    public void setTime(Time newTime) { time = newTime;}
-    public Location getLocation(){return location; }
-    public void setLocation(Location newLocation) { location = newLocation; }
-    public Weather getWeather(){return weather; }
-    public void setWeather(Weather newWeather) { weather = newWeather; }
 
     @Override
     public String toString() {
@@ -74,7 +64,6 @@ public class Sms extends MessageCondition implements Parcelable {
 
         parcel.writeString(name);
         parcel.writeString(phone);
-        parcel.writeString(message);
         parcel.writeInt(id);
     }
 }
