@@ -21,15 +21,13 @@ import java.nio.charset.Charset;
 //yahoo api
 
 public class Weather implements Parcelable {
-    String city;
-    String countryCode;
-    String host;
+    private String city, countryCode, host;
 
-    public Weather(String thisCity, String thisCountryCode, String thisHost){
-        city = thisCity;
-        countryCode = thisCountryCode;
-        //url should be = select item.condition.temp from weather.forecast where woeid in (select woeid from geo.places(1) where text="ottawa, ca")
-        host = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition.temp%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22" + city + "%2C%20" + countryCode + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+    public Weather(String newCity, String newCountryCode) {
+        this.city = newCity;
+        this.countryCode = newCountryCode;
+        //url checks what the city in country's current text condition is (Sunny, rainy, windy, cloudy, etc.)
+        this.host = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition.code%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22" + this.city + "%2C%20" + this.countryCode + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
     }
 
     protected Weather(Parcel in) {
@@ -50,13 +48,29 @@ public class Weather implements Parcelable {
         }
     };
 
-    public String getCity() { return this.city; }
-    public String getCountryCode() { return this.countryCode; }
-    public String getHost() { return this.host; }
+    public String getCity() {
+        return this.city;
+    }
 
-    public void setCity(String newCity) { this.city = newCity; }
-    public void setCountryCode(String newCountryCode) { this.countryCode = newCountryCode; }
-    public void setHost(String newHost) { this.host = newHost; }
+    public String getCountryCode() {
+        return this.countryCode;
+    }
+
+    public String getHost() {
+        return this.host;
+    }
+
+    public void setCity(String newCity) {
+        this.city = newCity;
+    }
+
+    public void setCountryCode(String newCountryCode) {
+        this.countryCode = newCountryCode;
+    }
+
+    public void setHost(String newHost) {
+        this.host = newHost;
+    }
 
     private static String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -86,24 +100,75 @@ public class Weather implements Parcelable {
         return result;
     }
 
-    //if false then trivial to understand its less
-    public boolean isGreater(int originalTemperature, String originalHost) throws IOException, JSONException {
-        int currentTemperature = getTemperature(originalHost);
+        /*
+        0	tornado
+        1	tropical storm
+        2	hurricane
+        3	severe thunderstorms
+        4	thunderstorms
+        5	mixed rain and snow
+        6	mixed rain and sleet
+        7	mixed snow and sleet
+        8	freezing drizzle
+        9	drizzle
+        10	freezing rain
+        11	showers
+        12	showers
+        13	snow flurries
+        14	light snow showers
+        15	blowing snow
+        16	snow
+        17	hail
+        18	sleet
+        19	dust
+        20	foggy
+        21	haze
+        22	smoky
+        23	blustery
+        24	windy
+        25	cold
+        26	cloudy
+        27	mostly cloudy (night)
+        28	mostly cloudy (day)
+        29	partly cloudy (night)
+        30	partly cloudy (day)
+        31	clear (night)
+        32	sunny
+        33	fair (night)
+        34	fair (day)
+        35	mixed rain and hail
+        36	hot
+        37	isolated thunderstorms
+        38	scattered thunderstorms
+        39	scattered thunderstorms
+        40	scattered showers
+        41	heavy snow
+        42	scattered snow showers
+        43	heavy snow
+        44	partly cloudy
+        45	thundershowers
+        46	snow showers
+        47	isolated thundershowers
+        */
 
-        return currentTemperature >= originalTemperature;
 
+        public int getCondition () throws IOException, JSONException {
+            JSONObject json = readJsonFromUrl(this.getHost());
+            int conditionCode = json.getInt("code");
+
+            return conditionCode;
+        }
+
+
+        @Override
+        public int describeContents () {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel (Parcel parcel,int i){
+            parcel.writeString(city);
+            parcel.writeString(countryCode);
+            parcel.writeString(host);
+        }
     }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(city);
-        parcel.writeString(countryCode);
-        parcel.writeString(host);
-    }
-}

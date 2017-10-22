@@ -13,15 +13,15 @@ public class PhoneData implements Parcelable {
 
     public PhoneData() {}
 
-    public PhoneData(String name, String phone){
-        this.name = name;
-        this.phone = phone;
+    public PhoneData(String newName, String newPhone){
+        this.name = newName;
+        this.phone = newPhone;
     }
 
-    public PhoneData(int id, String name, String phone){
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
+    public PhoneData(int newId, String newName, String newPhone){
+        this.id = newId;
+        this.name = newName;
+        this.phone = newPhone;
     }
 
     protected PhoneData(Parcel in) {
@@ -42,12 +42,12 @@ public class PhoneData implements Parcelable {
         }
     };
 
-    public int getID() { return id; }
+    public int getID() { return this.id; }
     public void setID(int newId) { this.id = newId; }
-    public String getName(){ return name; }
-    public void setName(String newName){this.name = newName; }
-    public String getPhone(){ return phone; }
-    public void setPhone(String newPhone){this.phone = newPhone; }
+    public String getName(){ return this.name; }
+    public void setName(String newName){ this.name = newName; }
+    public String getPhone(){ return this.phone; }
+    public void setPhone(String newPhone){ this.phone = newPhone; }
 
     @Override
     public String toString() {

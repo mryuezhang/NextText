@@ -10,48 +10,48 @@ import java.util.Calendar;
  */
 
 public class MessageData implements Parcelable {
-    Message message;
+    private Message message;
     private Time time;
     private Location location;
     private Weather weather;
-    int id;
+    private int id;
     //FORMAT: Feb 27, 2012 5:41:23 PM
     private String currentTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
-    public MessageData(Message newMessage, Time newTime, int id) {
+    public MessageData(Message newMessage, Time newTime, int newId) {
         this.message = newMessage;
         this.time = newTime;
-        this.id = id;
+        this.id = newId;
     }
 
-    public MessageData(Message newMessage, Location newLocation, int id) {
+    public MessageData(Message newMessage, Location newLocation, int newId) {
         this.message = newMessage;
         this.location = newLocation;
-        this.id = id;
+        this.id = newId;
     }
 
-    public MessageData(Message newMessage, Weather newWeather, int id) {
+    public MessageData(Message newMessage, Weather newWeather, int newId) {
         this.message = newMessage;
         this.weather = newWeather;
-        this.id = id;
+        this.id = newId;
     }
 
     public MessageData(Message newMessage, Time newTime) {
         this.message = newMessage;
         this.time = newTime;
-        id= 0;
+        this.id = 0;
     }
 
     public MessageData(Message newMessage, Location newLocation) {
         this.message = newMessage;
         this.location = newLocation;
-        id= 0;
+        this.id = 0;
     }
 
     public MessageData(Message newMessage, Weather newWeather) {
         this.message = newMessage;
         this.weather = newWeather;
-        id= 0;
+        this.id = 0;
     }
 
     protected MessageData(Parcel in) {
@@ -74,18 +74,17 @@ public class MessageData implements Parcelable {
         }
     };
 
-    public Message getMessage() {return message; }
-    public Time getTime() { return time; }
-    public Location getLocation() { return location; }
-    public Weather getWeather() { return weather; }
-    public String getCurrentTime() { return currentTime; }
-    public int getId() { return id; }
-
+    public Message getMessage() {return this.message; }
     public void setMessage(Message newMessage) { this.message = newMessage; }
-    public void setTime(Time newTime) { time = newTime; }
-    public void setLocation(Location newLocation) { location = newLocation; }
-    public void setWeather(Weather newWeather) { weather = newWeather; }
-    public void setId(int newId) { id = newId; }
+    public Time getTime() { return this.time; }
+    public void setTime(Time newTime) { this.time = newTime; }
+    public Location getLocation() { return this.location; }
+    public void setLocation(Location newLocation) { this.location = newLocation; }
+    public Weather getWeather() { return this.weather; }
+    public void setWeather(Weather newWeather) { this.weather = newWeather; }
+    public String getCurrentTime() { return this.currentTime; }
+    public int getId() { return this.id; }
+    public void setId(int newId) { this.id = newId; }
 
     @Override
     public String toString() {

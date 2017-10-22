@@ -13,12 +13,12 @@ public class Message implements Parcelable {
 
     public Message() {}
 
-    public Message(String from, String password, String to, String subject, String message){
-        this.from = from;
-        this.password = password;
-        this.to = to;
-        this.subject = subject;
-        this.message = message;
+    public Message(String newFrom, String newPassword, String newTo, String newSubject, String newMessage){
+        this.from = newFrom;
+        this.password = newPassword;
+        this.to = newTo;
+        this.subject = newSubject;
+        this.message = newMessage;
     }
 
     protected Message(Parcel in) {
@@ -40,15 +40,15 @@ public class Message implements Parcelable {
         }
     };
 
-    public String getFrom(){ return from; }
+    public String getFrom(){ return this.from; }
     public void setFrom(String newFrom) { this.from = newFrom; }
-    public String getPassword(){ return password; }
+    public String getPassword(){ return this.password; }
     public void setPassword(String newPassword) { this.password = newPassword; }
-    public String getTo(){ return to; }
+    public String getTo(){ return this.to; }
     public void setTo(String newTo) { this.to = newTo; }
-    public String getSubject(){ return subject; }
+    public String getSubject(){ return this.subject; }
     public void setSubject(String newSubject) { this.subject = newSubject; }
-    public String getMessage(){ return message; }
+    public String getMessage(){ return this.message; }
     public void setMessage(String newMessage) { this.message = newMessage; }
 
     @Override

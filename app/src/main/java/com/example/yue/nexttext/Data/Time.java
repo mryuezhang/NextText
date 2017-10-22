@@ -10,10 +10,8 @@ import java.util.Calendar;
  */
 
 public class Time implements Parcelable {
-    private String date;
-    private String time;
-    private int type;
-    private int status;
+    private String date, time;
+    private int type, status;
 
     public Time(String date, String time, int type, int status) {
         this.date = date;
