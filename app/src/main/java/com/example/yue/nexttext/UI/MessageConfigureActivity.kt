@@ -67,7 +67,7 @@ class MessageConfigureActivity : AppCompatActivity() {
 
         override fun getPageTitle(position: Int): CharSequence = when(position){
             0 -> "SMS"
-            else -> "Message"
+            else -> "Email"
         }
     }
 

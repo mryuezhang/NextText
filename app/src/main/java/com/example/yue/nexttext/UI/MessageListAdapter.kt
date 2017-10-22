@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.R
 
 /**
  * Created by yue on 2017-09-27.
  */
 class MessageListAdapter(private val context: Context,
-                         private val messageList: ArrayList<Message>): BaseAdapter() {
+                         private val messageList: ArrayList<MessageData>): BaseAdapter() {
 
     private class ViewHolder{
         var title: TextView? = null
@@ -33,13 +34,13 @@ class MessageListAdapter(private val context: Context,
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.title?.text = this.messageList[p0].getTitle()
-        viewHolder.content?.text = this.messageList[p0].getContent()
+        viewHolder.title?.text = this.messageList[p0].message.to
+        viewHolder.content?.text = this.messageList[p0].message.message
 
         return view
     }
 
-    fun add(message: Message){
+    fun add(message: MessageData){
         this.messageList.add(message)
         this.notifyDataSetChanged()
     }
@@ -49,7 +50,7 @@ class MessageListAdapter(private val context: Context,
         this.notifyDataSetChanged()
     }
 
-    override fun getItem(p0: Int): Message = this.messageList[p0]
+    override fun getItem(p0: Int): MessageData = this.messageList[p0]
 
     override fun getItemId(p0: Int): Long = this.messageList[p0].hashCode().toLong()
 

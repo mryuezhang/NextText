@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.yue.nexttext.Data.MessageData;
-import com.example.yue.nexttext.Data.Message;
-import com.example.yue.nexttext.Data.Time;
 import com.example.yue.nexttext.Data.Location;
+import com.example.yue.nexttext.Data.Message;
+import com.example.yue.nexttext.Data.MessageData;
+import com.example.yue.nexttext.Data.Time;
 import com.example.yue.nexttext.Data.Weather;
 
 import java.util.ArrayList;
@@ -18,13 +18,15 @@ public class MessageManager {
     Context context;
 
     public MessageManager(Context context){
+        dataManager = context.openOrCreateDatabase("messageData.db", Context.MODE_PRIVATE, null);
         this.context = context;
     }
 
+    public boolean isEmpty(){
+        return dataManager == null;
+    }
 
     public SQLiteDatabase getDatabase(){
-        dataManager = context.openOrCreateDatabase("messageData.db", Context.MODE_PRIVATE, null);
-
         //if the database exists
         if (dataManager != null) {
             //if the table exists
@@ -149,12 +151,7 @@ public class MessageManager {
 
         }
 
-        if(dataManager.insert("tbl_message_data", null, content) == -1){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return dataManager.insert("tbl_message_data", null, content) != -1;
     }
 
 
@@ -219,15 +216,10 @@ public class MessageManager {
         //values.put("weather",null);
 
         int returnValue = dataManager.update("tbl_message_data",values ,"id =" + data.getId(), null);
-        if (returnValue == 0){
-            //failed
-            return false;
-        } else {
-            return true;
-        }
+        return returnValue != 0;
     }
 
-    public void prepareData(MessageManager thisDatabase){
+    public void prepareData(){
 
         //email
         Message msg1 = new Message("jamespmulvenna@gmail.com", "dummypass", "someemail.com", "somesubject", "testmessageemail");
@@ -239,9 +231,9 @@ public class MessageManager {
         Time time2 = new Time();
         MessageData data2 = new MessageData(msg2, time2);
 
-        thisDatabase.createMessageTable();
-        thisDatabase.insertMessage(data1);
-        thisDatabase.insertMessage(data2);
+        this.createMessageTable();
+        this.insertMessage(data1);
+        this.insertMessage(data2);
 
     }
 }

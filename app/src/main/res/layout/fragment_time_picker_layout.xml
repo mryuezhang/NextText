@@ -5,22 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.yue.nexttext.UI.TextViewWithPrefix
+    <TextView
         android:id="@+id/date_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="end|center"
-        android:textAlignment="gravity"
+        android:background="@drawable/date_or_time_display_background"
+        android:gravity="center"
         android:padding="8dp"
-        android:tag="@string/date"
         android:text="@string/dummy_date"
+        android:textAlignment="gravity"
         android:textSize="@dimen/larger_text_size"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <com.example.yue.nexttext.UI.TextViewWithPrefix
-        android:tag="@string/time"
-        android:gravity="end|center"
+    <TextView
+        android:background="@drawable/date_or_time_display_background"
+        android:gravity="center"
         android:id="@+id/time_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

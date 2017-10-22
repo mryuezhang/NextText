@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-
-import com.example.yue.nexttext.Database.MessageManager;
 
 /**
  * Created by yue on 2017-09-27.
@@ -21,19 +20,23 @@ import com.example.yue.nexttext.Database.MessageManager;
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
-    private var message_ArrayList = ArrayList<Message>()
+    //private var message_ArrayList = ArrayList<Message>()
+    private var messageManger: MessageManager? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        messageManger = MessageManager(applicationContext)
+
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { createNewMessage() }
 
-        prepareDummyData()
+        //prepareDummyData()
+        messageManger?.prepareData()
         setupMessageList()
     }
 
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //MARK: private methods
+    /*
     private fun prepareDummyData(){
         message_ArrayList.add(0, Message("Happy Birthday", "Happy Birthday bro!!!!"))
         message_ArrayList.add(0, Message("It's gonna rain today", "The weather channel said it's gonna rain today, bring an umbrella or rain coat."))
@@ -71,15 +75,12 @@ class MainActivity : AppCompatActivity() {
         message_ArrayList[0].setTime()
         message_ArrayList[1].setLocation()
         message_ArrayList[2].setWeather()
-
-
-
-
     }
+    */
 
     private fun setupMessageList(){
-        if(!message_ArrayList.isEmpty()){
-            val messageListAdapter = MessageListAdapter(applicationContext, message_ArrayList)
+        if(!messageManger!!.isEmpty){
+            val messageListAdapter = MessageListAdapter(applicationContext, messageManger!!.loadDataTbl_Message_Data())
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
         }
@@ -94,13 +95,14 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
+
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val message: Message? = data?.getParcelableExtra<Message>("message")
         if(message == null){
             Log.e(TAG, "Received MessageData object is Null!")
         }
         else {
-            message_ArrayList.add(0,message)
+            //message_ArrayList.add(0,message)
             setupMessageList()
         }
     }
