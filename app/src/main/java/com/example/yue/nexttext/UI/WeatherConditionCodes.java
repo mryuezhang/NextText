@@ -32,12 +32,16 @@ public class WeatherConditionCodes {
         23	blustery
         24	windy
         25	cold
+
         26	cloudy
         27	mostly cloudy (night)
         28	mostly cloudy (day)
         29	partly cloudy (night)
         30	partly cloudy (day)
+
+
         31	clear (night)
+
         32	sunny
         33	fair (night)
         34	fair (day)

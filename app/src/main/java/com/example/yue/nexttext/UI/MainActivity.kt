@@ -13,6 +13,8 @@ import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
+import com.example.yue.nexttext.Database.MessageManager;
+
 /**
  * Created by yue on 2017-09-27.
  */
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private var message_ArrayList = ArrayList<Message>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +71,10 @@ class MainActivity : AppCompatActivity() {
         message_ArrayList[0].setTime()
         message_ArrayList[1].setLocation()
         message_ArrayList[2].setWeather()
+
+
+
+
     }
 
     private fun setupMessageList(){

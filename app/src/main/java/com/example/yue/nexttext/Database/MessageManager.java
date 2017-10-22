@@ -14,7 +14,7 @@ import com.example.yue.nexttext.Data.Weather;
 import java.util.ArrayList;
 
 public class MessageManager {
-    SQLiteDatabase dataManager =null;
+    SQLiteDatabase dataManager = null;
     Context context;
 
     public MessageManager(Context context){
@@ -74,13 +74,16 @@ public class MessageManager {
     }
 
     public int checkConditionType(MessageData data){
-        if (data.getTime() != null){
+        //time not null
+        if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
             return 1;
         }
-        else if (data.getLocation() != null){
+        //location not null
+        else if (data.getTime() == null && data.getLocation() != null && data.getWeather() == null){
             return 2;
         }
-        else if (data.getWeather() != null){
+        //weather not null
+        else if (data.getTime() == null && data.getLocation() == null && data.getWeather() != null){
             return 3;
         }
 
@@ -222,5 +225,23 @@ public class MessageManager {
         } else {
             return true;
         }
+    }
+
+    public void prepareData(MessageManager thisDatabase){
+
+        //email
+        Message msg1 = new Message("jamespmulvenna@gmail.com", "dummypass", "someemail.com", "somesubject", "testmessageemail");
+        Time time1 = new Time();
+        MessageData data1 = new MessageData(msg1, time1);
+
+        //sms
+        Message msg2 = new Message("James Mulvenna", null, "16136148702", null, "testmessagesms");
+        Time time2 = new Time();
+        MessageData data2 = new MessageData(msg2, time2);
+
+        thisDatabase.createMessageTable();
+        thisDatabase.insertMessage(data1);
+        thisDatabase.insertMessage(data2);
+
     }
 }
