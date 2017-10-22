@@ -14,6 +14,8 @@ import com.example.yue.nexttext.Data.Weather;
 import java.util.ArrayList;
 
 public class MessageManager {
+
+    private final static String TABLE_NAME = "[tbl_message_data]";
     SQLiteDatabase dataManager = null;
     Context context;
 
@@ -55,23 +57,20 @@ public class MessageManager {
     }
 
     public void createMessageTable(){
-        String sqlData = "CREATE TABLE [tbl_message_data] (\n" +
-                "[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-                //could also be used as display name for sms for instance if Phone number X
-                "[fromobj] TEXT  NULL,\n" +
-                "[password] TEXT  NULL,\n" +
-                "[toobj] TEXT  NULL,\n" +
-                "[subject] TEXT  NULL,\n" +
-                "[message] TEXT  NULL,\n" +
-                "[currtime] TEXT  NULL,\n" +
-                "[date] DATE  NULL,\n" +
-                "[time] TIME  NULL,\n" +
-                "[type] INTEGER  NULL,\n" +
-                "[status] INTEGER  NULL\n" +
-                //might need more columns later once known
-                "[location] LOCATION  NULL,\n" +
-                "[weather] WEATHER  NULL,\n" +
-                ")";
+        String sqlData = "CREATE TABLE IF NOT EXISTS" + TABLE_NAME + "(" +
+                "[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "[fromobj] TEXT NULL," +
+                "[password] TEXT NULL," +
+                "[toobj] TEXT NULL," +
+                "[subject] TEXT NULL," +
+                "[message] TEXT NULL," +
+                "[currtime] TEXT NULL," +
+                "[date] DATE NULL," +
+                "[time] TIME NULL," +
+                "[type] INTEGER NULL," +
+                "[status] INTEGER NULL," +
+                "[location] LOCATION NULL," +
+                "[weather] WEATHER NULL)";
         dataManager.execSQL(sqlData);
     }
 
