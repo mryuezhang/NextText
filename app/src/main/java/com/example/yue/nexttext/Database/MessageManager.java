@@ -55,6 +55,7 @@ public class MessageManager {
     public void createMessageTable(){
         String sqlData = "CREATE TABLE [tbl_message_data] (\n" +
                 "[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                //could also be used as display name for sms for instance if Phone number X
                 "[fromobj] TEXT  NULL,\n" +
                 "[password] TEXT  NULL,\n" +
                 "[toobj] TEXT  NULL,\n" +
@@ -156,7 +157,8 @@ public class MessageManager {
 
     public ArrayList<MessageData> loadDataTbl_Message_Data(){
         ArrayList<MessageData> messageData =new ArrayList<MessageData>();
-        Cursor cursor = dataManager.query("tbl_message_data",null,null,null,null,null,null,null);
+        //this should get all MessageData in ascending order of time the messagedata object was made
+        Cursor cursor = dataManager.query("tbl_message_data",null,null,null,null,null,"currtime ASC");
         int count = cursor.getCount();
         if (count != 0) {
             messageData = new ArrayList();
