@@ -45,7 +45,7 @@ public class MessageManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
                 KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_CURR_TIME + " TEXT," + KEY_DATE + " DATE," + KEY_TIME + " TIME," +
-                KEY_TYPE + " TEXT," + KEY_STATUS + " TEXT," + KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
+                KEY_TYPE + " INTEGER," + KEY_STATUS + " INTEGER," + KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -61,104 +61,27 @@ public class MessageManager extends SQLiteOpenHelper {
         return this.getMessagesCount() <= 0;
     }
 
-    public int checkConditionType(MessageData data){
-        //time not null
-        if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
-            return 1;
-        }
-        //location not null
-        else if (data.getTime() == null && data.getLocation() != null && data.getWeather() == null){
-            return 2;
-        }
-        //weather not null
-        else if (data.getTime() == null && data.getLocation() == null && data.getWeather() != null){
-            return 3;
-        }
-
-        return 0;
-    }
-
     public void addMessage(MessageData data){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        //get message content
-        Message message = data.getMessage();
-        //get condition content
-        Time time = data.getTime();
 
         //add content
-        content.put(KEY_FROM, message.getFrom());
-        content.put(KEY_PASSWORD, message.getPassword());
-        content.put(KEY_TO, message.getTo());
-        if(message.getSubject() != null){
-            content.put(KEY_SUBJECT, message.getSubject());
+        content.put(KEY_FROM, data.getMessage().getFrom());
+        content.put(KEY_PASSWORD, data.getMessage().getPassword());
+        content.put(KEY_TO, data.getMessage().getTo());
+        if(data.getMessage().getSubject() != null){
+            content.put(KEY_SUBJECT, data.getMessage().getSubject());
         }
-        content.put(KEY_MESSAGE, message.getMessage());
+        content.put(KEY_MESSAGE, data.getMessage().getMessage());
         content.put(KEY_CURR_TIME, data.getCurrentTime());
 
         //add time
-        content.put(KEY_DATE, time.getDate());
-        content.put(KEY_TIME, time.getTime());
-        content.put(KEY_TYPE, time.getType());
-        content.put(KEY_STATUS, time.getStatus());
+        content.put(KEY_DATE, data.getTime().getDate());
+        content.put(KEY_TIME, data.getTime().getTime());
+        content.put(KEY_TYPE, data.getTime().getType());
+        content.put(KEY_STATUS, data.getTime().getStatus());
         content.put(KEY_LOCATION, "null");
         content.put(KEY_WEATHER, "null");
-
-
-        /*
-        switch(checkConditionType(data)){
-            // condition is time
-            case 1:
-                Time time = data.getTime();
-                //add content
-                content.put("fromobj", message.getFrom());
-                content.put("password", message.getPassword());
-                content.put("toobj", message.getTo());
-                if(message.getSubject() != null){
-                    content.put("subject", message.getSubject());
-                }
-                content.put("message", message.getMessage());
-                content.put("currtime", data.getCurrentTime());
-
-                //add time
-                content.put("date", time.getDate());
-                content.put("time", time.getTime());
-                content.put("type", time.getType());
-                content.put("status", time.getStatus());
-
-            case 2:
-                Location location = data.getLocation();
-                //add content
-                content.put("fromobj", message.getFrom());
-                content.put("password", message.getPassword());
-                content.put("toobj", message.getTo());
-                if(message.getSubject() != null){
-                    content.put("subject", message.getSubject());
-                }
-                content.put("message", message.getMessage());
-                content.put("currtime", data.getCurrentTime());
-
-                //add location
-                //content.put("location", null);
-
-            case 3:
-                Weather weather = data.getWeather();
-                //add content
-                content.put("fromobj", message.getFrom());
-                content.put("password", message.getPassword());
-                content.put("toobj", message.getTo());
-                if(message.getSubject() != null){
-                    content.put("subject", message.getSubject());
-                }
-                content.put("message", message.getMessage());
-                content.put("currtime", data.getCurrentTime());
-
-                //add weather
-                //content.put("weather", null);
-            default:
-
-        }
-        */
 
         // Inserting Row
         db.insert(TABLE_NAME, null, content);
@@ -220,6 +143,40 @@ public class MessageManager extends SQLiteOpenHelper {
         return count;
     }
 
+    public int updateMessage(MessageData data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        //add content
+        values.put(KEY_FROM, data.getMessage().getFrom());
+        values.put(KEY_PASSWORD, data.getMessage().getPassword());
+        values.put(KEY_TO, data.getMessage().getTo());
+        if(data.getMessage().getSubject() != null){
+            values.put(KEY_SUBJECT, data.getMessage().getSubject());
+        }
+        values.put(KEY_MESSAGE, data.getMessage().getMessage());
+        values.put(KEY_CURR_TIME, data.getCurrentTime());
+
+        //add time
+        values.put(KEY_DATE, data.getTime().getDate());
+        values.put(KEY_TIME, data.getTime().getTime());
+        values.put(KEY_TYPE, data.getTime().getType());
+        values.put(KEY_STATUS, data.getTime().getStatus());
+        values.put(KEY_LOCATION, "null");
+        values.put(KEY_WEATHER, "null");
+
+        // updating row
+        return db.update(TABLE_NAME, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(data.getId()) });
+    }
+
+    public void deleteMessage(MessageData data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, KEY_ID + " = ?",
+                new String[] { String.valueOf(data.getId()) });
+        db.close();
+    }
+
     public void prepareData(){
 
         //email
@@ -247,6 +204,26 @@ public class MessageManager extends SQLiteOpenHelper {
             Log.d("Message : :", log);
         }
 
+    }
+}
+
+
+/*
+    public int checkConditionType(MessageData data){
+        //time not null
+        if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
+            return 1;
+        }
+        //location not null
+        else if (data.getTime() == null && data.getLocation() != null && data.getWeather() == null){
+            return 2;
+        }
+        //weather not null
+        else if (data.getTime() == null && data.getLocation() == null && data.getWeather() != null){
+            return 3;
+        }
+
+        return 0;
     }
 
     /*
@@ -284,4 +261,60 @@ public class MessageManager extends SQLiteOpenHelper {
         return messageData;
     }
     */
-}
+
+/*
+        switch(checkConditionType(data)){
+            // condition is time
+            case 1:
+                Time time = data.getTime();
+                //add content
+                content.put("fromobj", message.getFrom());
+                content.put("password", message.getPassword());
+                content.put("toobj", message.getTo());
+                if(message.getSubject() != null){
+                    content.put("subject", message.getSubject());
+                }
+                content.put("message", message.getMessage());
+                content.put("currtime", data.getCurrentTime());
+
+                //add time
+                content.put("date", time.getDate());
+                content.put("time", time.getTime());
+                content.put("type", time.getType());
+                content.put("status", time.getStatus());
+
+            case 2:
+                Location location = data.getLocation();
+                //add content
+                content.put("fromobj", message.getFrom());
+                content.put("password", message.getPassword());
+                content.put("toobj", message.getTo());
+                if(message.getSubject() != null){
+                    content.put("subject", message.getSubject());
+                }
+                content.put("message", message.getMessage());
+                content.put("currtime", data.getCurrentTime());
+
+                //add location
+                //content.put("location", null);
+
+            case 3:
+                Weather weather = data.getWeather();
+                //add content
+                content.put("fromobj", message.getFrom());
+                content.put("password", message.getPassword());
+                content.put("toobj", message.getTo());
+                if(message.getSubject() != null){
+                    content.put("subject", message.getSubject());
+                }
+                content.put("message", message.getMessage());
+                content.put("currtime", data.getCurrentTime());
+
+                //add weather
+                //content.put("weather", null);
+            default:
+
+        }
+        */
+
+

@@ -13,11 +13,18 @@ public class Message implements Parcelable {
 
     public Message() {}
 
+    // For email
     public Message(String newFrom, String newPassword, String newTo, String newSubject, String newMessage){
         this.from = newFrom;
         this.password = newPassword;
         this.to = newTo;
         this.subject = newSubject;
+        this.message = newMessage;
+    }
+
+    // For sms
+    public Message(String newTo, String newMessage){
+        this.to = newTo;
         this.message = newMessage;
     }
 
