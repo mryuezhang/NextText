@@ -1,6 +1,7 @@
 package com.example.yue.nexttext.UI
 
 import android.content.Context
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,15 @@ import android.widget.TextView
 import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.R
 
+
+
 /**
  * Created by yue on 2017-09-27.
  */
 class MessageListAdapter(private val context: Context,
                          private val messageList: ArrayList<MessageData>): BaseAdapter() {
+
+    private val selectedItemsIDs = SparseBooleanArray()
 
     private class ViewHolder{
         var title: TextView? = null
@@ -45,4 +50,5 @@ class MessageListAdapter(private val context: Context,
     override fun getItemId(p0: Int): Long = this.messageList[p0].hashCode().toLong()
 
     override fun getCount(): Int = this.messageList.size
+
 }

@@ -5,6 +5,7 @@
     <string name="action_confirm_new_message">Save</string>
     <string name="action_cancel_confirm_new_message">Cancel</string>
     <string name="action_cancel_new_message_configure">Cancel</string>
+    <string name="action_delete_select_message">Delete</string>
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="sms">SMS</string>

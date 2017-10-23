@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.AbsListView
+import android.widget.ListView
 import android.widget.Toast
 import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.Database.MessageManager
@@ -37,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { createNewMessage() }
 
         //prepareDummyData()
-        messageManager?.prepareData()
         setupMessageList()
     }
 
@@ -81,9 +83,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupMessageList(){
         if(!messageManager!!.isEmpty){
-            val messageListAdapter = MessageListAdapter(applicationContext, messageManager!!.allMessages as ArrayList<MessageData>)
+            val messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
+            messageList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+            messageList.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener{
+                override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean = false
+
+                override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
+                    val checkedCount: Int = messageList.checkedItemCount
+                    p0?.title = checkedCount.toString()
+                    messageListAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                    val menuInflater = p0?.menuInflater
+                    menuInflater?.inflate(R.menu.menu_multi_selected, p1)
+                    return true
+                }
+
+                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
+
+                override fun onDestroyActionMode(p0: ActionMode?) {
+                }
+
+            })
         }
     }
 

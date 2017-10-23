@@ -1,0 +1,7 @@
+- More work on UI
+- Decided to use swipe view instead of multiple activities
+- Research on swipe view, fragments, and material design
+- Impalemented swipe view on project
+
+Time: 12 hours
+

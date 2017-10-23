@@ -54,6 +54,12 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     //MARK: Private methods
     private fun createNewMesage(){
+        if(viewPager_message_configure.currentItem == 0){
+            //SMS
+        }
+        else{
+            //Email
+        }
         startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), Utilities.MESSAGECONFIRMATIONACITIVY_REQUEST_CODE)
     }
 

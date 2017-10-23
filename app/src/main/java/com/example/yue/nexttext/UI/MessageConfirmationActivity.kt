@@ -28,7 +28,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_message_confirmation.*
 import kotlinx.android.synthetic.main.fragment_time_picker_layout.*
-import kotlinx.android.synthetic.main.fragment_weather_picker_layout.*
 
 
 /**
@@ -168,32 +167,29 @@ class MessageConfirmationActivity : AppCompatActivity() {
         private val TAG = "WeatherPickerFragment"
         var autocompleteFragment: PlaceAutocompleteFragment? = null
 
-        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val v = inflater?.inflate(R.layout.fragment_weather_picker_layout, container, false)
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_weather_picker_layout, container, false)
+
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
 
             val typeFilter = AutocompleteFilter.Builder()
                     .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                     .build()
-
             autocompleteFragment = fragmentManager.findFragmentById(R.id.fragment_place_autocomplete) as PlaceAutocompleteFragment?
             autocompleteFragment?.setFilter(typeFilter)
             autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener{
                 override fun onPlaceSelected(p0: Place?) {
-                    Log.i(TAG, p0?.address.toString())
-                    cityDsiplay.text = p0?.address
+                    if(p0 == null){
+                        Log.e(TAG, "Null Place Selected!")
+                    }
+                    else Log.i(TAG, p0.address.toString())
                 }
-
                 override fun onError(p0: Status?) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
-
             })
-
-            return v
-
         }
-
-
     }
 
     companion object {

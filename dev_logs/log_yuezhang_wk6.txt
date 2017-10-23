@@ -1,0 +1,7 @@
+- Improve UI
+- Research on DatePicker and TimePicker
+- Implemented DatePicker and TimePicker as nested fragment
+- Research on Google place API and related widgets on Android
+- Attempted to implement PlaceAutocompleteFragment
+
+Time: 20 hours

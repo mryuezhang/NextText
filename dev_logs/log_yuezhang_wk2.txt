@@ -1,0 +1,5 @@
+- Research on iOS UI
+- Finished a simple sample UI for the project on iOS with Swift
+- TableView/Navigation design/research
+
+Time: 15 hours
