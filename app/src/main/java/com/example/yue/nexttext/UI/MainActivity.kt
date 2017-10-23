@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,14 +22,14 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     //private var message_ArrayList = ArrayList<Message>()
-    private var messageManger: MessageManager? = null
+    private var messageManager: MessageManager? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        messageManger = MessageManager(applicationContext)
+        messageManager = MessageManager(this)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { createNewMessage() }
 
         //prepareDummyData()
-        messageManger?.prepareData()
+        messageManager?.prepareData()
         setupMessageList()
     }
 
@@ -79,8 +80,8 @@ class MainActivity : AppCompatActivity() {
     */
 
     private fun setupMessageList(){
-        if(!messageManger!!.isEmpty){
-            val messageListAdapter = MessageListAdapter(applicationContext, messageManger!!.loadDataTbl_Message_Data())
+        if(!messageManager!!.isEmpty){
+            val messageListAdapter = MessageListAdapter(applicationContext, messageManager!!.allMessages as ArrayList<MessageData>)
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
         }
