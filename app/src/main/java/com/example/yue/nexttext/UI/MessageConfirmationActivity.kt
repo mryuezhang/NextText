@@ -21,8 +21,14 @@ import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
 import com.example.yue.nexttext.R
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.places.AutocompleteFilter
+import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
+import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_message_confirmation.*
 import kotlinx.android.synthetic.main.fragment_time_picker_layout.*
+import kotlinx.android.synthetic.main.fragment_weather_picker_layout.*
 
 
 /**
@@ -112,6 +118,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
             }
         }
 
+        //MARK: a fragment for a date picker widget
         class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
             var textView: TextView? = null
 
@@ -130,6 +137,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
             }
         }
 
+        //MARK: a fragment for a time picker widget
         class ExactTimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
             var textView: TextView? = null
 
@@ -157,8 +165,35 @@ class MessageConfirmationActivity : AppCompatActivity() {
     }
     //MARK: Weather Picker Fragment
     class WeatherPickerFragment: android.support.v4.app.Fragment(){
-        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-                inflater?.inflate(R.layout.fragment_weather_picker_layout, container, false)
+        private val TAG = "WeatherPickerFragment"
+        var autocompleteFragment: PlaceAutocompleteFragment? = null
+
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val v = inflater?.inflate(R.layout.fragment_weather_picker_layout, container, false)
+
+            val typeFilter = AutocompleteFilter.Builder()
+                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                    .build()
+
+            autocompleteFragment = fragmentManager.findFragmentById(R.id.fragment_place_autocomplete) as PlaceAutocompleteFragment?
+            autocompleteFragment?.setFilter(typeFilter)
+            autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener{
+                override fun onPlaceSelected(p0: Place?) {
+                    Log.i(TAG, p0?.address.toString())
+                    cityDsiplay.text = p0?.address
+                }
+
+                override fun onError(p0: Status?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+            })
+
+            return v
+
+        }
+
+
     }
 
     companion object {

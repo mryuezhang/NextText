@@ -31,6 +31,12 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     }
 
+    companion object {
+        fun getStartActivityIntent(context: Context) =
+                Intent(context, MessageConfigureActivity::class.java)
+    }
+
+
     //MARK: Action menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_message_configure, menu)
@@ -48,16 +54,11 @@ class MessageConfigureActivity : AppCompatActivity() {
 
     //MARK: Private methods
     private fun createNewMesage(){
-        startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), 122)
-    }
-
-    companion object {
-        fun getStartActivityIntent(context: Context) =
-                Intent(context, MessageConfigureActivity::class.java)
+        startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), Utilities.MESSAGECONFIRMATIONACITIVY_REQUEST_CODE)
     }
 
     //MARK: MessageCollectionPagerAdapter class
-    class MessageCollectionPagerAdapter(val fm: FragmentManager): FragmentStatePagerAdapter(fm){
+    class MessageCollectionPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){
         override fun getItem(position: Int): Fragment = when(position){
             0 -> SMSObjectFragment()
             else -> EmailObjectFragment()

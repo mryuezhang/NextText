@@ -24,7 +24,7 @@ public class PhoneData implements Parcelable {
         this.phone = newPhone;
     }
 
-    protected PhoneData(Parcel in) {
+    private PhoneData(Parcel in) {
         name = in.readString();
         phone = in.readString();
         id = in.readInt();

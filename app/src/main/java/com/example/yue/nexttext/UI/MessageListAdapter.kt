@@ -40,16 +40,6 @@ class MessageListAdapter(private val context: Context,
         return view
     }
 
-    fun add(message: MessageData){
-        this.messageList.add(message)
-        this.notifyDataSetChanged()
-    }
-
-    fun removeAt(index: Int){
-        this.messageList.removeAt(index)
-        this.notifyDataSetChanged()
-    }
-
     override fun getItem(p0: Int): MessageData = this.messageList[p0]
 
     override fun getItemId(p0: Int): Long = this.messageList[p0].hashCode().toLong()

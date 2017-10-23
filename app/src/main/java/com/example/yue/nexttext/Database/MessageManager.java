@@ -5,14 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 
-import com.example.yue.nexttext.Data.Location;
 import com.example.yue.nexttext.Data.Message;
 import com.example.yue.nexttext.Data.MessageData;
 import com.example.yue.nexttext.Data.Time;
-import com.example.yue.nexttext.Data.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +58,7 @@ public class MessageManager extends SQLiteOpenHelper {
     }
 
     public boolean isEmpty(){
-        if (this.getMessagesCount() > 0){
-            return false;
-        }
-        return true;
+        return this.getMessagesCount() <= 0;
     }
 
     public int checkConditionType(MessageData data){
@@ -182,9 +176,8 @@ public class MessageManager extends SQLiteOpenHelper {
 
         Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
         Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
-        MessageData messageData = new MessageData(message, time, Integer.parseInt(cursor.getString(0)));
 
-        return messageData;
+        return new MessageData(message, time, Integer.parseInt(cursor.getString(0)));
     }
 
     // Getting All Messages

@@ -3,8 +3,18 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="weather picker" />
+        android:id="@+id/fragment_place_autocomplete"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
+
+    <TextView
+        android:id="@+id/cityDsiplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="@dimen/larger_text_size"
+        android:textStyle="bold" />
 </LinearLayout>
