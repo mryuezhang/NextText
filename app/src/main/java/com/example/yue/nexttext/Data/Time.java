@@ -13,9 +13,11 @@ public class Time implements Parcelable {
     private String date, time;
     private int type, status;
 
-    public Time(String date, String time, int type, int status) {
-        this.date = date;
-        this.time = time;
+    public Time(String newDate, String newTime, int newType, int newStatus) {
+        this.date = newDate;
+        this.time = newTime;
+        this.type = newType;
+        this.status = newStatus;
     }
 
     public Time() {}
@@ -40,35 +42,35 @@ public class Time implements Parcelable {
     };
 
     public String getDate() {
-        return date;
+        return this.date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String newDate) {
+        this.date = newDate;
     }
 
     public String getTime() {
-        return time;
+        return this.time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(String newTime) {
+        this.time = newTime;
     }
 
     public int getType() {
-        return type;
+        return this.type;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setType(int newType) {
+        this.type = newType;
     }
 
     public int getStatus() {
-        return status;
+        return this.status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatus(int newStatus) {
+        this.status = newStatus;
     }
 
 

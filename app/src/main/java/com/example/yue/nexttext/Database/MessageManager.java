@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.yue.nexttext.Data.Location;
 import com.example.yue.nexttext.Data.Message;
 import com.example.yue.nexttext.Data.MessageData;
 import com.example.yue.nexttext.Data.Time;
+import com.example.yue.nexttext.Data.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class MessageManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
                 KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_CURR_TIME + " TEXT," + KEY_DATE + " DATE," + KEY_TIME + " TIME," +
                 KEY_TYPE + " INTEGER," + KEY_STATUS + " INTEGER," + KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
         db.execSQL(CREATE_TABLE);
@@ -61,6 +63,23 @@ public class MessageManager extends SQLiteOpenHelper {
         return this.getMessagesCount() <= 0;
     }
 
+    public int checkConditionType(MessageData data){
+        //time not null
+        if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
+            return 1;
+        }
+        //location not null
+        else if (data.getTime() == null && data.getLocation() != null && data.getWeather() == null){
+            return 2;
+        }
+        //weather not null
+        else if (data.getTime() == null && data.getLocation() == null && data.getWeather() != null){
+            return 3;
+        }
+
+        return 0;
+    }
+
     public void addMessage(MessageData data){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -76,12 +95,23 @@ public class MessageManager extends SQLiteOpenHelper {
         content.put(KEY_CURR_TIME, data.getCurrentTime());
 
         //add time
-        content.put(KEY_DATE, data.getTime().getDate());
-        content.put(KEY_TIME, data.getTime().getTime());
-        content.put(KEY_TYPE, data.getTime().getType());
-        content.put(KEY_STATUS, data.getTime().getStatus());
-        content.put(KEY_LOCATION, "null");
-        content.put(KEY_WEATHER, "null");
+
+        switch(checkConditionType(data)) {
+            // condition 1 is time, 2 is location, 3 is weather
+            case 1:
+                content.put(KEY_DATE, data.getTime().getDate());
+                content.put(KEY_TIME, data.getTime().getTime());
+                content.put(KEY_TYPE, data.getTime().getType());
+                content.put(KEY_STATUS, data.getTime().getStatus());
+                // condition is location
+            case 2:
+                //content.put(KEY_LOCATION, data.getLocation());
+            case 3:
+                //content.put(KEY_WEATHER, data.getWeather());
+            default:
+                break;
+        }
+
 
         // Inserting Row
         db.insert(TABLE_NAME, null, content);
@@ -92,7 +122,7 @@ public class MessageManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME, new String[]{KEY_ID,
-                KEY_FROM, KEY_PASSWORD, KEY_TO, KEY_SUBJECT, KEY_MESSAGE, KEY_CURR_TIME, KEY_DATE, KEY_TIME, KEY_TYPE, KEY_STATUS}, KEY_ID + "=?",
+                KEY_FROM, KEY_PASSWORD, KEY_TO, KEY_SUBJECT, KEY_MESSAGE, KEY_CURR_TIME, KEY_DATE, KEY_TIME, KEY_TYPE, KEY_STATUS, KEY_LOCATION, KEY_WEATHER}, KEY_ID + "=?",
         new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -170,27 +200,55 @@ public class MessageManager extends SQLiteOpenHelper {
                 new String[] { String.valueOf(data.getId()) });
     }
 
-    public void deleteMessage(MessageData data) {
+    public void deleteMessageById(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME, KEY_ID + " = ?",
-                new String[] { String.valueOf(data.getId()) });
+        db.delete(TABLE_NAME, KEY_ID+"="+id, null);
+    }
+
+    public void deleteAllMessages(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME);
         db.close();
     }
 
-    public void prepareData(){
+
+
+    public void prepareData() throws Exception {
 
         //email
-        Message msg1 = new Message("jamespmulvenna@gmail.com", "dummypass", "someemail.com", "somesubject", "testmessageemail");
-        Time time1 = new Time();
+        Message msg1 = new Message("a1", "dummypass", "1", "somesubject", "testmessageemail");
+        Time time1 = new Time(null, null, 1, 2);
         MessageData data1 = new MessageData(msg1, time1);
 
         //sms
-        Message msg2 = new Message("James Mulvenna", null, "16136148702", null, "testmessagesms");
-        Time time2 = new Time(null, null, 0, 4);
+        Message msg2 = new Message("b2", null, "2", null, "testmessagesms");
+        Time time2 = new Time(null, null, 3, 4);
         MessageData data2 = new MessageData(msg2, time2);
+
+        Message msg3 = new Message("c3", null, "3", "somesubject", "testmessageemail");
+        Time time3 = new Time(null, null, 1, 2);
+        MessageData data3 = new MessageData(msg3, time3);
+
+        //sms
+        Message msg4 = new Message("d4", null, "4", null, "testmessagesms");
+        Time time4 = new Time(null, null, 3, 4);
+        MessageData data4 = new MessageData(msg4, time4);
+
+        //sms
+        Message msg5 = new Message("e5", null, "5", null, "testmessagesms");
+        Time time5 = new Time(null, null, 3, 4);
+        MessageData data5 = new MessageData(msg5, time5);
+
+        Message msg6 = new Message("f6", null, "6", null, "testmessagesms");
+        Time time6 = new Time(null, null, 3, 4);
+        MessageData data6 = new MessageData(msg6, time6);
 
         this.addMessage(data1);
         this.addMessage(data2);
+        this.addMessage(data3);
+        this.addMessage(data4);
+        this.addMessage(data5);
+        this.addMessage(data6);
 
         // Reading all messages
         Log.d("Messages: ", "Reading all messages...");
@@ -209,22 +267,6 @@ public class MessageManager extends SQLiteOpenHelper {
 
 
 /*
-    public int checkConditionType(MessageData data){
-        //time not null
-        if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
-            return 1;
-        }
-        //location not null
-        else if (data.getTime() == null && data.getLocation() != null && data.getWeather() == null){
-            return 2;
-        }
-        //weather not null
-        else if (data.getTime() == null && data.getLocation() == null && data.getWeather() != null){
-            return 3;
-        }
-
-        return 0;
-    }
 
     /*
     public ArrayList<MessageData> loadDataTbl_Message_Data(){

@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { createNewMessage() }
 
         //prepareDummyData()
+        messageManager!!.prepareData()
         setupMessageList()
     }
 
