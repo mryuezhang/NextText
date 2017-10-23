@@ -28,6 +28,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_message_confirmation.*
 import kotlinx.android.synthetic.main.fragment_time_picker_layout.*
+import kotlinx.android.synthetic.main.fragment_weather_picker_layout.*
 
 
 /**
@@ -42,6 +43,8 @@ class MessageConfirmationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_confirmation)
+
+        receiveMessage()
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -78,6 +81,13 @@ class MessageConfirmationActivity : AppCompatActivity() {
             intent.putExtra("message", receivedMessage)
             setResult(Activity.RESULT_OK, intent)
             finish()
+        }
+    }
+
+    private fun receiveMessage(){
+        val bundle: Bundle? = intent.extras
+        if (bundle != null){
+            cityDsiplay.text = bundle.getString("Message")
         }
     }
 

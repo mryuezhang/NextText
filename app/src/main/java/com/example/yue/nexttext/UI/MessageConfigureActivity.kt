@@ -8,15 +8,19 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.*
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_configure.*
+import kotlinx.android.synthetic.main.fragment_email_layout.*
+import kotlinx.android.synthetic.main.fragment_sms_object.*
 
 /**
  * Created by yue on 2017-09-30.
  * This class is used to display a collection of SMS and Message objects
  */
 class MessageConfigureActivity : AppCompatActivity() {
+    private val TAG = "MessageConfiActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,19 +50,24 @@ class MessageConfigureActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
-            R.id.action_save_new_message_configure -> createNewMesage()
+            R.id.action_save_new_message_configure -> createNewMessage()
             else -> super.onOptionsItemSelected(item)
         }
         return true
     }
 
     //MARK: Private methods
-    private fun createNewMesage(){
+    private fun createNewMessage(){
+        val intent: Intent = MessageConfirmationActivity.getStartActivityIntent(this)
         if(viewPager_message_configure.currentItem == 0){
             //SMS
+            intent.putExtra("Message", editTextViewWithPrefix_emailAddress.text.toString())
+            Log.i(TAG, editTextViewWithPrefix_emailAddress.text.toString())
         }
         else{
             //Email
+            intent.putExtra("Message", editText_phoneNumber.text.toString())
+            Log.i(TAG, editText_phoneNumber.text.toString())
         }
         startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), Utilities.MESSAGECONFIRMATIONACITIVY_REQUEST_CODE)
     }

@@ -1,0 +1,1 @@
+- Research topics include data-transfer between fragments and activities
