@@ -1,6 +1,7 @@
 package com.example.yue.nexttext.Data;
 
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +11,17 @@ import java.util.Calendar;
  */
 
 public class MessageData implements Parcelable {
+    public static final Creator<MessageData> CREATOR = new Creator<MessageData>() {
+        @Override
+        public MessageData createFromParcel(Parcel in) {
+            return new MessageData(in);
+        }
+
+        @Override
+        public MessageData[] newArray(int size) {
+            return new MessageData[size];
+        }
+    };
     private Message message;
     private Time time;
     private Location location;
@@ -61,18 +73,6 @@ public class MessageData implements Parcelable {
         id = in.readInt();
         currentTime = in.readString();
     }
-
-    public static final Creator<MessageData> CREATOR = new Creator<MessageData>() {
-        @Override
-        public MessageData createFromParcel(Parcel in) {
-            return new MessageData(in);
-        }
-
-        @Override
-        public MessageData[] newArray(int size) {
-            return new MessageData[size];
-        }
-    };
 
     public Message getMessage() {return this.message; }
     public void setMessage(Message newMessage) { this.message = newMessage; }

@@ -1,6 +1,7 @@
 package com.example.yue.nexttext.UI
-
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,26 +10,39 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import android.provider.Settings
 import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
+import com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable
+import com.google.android.gms.common.api.GoogleApiActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import com.google.android.gms.common.api.GoogleApiClient
+import android.net.Uri
+import android.location.Location
+import com.example.yue.nexttext.Data.MLocation
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 
 /**
  * Created by yue on 2017-09-27.
  */
 class MainActivity : AppCompatActivity() {
 
+
     private val TAG = "MainActivity"
     //private var message_ArrayList = ArrayList<Message>()
     private var messageManager: MessageManager? = null
-
+    private var mLocation: MLocation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+                setContentView(R.layout.activity_main);
         messageManager = MessageManager(this)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -39,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         //prepareDummyData()
         messageManager?.prepareData()
         setupMessageList()
+        this.mLocation = MLocation(this)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,6 +77,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        Log.d(TAG, mLocation!!.location.toString())
+
         return if (id == R.id.action_settings) {
             true
         } else super.onOptionsItemSelected(item)
@@ -118,6 +136,18 @@ class MainActivity : AppCompatActivity() {
         //startActivityForResult(MessageConfigureActivity_Old.getStartActivityIntent(this), 1)
         startActivity(MessageConfigureActivity.getStartActivityIntent(this))
     }
+
+    override public fun onResume() {
+        super.onResume()
+        //mLocation.onResume()
+
+    }
+//    override fun onConnected (connectionHint: Bundle)
+//    {
+//
+//    }
+
+
 }
 
 

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yue.nexttext" >
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
@@ -23,15 +26,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".UI.MessageConfigureActivity"
-            android:parentActivityName=".UI.MainActivity"
             android:label="New Message"
+            android:parentActivityName=".UI.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".UI.MessageConfirmationActivity"
-            android:parentActivityName=".UI.MessageConfigureActivity"
             android:label="Trigger Picker"
+            android:parentActivityName=".UI.MessageConfigureActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
     </application>
 
 </manifest>
