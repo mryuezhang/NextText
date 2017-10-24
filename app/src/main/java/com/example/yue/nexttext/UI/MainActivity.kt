@@ -1,6 +1,7 @@
 package com.example.yue.nexttext.UI
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+
 
 /**
  * Created by yue on 2017-09-27.
@@ -63,11 +65,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
-
+        when(item.itemId){
+            R.id.action_settings -> return true
+            R.id.action_delete_all_messages -> {
+                messageManager?.deleteAllMessages()
+                (messageList.adapter as MessageListAdapter).deleteAll()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     //MARK: private methods
@@ -89,7 +95,31 @@ class MainActivity : AppCompatActivity() {
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
             messageList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
             messageList.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener{
-                override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean = false
+                override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                    when(p1?.itemId){
+                        R.id.action_delete_select_message -> {
+                            //Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_SHORT).show()
+                            val builder: AlertDialog.Builder  = AlertDialog.Builder(this@MainActivity)
+
+                            if (p0?.title.toString().toInt() > 1){
+                                builder.setMessage("Do you  want to delete selected record?")
+                            }else{
+                                builder.setMessage("Do you  want to delete all selected records?")
+                            }
+
+                            builder.setNegativeButton("No") { d, _ -> d.cancel() }.
+                                    setPositiveButton("Yes") {
+                                        //TODO: add the actual delete functionality here
+                                        d, _ -> d.cancel() }
+                            builder.create().show()
+
+                            return true
+                        }
+                        else -> {
+                            return false
+                        }
+                    }
+                }
 
                 override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
                     val checkedCount: Int = messageList.checkedItemCount
@@ -120,6 +150,10 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
     */
+
+    private fun deleteMessage(id: Int){
+        messageManager?.deleteMessageById(id)
+    }
 
 
     private fun receiveMessageAndUpdateListView(data: Intent?){

@@ -7,11 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.yue.nexttext.Data.Location;
 import com.example.yue.nexttext.Data.Message;
 import com.example.yue.nexttext.Data.MessageData;
 import com.example.yue.nexttext.Data.Time;
-import com.example.yue.nexttext.Data.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class MessageManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
                 KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_CURR_TIME + " TEXT," + KEY_DATE + " DATE," + KEY_TIME + " TIME," +
                 KEY_TYPE + " INTEGER," + KEY_STATUS + " INTEGER," + KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
         db.execSQL(CREATE_TABLE);
@@ -118,19 +116,47 @@ public class MessageManager extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    public MessageData getMessage(int id){
+    public MessageData getMessageDataByID(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NAME, new String[]{KEY_ID,
-                KEY_FROM, KEY_PASSWORD, KEY_TO, KEY_SUBJECT, KEY_MESSAGE, KEY_CURR_TIME, KEY_DATE, KEY_TIME, KEY_TYPE, KEY_STATUS, KEY_LOCATION, KEY_WEATHER}, KEY_ID + "=?",
-        new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
+        String[] projection = {
+                KEY_ID,//0
+                KEY_FROM,//1
+                KEY_PASSWORD,//2
+                KEY_TO, //3
+                KEY_SUBJECT,//4
+                KEY_MESSAGE,//5
+                KEY_CURR_TIME,//6
+                KEY_DATE,//7
+                KEY_TIME,//8
+                KEY_TYPE,//9
+                KEY_STATUS,//10
+                KEY_LOCATION, //11
+                KEY_WEATHER//12
+        };
+        String selection = KEY_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
 
-        Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-        Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
 
-        return new MessageData(message, time, Integer.parseInt(cursor.getString(0)));
+        Cursor cursor = db.query(TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs, null, null, null, null);
+
+        if (cursor == null ) {
+            return null;
+        }
+        else if(!cursor.moveToFirst()){
+            return null;
+        }
+        else{
+            Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
+            int key_id = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+            return new MessageData(message, time, key_id);
+        }
+
     }
 
     // Getting All Messages
@@ -316,7 +342,7 @@ public class MessageManager extends SQLiteOpenHelper {
                 if(message.getSubject() != null){
                     content.put("subject", message.getSubject());
                 }
-                content.put("message", message.getMessage());
+                content.put("message", message.getMessageDataByID());
                 content.put("currtime", data.getCurrentTime());
 
                 //add time
@@ -334,7 +360,7 @@ public class MessageManager extends SQLiteOpenHelper {
                 if(message.getSubject() != null){
                     content.put("subject", message.getSubject());
                 }
-                content.put("message", message.getMessage());
+                content.put("message", message.getMessageDataByID());
                 content.put("currtime", data.getCurrentTime());
 
                 //add location
@@ -349,7 +375,7 @@ public class MessageManager extends SQLiteOpenHelper {
                 if(message.getSubject() != null){
                     content.put("subject", message.getSubject());
                 }
-                content.put("message", message.getMessage());
+                content.put("message", message.getMessageDataByID());
                 content.put("currtime", data.getCurrentTime());
 
                 //add weather

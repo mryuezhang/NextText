@@ -72,6 +72,11 @@ class MessageConfigureActivity : AppCompatActivity() {
         startActivityForResult(MessageConfirmationActivity.getStartActivityIntent(this), Utilities.MESSAGECONFIRMATIONACITIVY_REQUEST_CODE)
     }
 
+    //MARK: Data Passer interface
+    interface DataPasser{
+        fun onDataPass(data: HashMap<String, String>)
+    }
+
     //MARK: MessageCollectionPagerAdapter class
     class MessageCollectionPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){
         override fun getItem(position: Int): Fragment = when(position){

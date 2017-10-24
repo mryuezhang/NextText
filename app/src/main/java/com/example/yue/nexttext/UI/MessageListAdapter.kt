@@ -51,4 +51,9 @@ class MessageListAdapter(private val context: Context,
 
     override fun getCount(): Int = this.messageList.size
 
+    fun deleteAll(){
+        messageList.clear()
+        this.notifyDataSetChanged()
+    }
+
 }
