@@ -1,6 +1,5 @@
 package com.example.yue.nexttext.UI
 
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -28,7 +27,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_message_confirmation.*
 import kotlinx.android.synthetic.main.fragment_time_picker_layout.*
-import kotlinx.android.synthetic.main.fragment_weather_picker_layout.*
 
 
 /**
@@ -38,13 +36,9 @@ import kotlinx.android.synthetic.main.fragment_weather_picker_layout.*
  */
 class MessageConfirmationActivity : AppCompatActivity() {
 
-    private val TAG = "MessageConActivity"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_confirmation)
-
-        receiveMessage()
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -63,7 +57,11 @@ class MessageConfirmationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_confirm_new_message -> confirmMessage()
+            R.id.action_confirm_new_message -> {
+                //TODO complete confirmMessage()
+                // confirmMessage()
+                return true
+            }
             android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
             else -> super.onOptionsItemSelected(item)
         }
@@ -71,6 +69,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
     }
 
     //MARK: Private methods
+    /*
     private fun confirmMessage(){
         val receivedMessage: Message? = intent.getParcelableExtra("message")
         if(receivedMessage == null){
@@ -83,13 +82,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    private fun receiveMessage(){
-        val bundle: Bundle? = intent.extras
-        if (bundle != null){
-            cityDsiplay.text = bundle.getString("Message")
-        }
-    }
+    */
 
     //MARK: MessageCollectionPagerAdapter class
     class TriggerPickerPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){
@@ -175,7 +168,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
     //MARK: Weather Picker Fragment
     class WeatherPickerFragment: android.support.v4.app.Fragment(){
         private val TAG = "WeatherPickerFragment"
-        var autocompleteFragment: PlaceAutocompleteFragment? = null
+        private var autocompleteFragment: PlaceAutocompleteFragment? = null
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
                 inflater?.inflate(R.layout.fragment_weather_picker_layout, container, false)

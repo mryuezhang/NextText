@@ -5,9 +5,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
         <item name="android:activatedBackgroundIndicator">@drawable/list_view_item_layout</item>
-        <item name="colorControlActivated">@color/colorSliver</item>
+        <item name="colorControlActivated">@color/colorPrimaryLight</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
