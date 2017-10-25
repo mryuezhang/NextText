@@ -1,7 +1,11 @@
 # NextText
 COMP3004 Project
 
-Developers: \n\n
-Yue Zhang - frontend \n
-James Mulvenna - backend including database, time/weather support\n
+Developers: 
+<br />
+<br />
+Yue Zhang - frontend 
+<br />
+James Mulvenna - backend including database, time/weather support
+<br />
 Davon - backend including map support 
