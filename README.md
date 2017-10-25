@@ -8,4 +8,4 @@ Yue Zhang - frontend
 <br />
 James Mulvenna - backend including database, time/weather support
 <br />
-Davon - backend including map support 
+Davon Plouffe - backend including map support 
