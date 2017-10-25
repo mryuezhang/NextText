@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:backgroundTint="@color/colorSliver"
         android:hint="To"
         android:inputType="phone"
         android:padding="16dp" />
@@ -18,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ems="10"
-        android:gravity="top|left"
+        android:background="@color/white"
+        android:gravity="top|start"
         android:hint="Text"
         android:inputType="textMultiLine|textShortMessage|textLongMessage"
         android:padding="16dp" />

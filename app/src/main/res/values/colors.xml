@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimaryVeryLight">#C5CAE9</color>
+    <color name="colorPrimaryLight">#7986CB</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorPrimaryLight">#7986CB</color>
     <color name="colorAccent">#303F9F</color>
     <color name="colorSliver">#EEEE</color>
     <color name="white">#FAFAFA</color>
+    <color name="text_color">#212121</color>
 </resources>

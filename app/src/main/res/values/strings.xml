@@ -7,6 +7,9 @@
     <string name="action_cancel_new_message_configure">Cancel</string>
     <string name="action_delete_select_message">Delete</string>
     <string name="action_delete_all_messages">Delete All Messages</string>
+
+    <string name="empty_view_text">Once you added a new message, you\'ll\n see it listed here</string>
+
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="sms">SMS</string>

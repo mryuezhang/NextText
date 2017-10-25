@@ -16,11 +16,11 @@
         android:text="@string/dummy_date"
         android:textAlignment="gravity"
         android:textSize="@dimen/larger_text_size"
-        android:textStyle="bold" />
+        android:textColor="#212121"/>
 
     <TextView
         android:background="@drawable/date_or_time_display_background"
-        android:gravity="center"
+        android:gravity="center|top"
         android:id="@+id/time_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +29,6 @@
         android:text="@string/dummy_time"
         android:textAlignment="gravity"
         android:textSize="@dimen/larger_text_size"
-        android:textStyle="bold"/>
+        android:textColor="#212121"/>
 
 </LinearLayout>

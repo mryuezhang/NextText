@@ -14,11 +14,14 @@ import com.example.yue.nexttext.R
 
 /**
  * Created by yue on 2017-09-27.
+ * This class is a customized BaseAdapter,
+ * it takes a list of MessageData and put in a ListView widget
+ * Used in MainActivity
  */
 class MessageListAdapter(private val context: Context,
                          private val messageList: ArrayList<MessageData>): BaseAdapter() {
 
-    private val selectedItemsIDs = SparseBooleanArray()
+    private var selectedItemsIDs = SparseBooleanArray()
 
     private class ViewHolder{
         var title: TextView? = null
@@ -56,4 +59,24 @@ class MessageListAdapter(private val context: Context,
         this.notifyDataSetChanged()
     }
 
+    fun delete(item : MessageData){
+        messageList.remove(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun toggleSelection(position: Int) {
+        selectView(position, !selectedItemsIDs.get(position))
+    }
+
+    private fun selectView(i: Int, boo: Boolean){
+        if(boo) selectedItemsIDs.put(i, boo)
+        else selectedItemsIDs.delete(i)
+    }
+
+    fun getSelectedIds(): SparseBooleanArray = selectedItemsIDs
+
+    fun removeSelection() {
+        selectedItemsIDs = SparseBooleanArray()
+        notifyDataSetChanged()
+    }
 }

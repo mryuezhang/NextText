@@ -1,34 +1,29 @@
 package com.example.yue.nexttext.UI
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.ListView
-import android.widget.Toast
 import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.empty_view_for_list_view.*
 
 
 /**
  * Created by yue on 2017-09-27.
+ * Main screen
  */
 class MainActivity : AppCompatActivity() {
-
-    private val TAG = "MainActivity"
-    //private var message_ArrayList = ArrayList<Message>()
     private var messageManager: MessageManager? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +34,14 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { createNewMessage() }
+        fab.setOnClickListener { startActivityForResult(MessageConfigureActivity.getStartActivityIntent(this),
+                Utilities.MESSAGECONFIGUREACTIVITY_REQUEST_CODE) }
 
-        //prepareDummyData()
         messageManager?.prepareData()
         setupMessageList()
     }
 
+    /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
@@ -57,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    */
 
     //MARK: Action menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,31 +61,23 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_settings -> return true
-            R.id.action_delete_all_messages -> {
-                messageManager?.deleteAllMessages()
-                (messageList.adapter as MessageListAdapter).deleteAll()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+        R.id.action_settings -> true
+        R.id.action_delete_all_messages -> {
+            deleteAllMessagesEverywhere()
+            true
         }
+        else -> super.onOptionsItemSelected(item)
     }
 
     //MARK: private methods
-    /*
-    private fun prepareDummyData(){
-        message_ArrayList.add(0, Message("Happy Birthday", "Happy Birthday bro!!!!"))
-        message_ArrayList.add(0, Message("It's gonna rain today", "The weather channel said it's gonna rain today, bring an umbrella or rain coat."))
-        message_ArrayList.add(0, Message("I will be there in 5 mins", "I'm close, get ready soon"))
-        message_ArrayList[0].setTime()
-        message_ArrayList[1].setLocation()
-        message_ArrayList[2].setWeather()
-    }
-    */
-
     private fun setupMessageList(){
+        //set up a additional view for listview when it's empty
+        val emptyView = layoutInflater.inflate(R.layout.empty_view_for_list_view, null, false)
+        addContentView(emptyView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        messageList.emptyView = emptyView_for_ListView
+
+        //inflate the list with data from database when database is not empty
         if(!messageManager!!.isEmpty){
             val messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
             messageList.adapter = messageListAdapter
@@ -101,30 +90,34 @@ class MainActivity : AppCompatActivity() {
                             //Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_SHORT).show()
                             val builder: AlertDialog.Builder  = AlertDialog.Builder(this@MainActivity)
 
-                            if (p0?.title.toString().toInt() > 1){
-                                builder.setMessage("Do you  want to delete selected record?")
+                            if (p0?.title.toString().toInt() == 1){
+                                builder.setMessage("Delete this message?")
                             }else{
-                                builder.setMessage("Do you  want to delete all selected records?")
+                                builder.setMessage("Delete these messages?")
                             }
 
                             builder.setNegativeButton("No") { d, _ -> d.cancel() }.
-                                    setPositiveButton("Yes") {
-                                        //TODO: add the actual delete functionality here
-                                        d, _ -> d.cancel() }
-                            builder.create().show()
+                                    setPositiveButton("Yes") { _, _ ->
+                                        val selectedViews = messageListAdapter.getSelectedIds()
+                                        (selectedViews.size()-1 downTo 0)
+                                                .filter { selectedViews.valueAt(it) }
+                                                .map { messageListAdapter.getItem(selectedViews.keyAt(it)) }
+                                                .forEach { deleteMessageEverywhere(it) }
+                                        selectedViews.clear()
 
+                                        p0?.finish()
+                                     }
+                            builder.create().show()
                             return true
                         }
-                        else -> {
-                            return false
-                        }
+                        else -> return false
                     }
                 }
 
                 override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
                     val checkedCount: Int = messageList.checkedItemCount
                     p0?.title = checkedCount.toString()
-                    messageListAdapter.notifyDataSetChanged()
+                    messageListAdapter.toggleSelection(p1)
                 }
 
                 override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
@@ -136,10 +129,20 @@ class MainActivity : AppCompatActivity() {
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
 
                 override fun onDestroyActionMode(p0: ActionMode?) {
+                    messageListAdapter.removeSelection()
                 }
-
             })
         }
+    }
+
+    private fun deleteAllMessagesEverywhere(){
+        messageManager?.deleteAllMessages()
+        (messageList.adapter as MessageListAdapter).deleteAll()
+    }
+
+    private fun deleteMessageEverywhere(messageData: MessageData){
+        messageManager?.deleteMessageById(messageData.id)
+        (messageList.adapter as MessageListAdapter).delete(messageData)
     }
 
     /*
@@ -151,11 +154,7 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
-    private fun deleteMessage(id: Int){
-        messageManager?.deleteMessageById(id)
-    }
-
-
+    /*
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val message: Message? = data?.getParcelableExtra<Message>("message")
         if(message == null){
@@ -166,17 +165,15 @@ class MainActivity : AppCompatActivity() {
             setupMessageList()
         }
     }
+    */
 
+    /*
     private fun cancel(data: Intent?){
         receiveMessageAndUpdateListView(data)
         Toast.makeText(applicationContext, "Canceled", Toast.LENGTH_SHORT).show()
         setupMessageList()
     }
-
-    private fun createNewMessage(){
-        //startActivityForResult(MessageConfigureActivity_Old.getStartActivityIntent(this), 1)
-        startActivity(MessageConfigureActivity.getStartActivityIntent(this))
-    }
+    */
 }
 
 
