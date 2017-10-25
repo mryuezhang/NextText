@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Service;
+package com.example.yue.nexttext.EmailService;
 
 /**
  * Created by jamesmulvenna on 2017-10-19.
@@ -52,7 +52,7 @@ public class GMailSupport extends javax.mail.Authenticator {
         return new PasswordAuthentication(user, password);
     }
 
-    public synchronized void sendMail(String subject, String body, String sender, String recipient) throws Exception {
+    public synchronized void sendMail(String sender, String recipient, String subject, String body) throws Exception {
         try{
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));

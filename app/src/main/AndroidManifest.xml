@@ -32,6 +32,9 @@
             android:label="Trigger Picker"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <receiver android:name=".SendReceiveService.AlarmReceiver" />
+        <service android:name=".SendReceiveService.MessageSender" />
     </application>
 
 </manifest>
