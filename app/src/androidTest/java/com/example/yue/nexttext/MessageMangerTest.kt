@@ -111,6 +111,8 @@ class MessageMangerTest {
         val time6 = Time(null, null, 3, 4)
         val data6 = MessageData(msg6, time6)
 
+        dataBase.deleteAllMessages()
+
         dataBase.addMessage(data1)
         dataBase.addMessage(data2)
         dataBase.addMessage(data3)
