@@ -1,5 +1,6 @@
 package com.example.yue.nexttext.UI
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -19,6 +20,7 @@ import android.view.*
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import com.example.yue.nexttext.Data.MessageData
 import com.example.yue.nexttext.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.places.AutocompleteFilter
@@ -35,10 +37,18 @@ import kotlinx.android.synthetic.main.fragment_time_picker_layout.*
  * and will put the trigger in the object
  */
 class MessageConfirmationActivity : AppCompatActivity() {
+    private var receivedMessageDataObject: MessageData? = null
+
+    companion object {
+        fun getStartActivityIntent(context: Context) =
+                Intent(context, MessageConfirmationActivity::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_confirmation)
+
+        receivedMessageDataObject = intent.getParcelableExtra(Utilities.INCOMPLETE_DATA)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -58,8 +68,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_confirm_new_message -> {
-                //TODO complete confirmMessage()
-                // confirmMessage()
+                confirmMessage()
                 return true
             }
             android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
@@ -69,20 +78,16 @@ class MessageConfirmationActivity : AppCompatActivity() {
     }
 
     //MARK: Private methods
-    /*
+
+    // TODO check trigger
+    // currently this function just simply forward the received MessageData object to MainActivity
+    // later on it should check if any trigger is set to this object, and forward it to MainActicity
     private fun confirmMessage(){
-        val receivedMessage: Message? = intent.getParcelableExtra("message")
-        if(receivedMessage == null){
-            Log.e(TAG, "Received MessageCondition object is Null!")
-        }
-        else{
-            val intent = Intent()
-            intent.putExtra("message", receivedMessage)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
+        intent.putExtra(Utilities.COMPLETE_DATA, receivedMessageDataObject)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
-    */
+
 
     //MARK: MessageCollectionPagerAdapter class
     class TriggerPickerPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){
@@ -167,7 +172,7 @@ class MessageConfirmationActivity : AppCompatActivity() {
     }
     //MARK: Weather Picker Fragment
     class WeatherPickerFragment: android.support.v4.app.Fragment(){
-        private val TAG = "WeatherPickerFragment"
+        private val _tag = "WeatherPickerFragment"
         private var autocompleteFragment: PlaceAutocompleteFragment? = null
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -184,19 +189,14 @@ class MessageConfirmationActivity : AppCompatActivity() {
             autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener{
                 override fun onPlaceSelected(p0: Place?) {
                     if(p0 == null){
-                        Log.e(TAG, "Null Place Selected!")
+                        Log.e(_tag, "Null Place Selected!")
                     }
-                    else Log.i(TAG, p0.address.toString())
+                    else Log.i(_tag, p0.address.toString())
                 }
                 override fun onError(p0: Status?) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             })
         }
-    }
-
-    companion object {
-        fun getStartActivityIntent(context: Context) =
-                Intent(context, MessageConfirmationActivity::class.java)
     }
 }

@@ -9,11 +9,13 @@ import com.example.yue.nexttext.Data.MessageData
 abstract class Utilities {
 
     companion object {
-        val MESSAGECONFIGUREACTIVITY_REQUEST_CODE = 121
-        val MESSAGECONFIRMATIONACITIVY_REQUEST_CODE = 122
+        val MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE = 121
+        val MESSAGE_CONFIRMATION_ACTIVITY_REQUEST_CODE = 122
+        val INCOMPLETE_DATA = "IncompleteMessageDataObject"
+        val COMPLETE_DATA = "CompleteMessageDataObject"
 
         fun isEmail(messageData: MessageData): Boolean =
-                messageData.message.to.contains("@")
+                messageData.message?.to!!.contains("@")
     }
 
 }

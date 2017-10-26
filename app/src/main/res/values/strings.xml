@@ -13,9 +13,8 @@
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="sms">SMS</string>
+    <string name="sms_content_hint">Type an SMS message here</string>
     <string name="email">E-mail</string>
-    <string name="choose_message_type">Choose message type: </string>
-    <string name="choose_message_base">Choose message base: </string>
     <string name="message_time_base">Time Base</string>
     <string name="message_location_base">Location Base</string>
     <string name="message_weather_base">Weather Base</string>

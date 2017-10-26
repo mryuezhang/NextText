@@ -1,9 +1,12 @@
 package com.example.yue.nexttext.UI
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -23,6 +26,7 @@ import kotlinx.android.synthetic.main.empty_view_for_list_view.*
  * Main screen
  */
 class MainActivity : AppCompatActivity() {
+    private val tag = "MainActivity"
     private var messageManager: MessageManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,25 +39,22 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { startActivityForResult(MessageConfigureActivity.getStartActivityIntent(this),
-                Utilities.MESSAGECONFIGUREACTIVITY_REQUEST_CODE) }
+                Utilities.MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE) }
 
-        messageManager?.prepareData()
+        //messageManager?.prepareData()
         setupMessageList()
     }
 
-    /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            1->{
+            Utilities.MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE->{
                 when(resultCode){
                     Activity.RESULT_OK -> receiveMessageAndUpdateListView(data)
-                    //Activity.RESULT_CANCELED -> cancel(data)
                 }
             }
         }
     }
-    */
 
     //MARK: Action menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -154,18 +155,17 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
-    /*
+
     private fun receiveMessageAndUpdateListView(data: Intent?){
-        val message: Message? = data?.getParcelableExtra<Message>("message")
-        if(message == null){
-            Log.e(TAG, "Received MessageData object is Null!")
+        val receivedCompleteData = data?.getParcelableExtra<MessageData>(Utilities.COMPLETE_DATA)
+        if(receivedCompleteData == null){
+            Log.e(tag, "Received MessageData object is Null!")
         }
         else {
-            //message_ArrayList.add(0,message)
-            setupMessageList()
+            (messageList.adapter as MessageListAdapter).add(receivedCompleteData)
+            messageManager?.addMessage(receivedCompleteData)
         }
     }
-    */
 
     /*
     private fun cancel(data: Intent?){

@@ -61,7 +61,7 @@ public class MessageManager extends SQLiteOpenHelper {
         return this.getMessagesCount() <= 0;
     }
 
-    public int checkConditionType(MessageData data){
+    private int checkTriggerType(MessageData data){
         //time not null
         if (data.getTime() != null && data.getLocation() == null && data.getWeather() == null){
             return 1;
@@ -94,7 +94,7 @@ public class MessageManager extends SQLiteOpenHelper {
 
         //add time
 
-        switch(checkConditionType(data)) {
+        switch(checkTriggerType(data)) {
             // condition 1 is time, 2 is location, 3 is weather
             case 1:
                 content.put(KEY_DATE, data.getTime().getDate());
@@ -137,7 +137,6 @@ public class MessageManager extends SQLiteOpenHelper {
         String selection = KEY_ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-
         Cursor cursor = db.query(TABLE_NAME,
                 projection,
                 selection,
@@ -151,17 +150,30 @@ public class MessageManager extends SQLiteOpenHelper {
         }
         else{
             Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-            Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
-            int key_id = Integer.parseInt(cursor.getString(0));
+            MessageData messageData = new MessageData(message, id);
+            messageData.setCurrentTime(cursor.getString(6));
+            if(!cursor.isNull(7) && !cursor.isNull(8)){
+                Time time = new Time(cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getInt(10));
+                //set the current time to when the MessageObject first time created, not when it's queried from database
+                messageData.setTime(time);
+            }
+            /*
+            else if(!cursor.isNull(11)){
+
+            }
+            else{
+            }
+            */
             cursor.close();
-            return new MessageData(message, time, key_id);
+
+            return messageData;
         }
 
     }
 
     // Getting All Messages
     public List<MessageData> getAllMessages() {
-        List<MessageData> messageList = new ArrayList<MessageData>();
+        List<MessageData> messageList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT * FROM " + TABLE_NAME;
 
@@ -173,12 +185,14 @@ public class MessageManager extends SQLiteOpenHelper {
             do {
                 Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
                 Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
-                MessageData messageData = new MessageData(message, time, Integer.parseInt(cursor.getString(0)));
+                MessageData messageData = new MessageData(message, Integer.parseInt(cursor.getString(0)));
+                //use setter to set time instead of using constructor
+                messageData.setTime(time);
                 // Adding message to list
                 messageList.add(messageData);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return message list
         return messageList;
     }
@@ -237,35 +251,32 @@ public class MessageManager extends SQLiteOpenHelper {
         db.close();
     }
 
-
-
     public void prepareData() throws Exception {
-
         //email
-        Message msg1 = new Message("a1", "dummypass", "1", "somesubject", "testmessageemail");
+        Message msg1 = new Message("yuezhang5@cmail.carleton.ca", "dummypass", "jamesmulvenna@cmail.carleton.ca", "First Dummy", "This is the first dummy Email");
         Time time1 = new Time(null, null, 1, 2);
         MessageData data1 = new MessageData(msg1, time1);
 
         //sms
-        Message msg2 = new Message("b2", null, "2", null, "testmessagesms");
+        Message msg2 = new Message("61325093232","This is the first dummy SMS");
         Time time2 = new Time(null, null, 3, 4);
         MessageData data2 = new MessageData(msg2, time2);
 
-        Message msg3 = new Message("c3", null, "3", "somesubject", "testmessageemail");
+        Message msg3 = new Message("yuezhang5@cmail.carleton.ca", "123", "jamesmulvenna@cmail.carleton.ca", "Second Dummy", "This is the second dummy Email");
         Time time3 = new Time(null, null, 1, 2);
         MessageData data3 = new MessageData(msg3, time3);
 
         //sms
-        Message msg4 = new Message("d4", null, "4", null, "testmessagesms");
+        Message msg4 = new Message("6134347584","This is the second dummy SMS");
         Time time4 = new Time(null, null, 3, 4);
         MessageData data4 = new MessageData(msg4, time4);
 
         //sms
-        Message msg5 = new Message("e5", null, "5", null, "testmessagesms");
+        Message msg5 = new Message("6135458687","This is the third dummy SMS");
         Time time5 = new Time(null, null, 3, 4);
         MessageData data5 = new MessageData(msg5, time5);
 
-        Message msg6 = new Message("f6", null, "6", null, "testmessagesms");
+        Message msg6 = new Message("6136235968","This is the forth dummy SMS");
         Time time6 = new Time(null, null, 3, 4);
         MessageData data6 = new MessageData(msg6, time6);
 
@@ -291,8 +302,6 @@ public class MessageManager extends SQLiteOpenHelper {
     }
 }
 
-
-/*
 
     /*
     public ArrayList<MessageData> loadDataTbl_Message_Data(){
@@ -383,6 +392,6 @@ public class MessageManager extends SQLiteOpenHelper {
             default:
 
         }
-        */
+*/
 
 

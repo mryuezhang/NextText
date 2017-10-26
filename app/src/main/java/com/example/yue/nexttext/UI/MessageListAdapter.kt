@@ -42,8 +42,8 @@ class MessageListAdapter(private val context: Context,
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.title?.text = this.messageList[p0].message.to
-        viewHolder.content?.text = this.messageList[p0].message.message
+        viewHolder.title?.text = this.messageList[p0].message?.to
+        viewHolder.content?.text = this.messageList[p0].message?.message
 
         return view
     }
@@ -53,6 +53,11 @@ class MessageListAdapter(private val context: Context,
     override fun getItemId(p0: Int): Long = this.messageList[p0].hashCode().toLong()
 
     override fun getCount(): Int = this.messageList.size
+
+    fun add(messageData: MessageData){
+        messageList.add(messageData)
+        notifyDataSetChanged()
+    }
 
     fun deleteAll(){
         messageList.clear()

@@ -4,4 +4,4 @@
 - Research on Google place API and related widgets on Android
 - Attempted to implement PlaceAutocompleteFragment
 
-Time: 20 hours
+Time: 25 hours
