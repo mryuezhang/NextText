@@ -6,6 +6,7 @@ import android.os.Parcelable
 /**
  * Created by yue on 2017-10-26.
  * A class can be used to hold either for SMS or Email data
+ *
  */
 class Message() : Parcelable {
     var from: String? = null
