@@ -44,6 +44,7 @@ import kotlinx.android.synthetic.main.empty_view_for_list_view.*
 class MainActivity : AppCompatActivity() {
     private val tag = "MainActivity"
     private var messageManager: MessageManager? = null
+    private var messageListAdapter: MessageListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         //inflate the list with data from database when database is not empty
         if(!messageManager!!.isEmpty){
-            val messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
+            messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
             messageList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
@@ -115,10 +116,10 @@ class MainActivity : AppCompatActivity() {
 
                             builder.setNegativeButton("No") { d, _ -> d.cancel() }.
                                     setPositiveButton("Yes") { _, _ ->
-                                        val selectedViews = messageListAdapter.getSelectedIds()
+                                        val selectedViews = messageListAdapter!!.getSelectedIds()
                                         (selectedViews.size()-1 downTo 0)
                                                 .filter { selectedViews.valueAt(it) }
-                                                .map { messageListAdapter.getItem(selectedViews.keyAt(it)) }
+                                                .map { messageListAdapter!!.getItem(selectedViews.keyAt(it)) }
                                                 .forEach { deleteMessageEverywhere(it) }
                                         selectedViews.clear()
 
@@ -134,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
                     val checkedCount: Int = messageList.checkedItemCount
                     p0?.title = checkedCount.toString()
-                    messageListAdapter.toggleSelection(p1)
+                    messageListAdapter!!.toggleSelection(p1)
                 }
 
                 override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
 
                 override fun onDestroyActionMode(p0: ActionMode?) {
-                    messageListAdapter.removeSelection()
+                    messageListAdapter!!.removeSelection()
                 }
             })
         }
@@ -154,23 +155,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteAllMessagesEverywhere(){
         messageManager?.deleteAllMessages()
-        (messageList.adapter as MessageListAdapter).deleteAll()
+        messageListAdapter!!.deleteAll()
     }
 
     private fun deleteMessageEverywhere(messageData: MessageData){
         messageManager?.deleteMessageById(messageData.id)
-        (messageList.adapter as MessageListAdapter).delete(messageData)
+        messageListAdapter!!.delete(messageData)
     }
-
-    /*
-    private fun editMessage(i: Int){
-        val intent = MessageConfigureActivity_Old.getStartActivityIntent(this)
-        intent.putExtra("selected_message", message_ArrayList[i])
-        message_ArrayList.removeAt(i)
-        startActivityForResult(intent, 1)
-    }
-    */
-
 
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val receivedCompleteData = data?.getParcelableExtra<MessageData>(Utilities.COMPLETE_DATA)
@@ -178,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             Log.e(tag, "Received MessageData object is Null!")
         }
         else {
-            (messageList.adapter as MessageListAdapter).add(receivedCompleteData)
+            messageListAdapter!!.add(receivedCompleteData)
             messageManager?.addMessage(receivedCompleteData)
         }
     }
