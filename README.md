@@ -4,9 +4,9 @@ COMP3004 Project
 Developers(from A to Z): 
 <br />
 
-James Mulvenna - backend including database, time/weather support
+James Mulvenna - Backend (Database, Models, Service), Yahoo Weather API
 <br />
-Davon Plouffe - backend including map support 
+Devon Plouffe - Google Maps API
 <br />
-Yue Zhang - frontend 
+Yue Zhang - Frontend
 
