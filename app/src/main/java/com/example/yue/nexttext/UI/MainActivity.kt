@@ -212,12 +212,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteAllMessagesEverywhere(){
         messageManager?.deleteAllMessages()
-        (messageList.adapter as? MessageListAdapter)!!.deleteAll()
+        if (messageList.adapter == null ) setupMessageList()
+        else (messageList.adapter as MessageListAdapter).deleteAll()
     }
 
     private fun deleteMessageEverywhere(messageData: MessageData){
         messageManager?.deleteMessageById(messageData.id)
-        (messageList.adapter as? MessageListAdapter)!!.delete(messageData)
+        if (messageList.adapter == null ) setupMessageList()
+        (messageList.adapter as MessageListAdapter).delete(messageData)
     }
 
     private fun receiveMessageAndUpdateListView(data: Intent?){
@@ -227,9 +229,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             messageManager?.addMessage(receivedCompleteData)
-            if(messageList.adapter == null){
-                setupMessageList()
-            }
+            if(messageList.adapter == null) setupMessageList()
             else (messageList.adapter as MessageListAdapter).add(receivedCompleteData)
         }
     }
