@@ -102,6 +102,24 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //MARK: Navigation drawer
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        drawerToggle?.syncState()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drawerToggle?.onConfigurationChanged(newConfig)
+    }
+
+    fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
     //MARK: private methods
     private fun setupMessageList(){
         //set up a additional view for listview when it's empty
@@ -113,55 +131,7 @@ class MainActivity : AppCompatActivity() {
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
             messageList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-            messageList.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener{
-                override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-                    when(p1?.itemId){
-                        R.id.action_delete_select_message -> {
-                            //Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_SHORT).show()
-                            val builder: AlertDialog.Builder  = AlertDialog.Builder(this@MainActivity)
-
-                            if (p0?.title.toString().toInt() == 1){
-                                builder.setMessage("Delete this message?")
-                            }else{
-                                builder.setMessage("Delete these messages?")
-                            }
-
-                            builder.setNegativeButton("No") { d, _ -> d.cancel() }.
-                                    setPositiveButton("Yes") { _, _ ->
-                                        val selectedViews = messageListAdapter.getSelectedIds()
-                                        (selectedViews.size()-1 downTo 0)
-                                                .filter { selectedViews.valueAt(it) }
-                                                .map { messageListAdapter.getItem(selectedViews.keyAt(it)) }
-                                                .forEach { deleteMessageEverywhere(it) }
-                                        selectedViews.clear()
-
-                                        p0?.finish()
-                                     }
-                            builder.create().show()
-                            return true
-                        }
-                        else -> return false
-                    }
-                }
-
-                override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
-                    val checkedCount: Int = messageList.checkedItemCount
-                    p0?.title = checkedCount.toString()
-                    messageListAdapter.toggleSelection(p1)
-                }
-
-                override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                    val menuInflater = p0?.menuInflater
-                    menuInflater?.inflate(R.menu.menu_multi_selected, p1)
-                    return true
-                }
-
-                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
-
-                override fun onDestroyActionMode(p0: ActionMode?) {
-                    messageListAdapter.removeSelection()
-                }
-            })
+            setupMultiChoiceListener(messageListAdapter)
         }
     }
 
@@ -187,22 +157,69 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
+    private fun setupMultiChoiceListener(messageListAdapter: MessageListAdapter) {
+        messageList.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener{
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                when(p1?.itemId){
+                    R.id.action_delete_select_message -> {
+                        //Toast.makeText(applicationContext, "Deleted!", Toast.LENGTH_SHORT).show()
+                        val builder: AlertDialog.Builder  = AlertDialog.Builder(this@MainActivity)
 
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
-        return true
+                        if (p0?.title.toString().toInt() == 1){
+                            builder.setMessage("Delete this message?")
+                        }else{
+                            builder.setMessage("Delete these messages?")
+                        }
+
+                        builder.setNegativeButton("No") { d, _ -> d.cancel() }.
+                                setPositiveButton("Yes") { _, _ ->
+                                    val selectedViews = messageListAdapter.getSelectedIds()
+                                    (selectedViews.size()-1 downTo 0)
+                                            .filter { selectedViews.valueAt(it) }
+                                            .map { messageListAdapter.getItem(selectedViews.keyAt(it)) }
+                                            .forEach { deleteMessageEverywhere(it) }
+                                    selectedViews.clear()
+
+                                    p0?.finish()
+                                }
+                        builder.create().show()
+                        return true
+                    }
+                    else -> return false
+                }
+            }
+
+            override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
+                val checkedCount: Int = messageList.checkedItemCount
+                p0?.title = checkedCount.toString()
+                messageListAdapter.toggleSelection(p1)
+            }
+
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                val menuInflater = p0?.menuInflater
+                menuInflater?.inflate(R.menu.menu_multi_selected, p1)
+                return true
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+                messageListAdapter.removeSelection()
+            }
+        })
+
     }
 
     private fun deleteAllMessagesEverywhere(){
         messageManager?.deleteAllMessages()
-        (messageList.adapter as? MessageListAdapter)!!.deleteAll()
+        if (messageList.adapter == null ) setupMessageList()
+        else (messageList.adapter as MessageListAdapter).deleteAll()
     }
 
     private fun deleteMessageEverywhere(messageData: MessageData){
         messageManager?.deleteMessageById(messageData.id)
-        (messageList.adapter as? MessageListAdapter)!!.delete(messageData)
+        if (messageList.adapter == null ) setupMessageList()
+        (messageList.adapter as MessageListAdapter).delete(messageData)
     }
 
     private fun receiveMessageAndUpdateListView(data: Intent?){
@@ -212,32 +229,10 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             messageManager?.addMessage(receivedCompleteData)
-            if(messageList.adapter == null){
-                messageList.adapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
-            }
+            if(messageList.adapter == null) setupMessageList()
             else (messageList.adapter as MessageListAdapter).add(receivedCompleteData)
         }
     }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle?.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        drawerToggle?.onConfigurationChanged(newConfig)
-    }
-
-
-    /*
-    private fun cancel(data: Intent?){
-        receiveMessageAndUpdateListView(data)
-        Toast.makeText(applicationContext, "Canceled", Toast.LENGTH_SHORT).show()
-        setupMessageList()
-    }
-    */
 }
 
 
