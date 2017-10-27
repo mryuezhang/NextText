@@ -1,4 +1,6 @@
 <resources>
+    <dimen name="drawer_text_size">14sp</dimen>
+    <dimen name="drawer_list_item_height">48dp</dimen>
     <dimen name="text_caption">16sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="list_text_size">16sp</dimen>

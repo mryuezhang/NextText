@@ -19,14 +19,18 @@ package com.example.yue.nexttext.UI
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
+import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import com.example.yue.nexttext.Data.MessageData
@@ -34,7 +38,6 @@ import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.empty_view_for_list_view.*
 
 
 /**
@@ -44,7 +47,7 @@ import kotlinx.android.synthetic.main.empty_view_for_list_view.*
 class MainActivity : AppCompatActivity() {
     private val tag = "MainActivity"
     private var messageManager: MessageManager? = null
-    private var messageListAdapter: MessageListAdapter? = null
+    private var drawerToggle: ActionBarDrawerToggle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+
+        setupNavigationDrawer()
 
         fab.setOnClickListener { startActivityForResult(MessageConfigureActivity.getStartActivityIntent(this),
                 Utilities.MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE) }
@@ -79,25 +86,30 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
-        R.id.action_settings -> true
-        R.id.action_delete_all_messages -> {
-            deleteAllMessagesEverywhere()
-            true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_settings -> return true
+            R.id.action_delete_all_messages -> {
+                deleteAllMessagesEverywhere()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        else -> super.onOptionsItemSelected(item)
+        if (drawerToggle!!.onOptionsItemSelected(item)) {
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     //MARK: private methods
     private fun setupMessageList(){
         //set up a additional view for listview when it's empty
-        val emptyView = layoutInflater.inflate(R.layout.empty_view_for_list_view, null, false)
-        addContentView(emptyView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         messageList.emptyView = emptyView_for_ListView
 
         //inflate the list with data from database when database is not empty
         if(!messageManager!!.isEmpty){
-            messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
+            val messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
             messageList.adapter = messageListAdapter
             //messageList.setOnItemClickListener { adapterView, view, i, l -> editMessage(i) }
             messageList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
@@ -116,10 +128,10 @@ class MainActivity : AppCompatActivity() {
 
                             builder.setNegativeButton("No") { d, _ -> d.cancel() }.
                                     setPositiveButton("Yes") { _, _ ->
-                                        val selectedViews = messageListAdapter!!.getSelectedIds()
+                                        val selectedViews = messageListAdapter.getSelectedIds()
                                         (selectedViews.size()-1 downTo 0)
                                                 .filter { selectedViews.valueAt(it) }
-                                                .map { messageListAdapter!!.getItem(selectedViews.keyAt(it)) }
+                                                .map { messageListAdapter.getItem(selectedViews.keyAt(it)) }
                                                 .forEach { deleteMessageEverywhere(it) }
                                         selectedViews.clear()
 
@@ -135,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onItemCheckedStateChanged(p0: ActionMode?, p1: Int, p2: Long, p3: Boolean) {
                     val checkedCount: Int = messageList.checkedItemCount
                     p0?.title = checkedCount.toString()
-                    messageListAdapter!!.toggleSelection(p1)
+                    messageListAdapter.toggleSelection(p1)
                 }
 
                 override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
@@ -147,20 +159,50 @@ class MainActivity : AppCompatActivity() {
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean = false
 
                 override fun onDestroyActionMode(p0: ActionMode?) {
-                    messageListAdapter!!.removeSelection()
+                    messageListAdapter.removeSelection()
                 }
             })
         }
     }
 
+    private fun setupNavigationDrawer(){
+        drawerToggle = object : ActionBarDrawerToggle(this@MainActivity, drawer_layout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state.  */
+            override fun onDrawerClosed(view: View) {
+                super.onDrawerClosed(view)
+                invalidateOptionsMenu() // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state.  */
+            override fun onDrawerOpened(drawerView: View) {
+                super.onDrawerOpened(drawerView)
+                invalidateOptionsMenu() // creates call to onPrepareOptionsMenu()
+            }
+        }
+
+        drawerToggle?.isDrawerIndicatorEnabled = true
+        drawer_layout.addDrawerListener(drawerToggle!!)
+
+    }
+
+    fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
     private fun deleteAllMessagesEverywhere(){
         messageManager?.deleteAllMessages()
-        messageListAdapter!!.deleteAll()
+        (messageList.adapter as? MessageListAdapter)!!.deleteAll()
     }
 
     private fun deleteMessageEverywhere(messageData: MessageData){
         messageManager?.deleteMessageById(messageData.id)
-        messageListAdapter!!.delete(messageData)
+        (messageList.adapter as? MessageListAdapter)!!.delete(messageData)
     }
 
     private fun receiveMessageAndUpdateListView(data: Intent?){
@@ -169,10 +211,25 @@ class MainActivity : AppCompatActivity() {
             Log.e(tag, "Received MessageData object is Null!")
         }
         else {
-            messageListAdapter!!.add(receivedCompleteData)
             messageManager?.addMessage(receivedCompleteData)
+            if(messageList.adapter == null){
+                messageList.adapter = MessageListAdapter(baseContext, messageManager!!.allMessages as ArrayList<MessageData>)
+            }
+            else (messageList.adapter as MessageListAdapter).add(receivedCompleteData)
         }
     }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle?.syncState()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drawerToggle?.onConfigurationChanged(newConfig)
+    }
+
 
     /*
     private fun cancel(data: Intent?){

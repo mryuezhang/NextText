@@ -27,4 +27,13 @@
     <string name="dummy_time">7:00 PM</string>
     <string name="date">Date: </string>
     <string name="time">Time: </string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string-array name="drawer_titles">
+        <item>All messages</item>
+        <item>SMS only</item>
+        <item>Email only</item>
+    </string-array>
 </resources>
