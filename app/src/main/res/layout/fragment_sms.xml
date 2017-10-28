@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText_phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:hint="@string/sms_to_hint"
+        android:inputType="phone"
+        android:padding="16dp" />
+
+    <EditText
+        android:id="@+id/editText_SMSContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ems="10"
+        android:background="#FFF"
+        android:gravity="top|start"
+        android:hint="@string/sms_content_hint"
+        android:inputType="textMultiLine|textShortMessage|textLongMessage"
+        android:padding="16dp" />
+</LinearLayout>

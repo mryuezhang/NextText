@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.yue.nexttext.UI.EditTextViewWithPrefix
+        android:tag="To "
+        android:id="@+id/editTextViewWithPrefix_emailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        android:backgroundTint="@color/colorPrimaryVeryLight"/>
+
+    <EditText
+        android:id="@+id/editText_emailSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_subject_hint"
+        android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:inputType="textEmailSubject"
+        android:padding="16dp" />
+
+    <EditText
+        android:id="@+id/editText_composeEmail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/email_compose_hint"
+        android:inputType="textMultiLine"
+        android:padding="16dp" />
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/developer_add_dummy_data"
+        android:orderInCategory="100"
+        android:title="Add Dummy Data"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/developer_delete_all_messages"
+        android:orderInCategory="100"
+        android:title="Delete All Messages"
+        app:showAsAction="never" />
+</menu>

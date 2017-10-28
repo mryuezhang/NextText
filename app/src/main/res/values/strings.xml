@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">NextText</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="empty_view_default_text">Once you added a new message, you\'ll\n see it listed here</string>
+    <string name="empty_view_no_sms">No SMS message</string>
+    <string name="empty_view_no_email">No email</string>
+
+    <!--For MessageConfigureActivity class-->
+    <string name="sms_to_hint">To</string>
+    <string name="sms_content_hint">Type an SMS message here</string>
+    <string name="email_subject_hint">Subject</string>
+    <string name="email_compose_hint">Compose email</string>
+
+    <string name="action_save_new_message_configure">Save</string>
+</resources>
