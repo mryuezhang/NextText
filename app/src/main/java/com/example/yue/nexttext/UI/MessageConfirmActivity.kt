@@ -6,7 +6,6 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -15,7 +14,6 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TextView
@@ -105,6 +103,10 @@ class MessageConfirmActivity : AppCompatActivity() {
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
+
+            date_display.text = Utilities.dateFormat.format(Calendar.getInstance())
+            time_display.text = Utilities.timeFormat.format(Calendar.getInstance())
+
             date_display.setOnClickListener {
                 val newFragment = DatePickerFragment()
                 newFragment.textView = date_display
@@ -129,10 +131,9 @@ class MessageConfirmActivity : AppCompatActivity() {
                             Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 
             override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-                val simpleDateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
                 val calendar = Calendar.getInstance()
                 calendar.set(year, month, day)
-                textView?.text = simpleDateFormat.format(calendar)
+                textView?.text = Utilities.dateFormat.format(calendar)
             }
         }
 
@@ -148,10 +149,9 @@ class MessageConfirmActivity : AppCompatActivity() {
                             DateFormat.is24HourFormat(activity))
 
             override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-                val simpleDateFormat = SimpleDateFormat("h:mm a")
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH,hourOfDay, minute)
-                textView?.text = simpleDateFormat.format(calendar)
+                textView?.text = Utilities.timeFormat.format(calendar)
             }
         }
     }

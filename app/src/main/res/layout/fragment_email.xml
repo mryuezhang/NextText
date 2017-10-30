@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <com.example.yue.nexttext.UI.EditTextViewWithPrefix
-        android:tag="To "
+        android:tag="To     "
         android:id="@+id/editTextViewWithPrefix_emailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

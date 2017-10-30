@@ -1,5 +1,7 @@
 package com.example.yue.nexttext.UI
 
+import android.icu.text.SimpleDateFormat
+
 /**
  * Created by yue on 2017-10-28.
  */
@@ -13,5 +15,7 @@ class Utilities {
         val COMPLETE_DATA = "CompleteMessageDataObject"
         val EDIT_DATA = "EditDataObject"
 
+        val dateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
+        val timeFormat = SimpleDateFormat("h:mm a")
     }
 }

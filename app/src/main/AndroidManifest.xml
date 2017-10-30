@@ -32,5 +32,4 @@
             android:label="Edit Message">
         </activity>
     </application>
-
 </manifest>
