@@ -2,18 +2,21 @@ package com.example.yue.nexttext.UI
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AbsListView
+import android.widget.ImageView
 import android.widget.ListView
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.Database.MessageManager
@@ -21,6 +24,7 @@ import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_list.*
 import kotlinx.android.synthetic.main.app_bar_message_list.*
 import kotlinx.android.synthetic.main.content_message_list.*
+
 
 class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var messageManager: MessageManager? = null
@@ -40,7 +44,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         nav_view.setNavigationItemSelectedListener(this)
         //by default the app should show all messages at first time
         if (savedInstanceState == null) {
-            setTitle("All Messages")
+            title = "All Messages"
             nav_view.setCheckedItem(R.id.nav_all_messages)
         }
 
@@ -73,22 +77,61 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        val searchMenuItem = menu!!.findItem(R.id.search)
+
+        val searchView = searchMenuItem.actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                (message_list.adapter as MessageListAdapter).filter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                (message_list.adapter as MessageListAdapter).filter.filter(newText)
+                return true
+            }
+        })
+
+        searchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener {
+            searchView.setQuery("", false)
+            refreshMessgeList()
+        }
+
+        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                when(toolbar.title){
+                    "SMS" -> setupMessageList_SMSOnly()
+                    "Email" -> setupMessageList_EmailsOnly()
+                    else -> refreshMessgeList()
+                }
+                return true
+            }
+
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                // Do something when expanded
+                return true  // Return true to expand action view
+            }
+        })
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
             R.id.developer_add_dummy_data -> {
                 messageManager!!.prepareData()
                 refreshMessgeList()
-                return true
+                true
             }
             R.id.developer_delete_all_messages ->{
                 deleteAllMessagesEverywhere()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
-        }
+            else -> super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -119,8 +162,11 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private fun setupMessageList(){
         message_list.emptyView = emptyView_for_ListView
 
-        val messageListAdapter = MessageListAdapter(baseContext, messageManager!!.allMessages)
+        val messageListAdapter = MessageListAdapter(this@MessageListActivity, messageManager!!.allMessages)
+
         message_list.adapter = messageListAdapter
+
+        message_list.isTextFilterEnabled = true
 
         message_list.setOnItemClickListener { _, _, i, _ -> editMessage(i) }
 
