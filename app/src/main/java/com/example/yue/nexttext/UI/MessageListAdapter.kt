@@ -20,6 +20,7 @@ import com.example.yue.nexttext.R
 class MessageListAdapter(private val activity:Activity,
                          private var messageList: ArrayList<MessageWrapper>): BaseAdapter(), Filterable {
     private var selectedItemsIDs = SparseBooleanArray()
+    private val fullList = messageList
 
     private class ViewHolder{
         var title: TextView? = null
@@ -53,10 +54,13 @@ class MessageListAdapter(private val activity:Activity,
             @Suppress("UNCHECKED_CAST")
             val filteredList = p1?.values as ArrayList<MessageWrapper>
 
-            if (filteredList.size == 0) {
-               activity.findViewById<TextView>(R.id.emptyView_text).text = "No result found for \"" + p0.toString() +"\""
+            if(p0 != null){
+                if (filteredList.size == 0) {
+                    activity.findViewById<TextView>(R.id.emptyView_text).text =activity.resources.getString(R.string.no_search_result, p0.toString())
+                }
+                if (p0.toString() != "") messageList = filteredList
+                else messageList = fullList
             }
-            if (p0.toString() != "") messageList = filteredList
             notifyDataSetChanged()
         }
 
