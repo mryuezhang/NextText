@@ -1,0 +1,6 @@
+- started learning alarmmanager and service for time trigger, made basic implementations
+- finalized the backend database, this was a huge process of testing and debugging to make sure it was fully functional
+- worked along-side Yue during reading week for full days on making sure the UI and backend could talk to one another and function properly to add, delete, etc. with data
+- did deliverable 2 and demo script
+
+Hours: 30
