@@ -8,8 +8,8 @@ import android.os.Parcelable
  * Created by yue on 2017-10-28.
  */
 class MessageWrapper(var message: Message,
-                     var timeTrigger: String?,
-                     var weatherTrigger: String?,
+                     var timeTrigger: Time?,
+                     var weatherTrigger: Weather?,
                      var locationTrigger: String?,
                      var id: Int) : Parcelable{
 
@@ -17,12 +17,13 @@ class MessageWrapper(var message: Message,
 
     constructor(parcel: Parcel) : this(
             parcel.readParcelable(Message::class.java.classLoader),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readParcelable(Time::class.java.classLoader),
+            parcel.readParcelable(Weather::class.java.classLoader),
             parcel.readString(),
             parcel.readInt()) {
         createdTime = parcel.readString()
     }
+
 
     constructor(message: Message):this(message, null, null, null, 0)
 
@@ -30,8 +31,8 @@ class MessageWrapper(var message: Message,
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(message, flags)
-        parcel.writeString(timeTrigger)
-        parcel.writeString(weatherTrigger)
+        parcel.writeParcelable(timeTrigger, flags)
+        parcel.writeParcelable(weatherTrigger, flags)
         parcel.writeString(locationTrigger)
         parcel.writeInt(id)
         parcel.writeString(createdTime)
@@ -50,4 +51,5 @@ class MessageWrapper(var message: Message,
             return arrayOfNulls(size)
         }
     }
+
 }
