@@ -96,10 +96,13 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 (message_list.adapter as MessageListAdapter).filter.filter(newText)
                 return true
             }
+
         })
+
 
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                searchView.clearFocus()
                 when(toolbar.title){
                     "SMS" -> setupMessageList_SMSOnly()
                     "Email" -> setupMessageList_EmailsOnly()

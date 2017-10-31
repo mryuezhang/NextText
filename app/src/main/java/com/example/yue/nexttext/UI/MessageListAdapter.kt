@@ -2,6 +2,7 @@ package com.example.yue.nexttext.UI
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.Filterable
 import android.widget.TextView
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
+import java.util.*
 
 
 /**
@@ -20,7 +22,7 @@ import com.example.yue.nexttext.R
 class MessageListAdapter(private val activity:Activity,
                          private var messageList: ArrayList<MessageWrapper>): BaseAdapter(), Filterable {
     private var selectedItemsIDs = SparseBooleanArray()
-    private val fullList = messageList
+    private var fullList = messageList
 
     private class ViewHolder{
         var title: TextView? = null
@@ -29,24 +31,24 @@ class MessageListAdapter(private val activity:Activity,
 
     private inner class MessageFilter: Filter(){
         override fun performFiltering(p0: CharSequence?): FilterResults {
+            messageList = fullList
             val filterResult = FilterResults()
-
-            if(p0 == null || p0.toString() == ""){
-                filterResult.count = messageList.size
-                filterResult.values = messageList
-            }
-            else if (p0.isNotEmpty()){
-                val tempList = ArrayList<MessageWrapper>()
-                for(messageWrapper in messageList ){
-                    if (messageWrapper.message._to.toLowerCase().contains(p0.toString().toLowerCase())) tempList.add(messageWrapper)
-                    if (messageWrapper.message._content.toLowerCase().contains(p0.toString().toLowerCase())) tempList.add(messageWrapper)
+            if(p0 != null){
+                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
+                if (definedQuery == "") {
+                    filterResult.count = messageList.size
+                    filterResult.values = messageList
+                } else {
+                    Log.i("QueryText:      ", p0.toString())
+                    val tempList = ArrayList<MessageWrapper>()
+                    for (messageWrapper in messageList) {
+                        if (messageWrapper.message._to.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
+                        if (messageWrapper.message._content.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
+                    }
+                    filterResult.count = tempList.size
+                    filterResult.values = tempList
                 }
-                filterResult.count = tempList.size
-                filterResult.values = tempList
             }
-
-
-
             return filterResult
         }
 
@@ -55,11 +57,13 @@ class MessageListAdapter(private val activity:Activity,
             val filteredList = p1?.values as ArrayList<MessageWrapper>
 
             if(p0 != null){
+                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
                 if (filteredList.size == 0) {
                     activity.findViewById<TextView>(R.id.emptyView_text).text =activity.resources.getString(R.string.no_search_result, p0.toString())
+                    Log.i("FilteredListSIze:   ", filteredList.size.toString())
                 }
-                if (p0.toString() != "") messageList = filteredList
-                else messageList = fullList
+                messageList = if (definedQuery != "") filteredList
+                else fullList
             }
             notifyDataSetChanged()
         }
@@ -128,6 +132,7 @@ class MessageListAdapter(private val activity:Activity,
 
     fun setMessageList(newList: ArrayList<MessageWrapper>) {
         this.messageList = newList
+        this.fullList = messageList
         notifyDataSetChanged()
     }
 }
