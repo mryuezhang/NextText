@@ -12,8 +12,8 @@ import java.util.Collection;
  */
 
 public class PhoneFilter {
-    Collection<String> contacts;
-    ContentResolver contentResolver;
+    private Collection<String> contacts;
+    private ContentResolver contentResolver;
 
     public PhoneFilter(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
@@ -26,7 +26,7 @@ public class PhoneFilter {
         ContentResolver currCR = contentResolver;
         Cursor currCursor = currCR.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-        if (currCursor.getCount() > 0) {
+        if (currCursor != null && currCursor.getCount() > 0) {
             while (currCursor.moveToNext()) {
                 String id = currCursor.getString(currCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = currCursor.getString(currCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -36,15 +36,17 @@ public class PhoneFilter {
                             null,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{id}, null);
-                    while (newCursor.moveToNext()) {
-                        String phoneNumber = newCursor.getString(newCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        currPhone.add(name + " " + phoneNumber);
+                    if (newCursor != null) {
+                        while (newCursor.moveToNext()) {
+                            String phoneNumber = newCursor.getString(newCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            currPhone.add(name + " " + phoneNumber);
+                        }
+                        newCursor.close();
                     }
-                    newCursor.close();
                 }
             }
+            currCursor.close();
         }
-
         return currPhone;
     }
 

@@ -1,19 +1,18 @@
 package com.example.yue.nexttext.EmailService;
 
-import android.content.Context;
+
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 import javax.mail.MessagingException;
 
 public class SendASync extends AsyncTask<String, Void, Integer> {
-    Context context;
-    GMailSupport sender;
-    String username,password;
+    private static final String TAG = "SendASync";
+    private GMailSupport sender;
+    private String username,password;
 
-    public SendASync(Context context, String username, String password){
+    public SendASync(String username, String password){
         super();
-        this.context = context;
         this.username= username;
         this.password = password;
 
@@ -38,7 +37,6 @@ public class SendASync extends AsyncTask<String, Void, Integer> {
         } catch (Exception e) {
             e.printStackTrace();
             success = 1;
-
         }
 
         return success;
@@ -48,9 +46,9 @@ public class SendASync extends AsyncTask<String, Void, Integer> {
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
         if (result == 0) {
-            Toast.makeText(context, "Succeeded sending Email", Toast.LENGTH_LONG).show();
+            Log.i(TAG, "Succeeded sending Email");
         } else {
-            Toast.makeText(context, "Failed sending Email", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Failed sending Email");
         }
     }
 }

@@ -21,7 +21,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class GMailSupport extends javax.mail.Authenticator {
-    private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
     private Session session;
@@ -36,7 +35,8 @@ public class GMailSupport extends javax.mail.Authenticator {
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", mailhost);
+        String mailHost = "smtp.gmail.com";
+        props.setProperty("mail.host", mailHost);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -61,8 +61,7 @@ public class GMailSupport extends javax.mail.Authenticator {
             message.setDataHandler(handler);
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             Transport.send(message);
-        }catch(Exception e){
-
+        }catch(Exception ignored){
         }
     }
 
@@ -70,7 +69,7 @@ public class GMailSupport extends javax.mail.Authenticator {
         private byte[] data;
         private String type;
 
-        public ByteArrayDataSource(byte[] data, String type) {
+        ByteArrayDataSource(byte[] data, String type) {
             super();
             this.data = data;
             this.type = type;
