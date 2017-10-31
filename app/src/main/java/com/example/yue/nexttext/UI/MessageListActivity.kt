@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import com.example.yue.nexttext.DataType.MessageWrapper
@@ -74,13 +75,10 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.message_list, menu)
-        return true
-    }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        val searchMenuItem = menu!!.findItem(R.id.search)
+        val searchMenuItem = menu.findItem(R.id.search)
 
         val searchView = searchMenuItem.actionView as SearchView
 
@@ -96,13 +94,14 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 (message_list.adapter as MessageListAdapter).filter.filter(newText)
                 return true
             }
-
         })
-
 
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 searchView.clearFocus()
+                findViewById<View>(R.id.emptyView_text).visibility = View.VISIBLE
+                findViewById<View>(R.id.no_result_empty_view).visibility = View.INVISIBLE
+                message_list.emptyView = emptyView_for_ListView
                 when(toolbar.title){
                     "SMS" -> setupMessageList_SMSOnly()
                     "Email" -> setupMessageList_EmailsOnly()
@@ -112,11 +111,14 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
 
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                // Do something when expanded
+                findViewById<View>(R.id.no_result_empty_view).visibility = View.VISIBLE
+                findViewById<View>(R.id.emptyView_text).visibility = View.INVISIBLE
+                message_list.emptyView = no_result_empty_view
                 return true  // Return true to expand action view
             }
         })
-        return super.onPrepareOptionsMenu(menu)
+
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -159,12 +161,13 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     //MARK: private methods
     private fun setupMessageList(){
         message_list.emptyView = emptyView_for_ListView
+        findViewById<View>(R.id.no_result_empty_view).visibility = View.INVISIBLE
 
         val messageListAdapter = MessageListAdapter(this@MessageListActivity, messageManager!!.allMessages)
 
         message_list.adapter = messageListAdapter
 
-        message_list.isTextFilterEnabled = true
+        //message_list.isTextFilterEnabled = true
 
         message_list.setOnItemClickListener { _, _, i, _ -> editMessage(i) }
 

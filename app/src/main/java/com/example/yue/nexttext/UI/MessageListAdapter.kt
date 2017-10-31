@@ -139,8 +139,8 @@ class MessageListAdapter(private val activity:Activity,
                 } else {
                     val tempList = ArrayList<MessageWrapper>()
                     for (messageWrapper in messageList) {
-                        if (messageWrapper.message._to.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
-                        if (messageWrapper.message._content.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
+                        if (messageWrapper.message._to.toLowerCase(Locale.getDefault()).contains(definedQuery) ||
+                                messageWrapper.message._content.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
                     }
                     filterResult.count = tempList.size
                     filterResult.values = tempList
@@ -156,7 +156,8 @@ class MessageListAdapter(private val activity:Activity,
             if(p0 != null){
                 val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
                 if (filteredList.size == 0) {
-                    activity.findViewById<TextView>(R.id.emptyView_text).text =activity.resources.getString(R.string.no_search_result, p0.toString())
+                    if(definedQuery == "") activity.findViewById<TextView>(R.id.no_result_text).text = "No result"
+                    else activity.findViewById<TextView>(R.id.no_result_text).text = activity.resources.getString(R.string.no_search_result, p0.toString())
                 }
                 messageList = if (definedQuery != "") filteredList
                 else fullList

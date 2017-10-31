@@ -2,6 +2,7 @@ package com.example.yue.nexttext.DataType;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.Calendar;
 
 /**
@@ -19,9 +20,7 @@ public class Time implements Parcelable {
         this.status = newStatus;
     }
 
-    public Time() {}
-
-    protected Time(Parcel in) {
+    private Time(Parcel in) {
         date = in.readString();
         time = in.readString();
         type = in.readInt();
@@ -85,8 +84,6 @@ public class Time implements Parcelable {
             hour -= 12;
             AM = "PM";
         }
-
-
         return hour + ":" + minute + AM;
     }
 
