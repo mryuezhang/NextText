@@ -4,9 +4,11 @@
     action mode;
     contextual menu;
     listview multi-selection;
+    Searchable Activity, Searchable Adapter, and SeachView
     more material design stuff;
 
 - Completed basic UI functionality including create MessageData objects and store them into database and delete one or more at once
 - Rewrote Message and MessageData class with Kotlin, fixed couple obvious issues on it
+- Created a SearchView for the message list inside MessageListActivity
 
-Time: 30 hours
+Time: 50 hours

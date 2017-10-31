@@ -2,7 +2,12 @@ package com.example.yue.nexttext.UI
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TextAppearanceSpan
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -23,54 +28,12 @@ class MessageListAdapter(private val activity:Activity,
                          private var messageList: ArrayList<MessageWrapper>): BaseAdapter(), Filterable {
     private var selectedItemsIDs = SparseBooleanArray()
     private var fullList = messageList
+    private var queryText: String = ""
 
     private class ViewHolder{
         var title: TextView? = null
         var content: TextView? = null
     }
-
-    private inner class MessageFilter: Filter(){
-        override fun performFiltering(p0: CharSequence?): FilterResults {
-            messageList = fullList
-            val filterResult = FilterResults()
-            if(p0 != null){
-                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
-                if (definedQuery == "") {
-                    filterResult.count = messageList.size
-                    filterResult.values = messageList
-                } else {
-                    Log.i("QueryText:      ", p0.toString())
-                    val tempList = ArrayList<MessageWrapper>()
-                    for (messageWrapper in messageList) {
-                        if (messageWrapper.message._to.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
-                        if (messageWrapper.message._content.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
-                    }
-                    filterResult.count = tempList.size
-                    filterResult.values = tempList
-                }
-            }
-            return filterResult
-        }
-
-        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-            @Suppress("UNCHECKED_CAST")
-            val filteredList = p1?.values as ArrayList<MessageWrapper>
-
-            if(p0 != null){
-                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
-                if (filteredList.size == 0) {
-                    activity.findViewById<TextView>(R.id.emptyView_text).text =activity.resources.getString(R.string.no_search_result, p0.toString())
-                    Log.i("FilteredListSIze:   ", filteredList.size.toString())
-                }
-                messageList = if (definedQuery != "") filteredList
-                else fullList
-            }
-            notifyDataSetChanged()
-        }
-
-    }
-
-    override fun getFilter(): Filter = MessageFilter()
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         var viewHolder = ViewHolder()
@@ -82,13 +45,40 @@ class MessageListAdapter(private val activity:Activity,
             viewHolder.title = view.findViewById(R.id.messageList_item_title)
             viewHolder.content = view.findViewById(R.id.messageList_item_content)
             view.tag = viewHolder
-        }else{
+        }
+        else{
             view = p1
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.title?.text = this.messageList[p0].message._to
-        viewHolder.content?.text = this.messageList[p0].message._content
+        val messageTitle = this.messageList[p0].message._to
+        val messageContent = this.messageList[p0].message._content
+
+        var startPosition: Int = messageTitle.toLowerCase(Locale.getDefault()).trim().indexOf(queryText)
+        var endPosition: Int = startPosition + queryText.length
+        if (startPosition > -1){
+            val spannable = SpannableString(messageTitle)
+            val redColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.RED))
+            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, redColor, null)
+            spannable.setSpan(highlightSpan, startPosition, endPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            viewHolder.title?.text = spannable
+        }
+        else viewHolder.title?.text = messageTitle
+
+        startPosition= messageContent.toLowerCase(Locale.getDefault()).trim().indexOf(queryText)
+        endPosition= startPosition + queryText.length
+
+        if (startPosition > -1){
+            val spannable = SpannableString(messageContent)
+            val redColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.RED))
+            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, redColor, null)
+            spannable.setSpan(highlightSpan, startPosition, endPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            viewHolder.content?.text = spannable
+        }
+        else viewHolder.content?.text = messageContent
+
+        //viewHolder.title?.text = this.messageList[p0].message._to
+        //viewHolder.content?.text = this.messageList[p0].message._content
 
         return view
     }
@@ -135,4 +125,46 @@ class MessageListAdapter(private val activity:Activity,
         this.fullList = messageList
         notifyDataSetChanged()
     }
+
+    private inner class MessageFilter: Filter(){
+        override fun performFiltering(p0: CharSequence?): FilterResults {
+            messageList = fullList
+            val filterResult = FilterResults()
+            if(p0 != null){
+                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
+                queryText = definedQuery
+                if (definedQuery == "") {
+                    filterResult.count = messageList.size
+                    filterResult.values = messageList
+                } else {
+                    val tempList = ArrayList<MessageWrapper>()
+                    for (messageWrapper in messageList) {
+                        if (messageWrapper.message._to.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
+                        if (messageWrapper.message._content.toLowerCase(Locale.getDefault()).contains(definedQuery)) tempList.add(messageWrapper)
+                    }
+                    filterResult.count = tempList.size
+                    filterResult.values = tempList
+                }
+            }
+            return filterResult
+        }
+
+        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+            @Suppress("UNCHECKED_CAST")
+            val filteredList = p1?.values as ArrayList<MessageWrapper>
+
+            if(p0 != null){
+                val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
+                if (filteredList.size == 0) {
+                    activity.findViewById<TextView>(R.id.emptyView_text).text =activity.resources.getString(R.string.no_search_result, p0.toString())
+                }
+                messageList = if (definedQuery != "") filteredList
+                else fullList
+            }
+            notifyDataSetChanged()
+        }
+
+    }
+
+    override fun getFilter(): Filter = MessageFilter()
 }
