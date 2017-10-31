@@ -1,0 +1,8 @@
+- Made decision with team to switch to Android for technical reasons
+- wrote down tasks and scheduled a major meeting to talk over splitting tasks
+- developed sqllite backend database for sms and email
+- developed class templates for time, sms, email
+- developed formatting functions in time class
+- Group meeting to go over tasks, worked together on frontend + backend (Yue + James)
+
+Time: 10 hours

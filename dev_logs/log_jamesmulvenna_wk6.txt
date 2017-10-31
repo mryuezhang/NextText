@@ -1,0 +1,4 @@
+- Developed weather api, gmail sending support
+- plan to put in full days during the reading week
+
+Hours: 9

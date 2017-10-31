@@ -1,0 +1,6 @@
+- Continued working on TableView and other parts on UI
+- Agreed switching to Android is a good decision
+- designed UI base design
+- Decided to use Kotlin instead of Java to build the UI
+
+Time: 8 hours

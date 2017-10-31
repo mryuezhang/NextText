@@ -1,0 +1,12 @@
+- Research topics include:
+    data-transfer between fragments and activities;
+    receive data from another activities;
+    action mode;
+    contextual menu;
+    listview multi-selection;
+    more material design stuff;
+
+- Completed basic UI functionality including create MessageData objects and store them into database and delete one or more at once
+- Rewrote Message and MessageData class with Kotlin, fixed couple obvious issues on it
+
+Time: 30 hours

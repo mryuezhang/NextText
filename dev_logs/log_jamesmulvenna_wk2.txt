@@ -1,0 +1,5 @@
+- Wrote D1 and D1 slides learnt Twilio, developed mock designs, learning/implementing backend (Heroku/ngrok)
+- realizing difficulties with ios
+- Met with Devon to go over project idea and D1, more added complications ran through
+
+Time: 8 hours

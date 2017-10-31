@@ -1,0 +1,4 @@
+- Finished the basic UI on Android with Kotlin
+- Research and experiments on how to retrieve a list of contacts on Android
+
+Time: 20 hours
