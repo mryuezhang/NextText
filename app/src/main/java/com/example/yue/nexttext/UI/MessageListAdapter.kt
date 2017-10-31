@@ -38,8 +38,8 @@ class MessageListAdapter(private val activity:Activity,
             else if (p0.isNotEmpty()){
                 val tempList = ArrayList<MessageWrapper>()
                 for(messageWrapper in messageList ){
-                    if (messageWrapper.message._to.contains(p0)) tempList.add(messageWrapper)
-                    if (messageWrapper.message._content.contains(p0)) tempList.add(messageWrapper)
+                    if (messageWrapper.message._to.toLowerCase().contains(p0.toString().toLowerCase())) tempList.add(messageWrapper)
+                    if (messageWrapper.message._content.toLowerCase().contains(p0.toString().toLowerCase())) tempList.add(messageWrapper)
                 }
                 filterResult.count = tempList.size
                 filterResult.values = tempList

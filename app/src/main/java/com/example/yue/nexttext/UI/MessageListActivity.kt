@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -16,7 +17,6 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AbsListView
-import android.widget.ImageView
 import android.widget.ListView
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.Database.MessageManager
@@ -97,11 +97,6 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 return true
             }
         })
-
-        searchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener {
-            searchView.setQuery("", false)
-            refreshMessgeList()
-        }
 
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
@@ -220,7 +215,12 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
                                     p0?.finish()
                                 }
-                        builder.create().show()
+                        val mAlertDialog = builder.create()
+                        mAlertDialog.setOnShowListener {
+                            mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
+                            mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
+                        }
+                        mAlertDialog.show()
                         return true
                     }
                     else -> return false

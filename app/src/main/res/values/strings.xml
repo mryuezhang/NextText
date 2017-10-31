@@ -17,4 +17,7 @@
     <string name="email_compose_hint">Compose email</string>
 
     <string name="action_save_new_message_configure">Save</string>
+
+    <!--Text displayed on Empty View for messageList-->
+    <string name="no_search_result">No result found for \"%1$s\"</string>
 </resources>
