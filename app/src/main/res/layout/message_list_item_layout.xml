@@ -24,5 +24,7 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:textColor="#212121"
+        android:lines="2"
+        android:maxLines="2"
         android:text="Content"/>
 </LinearLayout>

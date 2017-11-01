@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TextAppearanceSpan
@@ -58,8 +59,8 @@ class MessageListAdapter(private val activity:Activity,
         var endPosition: Int = startPosition + queryText.length
         if (startPosition > -1){
             val spannable = SpannableString(messageTitle)
-            val redColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.RED))
-            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, redColor, null)
+            val colorAccent = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.argb(255,255,64,129)))
+            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, colorAccent, null)
             spannable.setSpan(highlightSpan, startPosition, endPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             viewHolder.title?.text = spannable
         }
@@ -70,8 +71,8 @@ class MessageListAdapter(private val activity:Activity,
 
         if (startPosition > -1){
             val spannable = SpannableString(messageContent)
-            val redColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.RED))
-            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, redColor, null)
+            val colorAccent = ColorStateList(arrayOf(intArrayOf()), intArrayOf(Color.argb(255,255,64,129)))
+            val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, colorAccent, null)
             spannable.setSpan(highlightSpan, startPosition, endPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             viewHolder.content?.text = spannable
         }
@@ -157,7 +158,10 @@ class MessageListAdapter(private val activity:Activity,
                 val definedQuery = p0.toString().toLowerCase(Locale.getDefault()).trim()
                 if (filteredList.size == 0) {
                     if(definedQuery == "") activity.findViewById<TextView>(R.id.no_result_text).text = "No result"
-                    else activity.findViewById<TextView>(R.id.no_result_text).text = activity.resources.getString(R.string.no_search_result, p0.toString())
+                    else {
+                        val string = "No result found for \'<b>" + p0.toString() + "<b>\'"
+                        activity.findViewById<TextView>(R.id.no_result_text).text = Html.fromHtml(string, Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH)
+                    }
                 }
                 messageList = if (definedQuery != "") filteredList
                 else fullList

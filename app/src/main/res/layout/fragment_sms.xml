@@ -3,20 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <com.example.yue.nexttext.UI.EditTextViewWithPrefix
+        android:tag="To     "
+        android:id="@+id/editText_phoneNumber"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.example.yue.nexttext.UI.EditTextViewWithPrefix
-            android:tag="To     "
-            android:id="@+id/editText_phoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/sms_to_hint"
-            android:inputType="phone"
-            android:padding="16dp" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone"
+        android:padding="16dp"
+        android:backgroundTint="@color/colorPrimaryVeryLight"/>
 
     <EditText
         android:id="@+id/editText_SMSContent"
