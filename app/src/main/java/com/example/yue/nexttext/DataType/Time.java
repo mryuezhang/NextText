@@ -11,20 +11,15 @@ import java.util.Calendar;
 
 public class Time implements Parcelable {
     private String date, time;
-    private int type, status;
 
     public Time(String newDate, String newTime, int newType, int newStatus) {
         this.date = newDate;
         this.time = newTime;
-        this.type = newType;
-        this.status = newStatus;
     }
 
     private Time(Parcel in) {
         date = in.readString();
         time = in.readString();
-        type = in.readInt();
-        status = in.readInt();
     }
 
     public static final Creator<Time> CREATOR = new Creator<Time>() {
@@ -53,22 +48,6 @@ public class Time implements Parcelable {
 
     public void setTime(String newTime) {
         this.time = newTime;
-    }
-
-    public int getType() {
-        return this.type;
-    }
-
-    public void setType(int newType) {
-        this.type = newType;
-    }
-
-    public int getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(int newStatus) {
-        this.status = newStatus;
     }
 
 
@@ -129,7 +108,5 @@ public class Time implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(date);
         parcel.writeString(time);
-        parcel.writeInt(type);
-        parcel.writeInt(status);
     }
 }
