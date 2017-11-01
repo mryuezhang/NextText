@@ -14,6 +14,7 @@ class Utilities {
         val INCOMPLETE_DATA = "IncompleteMessageDataObject"
         val COMPLETE_DATA = "CompleteMessageDataObject"
         val EDIT_DATA = "EditDataObject"
+        val EDITED_DATA = "EditedDataObject"
 
         val dateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
         val timeFormat = SimpleDateFormat("h:mm a")
