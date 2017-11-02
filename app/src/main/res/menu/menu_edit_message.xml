@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_don_edit"
+        android:id="@+id/action_done_edit"
         android:orderInCategory="100"
         android:icon="@drawable/ic_done"
         android:title="Finish"

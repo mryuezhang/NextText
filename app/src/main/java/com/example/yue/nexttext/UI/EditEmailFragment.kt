@@ -3,7 +3,6 @@ package com.example.yue.nexttext.UI
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,11 +43,11 @@ class EditEmailFragment: Fragment() {
         super.onPause()
 
         receivedMessage!!.message._to = edit_to_email.text.toString()
+
         receivedMessage!!.message._subject = edit_subject_email.text.toString()
+
         receivedMessage!!.message._content = edit_content_email.text.toString()
 
         messageDataPasser!!.onDataPass(receivedMessage!!)
-
-        Log.i("AAAAAAA", "AAAAAAAA")
     }
 }

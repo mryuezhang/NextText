@@ -41,6 +41,7 @@ class EditSMSFragment: Fragment() {
         super.onPause()
 
         receivedMessage!!.message._to = edit_to.text.toString()
+
         receivedMessage!!.message._content = edit_content.text.toString()
 
         messageDataPasser!!.onDataPass(receivedMessage!!)

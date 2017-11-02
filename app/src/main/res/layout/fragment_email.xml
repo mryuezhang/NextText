@@ -9,7 +9,7 @@
         android:id="@+id/editTextViewWithPrefix_emailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
+        android:inputType="textEmailAddress|textNoSuggestions"
         android:padding="16dp"
         android:backgroundTint="@color/colorPrimaryVeryLight"/>
 
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/email_subject_hint"
         android:backgroundTint="@color/colorPrimaryVeryLight"
-        android:inputType="textEmailSubject"
+        android:inputType="textEmailSubject|textNoSuggestions"
         android:padding="16dp" />
 
     <EditText

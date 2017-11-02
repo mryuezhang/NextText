@@ -15,9 +15,7 @@ import kotlinx.android.synthetic.main.activity_edit_message.*
  * Created by yue on 2017-10-28.
  */
 class EditMessageActivity: AppCompatActivity(), MessageDataPasser{
-
     private var receivedMessage: MessageWrapper? = null
-    private var editedMessage: MessageWrapper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +47,7 @@ class EditMessageActivity: AppCompatActivity(), MessageDataPasser{
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean  = when(item.itemId) {
-            R.id.action_don_edit -> {
+            R.id.action_done_edit -> {
                 val fragment = if (fragmentManager.findFragmentByTag("SMS") != null){
                     fragmentManager.findFragmentByTag("SMS")
                 } else {

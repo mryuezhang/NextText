@@ -14,7 +14,7 @@
         android:paddingEnd="16dp"
         android:paddingTop="24dp"
         android:paddingBottom="24dp"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress|textNoSuggestions"/>
 
     <EditText
         android:id="@+id/edit_subject_email"
@@ -27,7 +27,7 @@
         android:paddingBottom="24dp"
         android:text="Name"
         android:textAlignment="gravity"
-        android:inputType="textEmailSubject"/>
+        android:inputType="textEmailSubject|textNoSuggestions"/>
 
     <EditText
         android:id="@+id/edit_content_email"

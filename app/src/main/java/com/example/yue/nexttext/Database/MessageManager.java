@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yue on 2017-10-28.
+ * Created by jamesmulvenna on 2017-09-28.
+ * This class is totally written by james, however I(Yue Zhang) pushed it to github since at one point I needed to re-write the entire UI,
+ * so I just copied the existing database file since it's necessary for UI's functionality, added getAllEmails() and getAllSMS() methods
+ * and did some clean-up work
  */
 
 public class MessageManager extends SQLiteOpenHelper {
@@ -134,11 +137,12 @@ public class MessageManager extends SQLiteOpenHelper {
         };
         String selection = KEY_ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
+        String order = " ORDER BY "+ KEY_ID+" DESC";
 
         Cursor cursor = db.query(TABLE_NAME,
                 projection,
                 selection,
-                selectionArgs, null, null, null, null);
+                selectionArgs, null, null, order, null);
 
         if (cursor == null ) {
             return null;
@@ -174,7 +178,7 @@ public class MessageManager extends SQLiteOpenHelper {
     public ArrayList<MessageWrapper> getAllEmails() {
         ArrayList<MessageWrapper> emailList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_TO + " LIKE '%@%'";
+        String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_TO + " LIKE '%@%'" + " ORDER BY "+ KEY_ID+" DESC";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -197,7 +201,7 @@ public class MessageManager extends SQLiteOpenHelper {
     public ArrayList<MessageWrapper> getAllSMS() {
         ArrayList<MessageWrapper> smsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_TO + " NOT LIKE '%@%'";
+        String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_TO + " NOT LIKE '%@%'" + " ORDER BY "+ KEY_ID+" DESC";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -221,7 +225,7 @@ public class MessageManager extends SQLiteOpenHelper {
     public ArrayList<MessageWrapper> getAllMessages() {
         ArrayList<MessageWrapper> messageList = new ArrayList<>();
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_NAME;
+        String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY "+ KEY_ID+" DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -248,7 +252,7 @@ public class MessageManager extends SQLiteOpenHelper {
 
     // Getting messages Count
     public int getMessagesCount() {
-        String countQuery = "SELECT * FROM " + TABLE_NAME;
+        String countQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY "+ KEY_ID+" DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = 0;
@@ -305,7 +309,6 @@ public class MessageManager extends SQLiteOpenHelper {
     }
 
     public void prepareData() throws Exception {
-        Log.d("YASSSSS", "Reading all messages...");
         //email
         Message msg1 = new Message("yuezhang5@cmail.carleton.ca", "dummypass", "jamesmulvenna@cmail.carleton.ca", null,
                 "Android is a mobile operating system developed by Google, based on the Linux kernel " +
