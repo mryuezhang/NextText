@@ -90,8 +90,8 @@ public class MessageManager extends SQLiteOpenHelper {
         content.put(KEY_CREATED_TIME, data.getCreatedTime());
 
         //add time
-        content.put(KEY_DATE, data.getTimeTrigger().getDate());
-        content.put(KEY_TIME, data.getTimeTrigger().getTime());
+        //content.put(KEY_DATE, data.getTimeTrigger().getDate());
+        //content.put(KEY_TIME, data.getTimeTrigger().getTime());
 
         /*
         switch(checkTriggerType(data)) {
