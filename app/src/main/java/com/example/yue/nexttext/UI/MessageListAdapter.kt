@@ -53,7 +53,17 @@ class MessageListAdapter(private val activity:Activity,
         }
 
         val messageTitle = this.messageList[p0].message._to
-        val messageContent = this.messageList[p0].message._content
+
+        val messageContent = if (messageTitle.contains("@")) {
+            val emailSubject = if (this.messageList[p0].message._subject != null){
+                this.messageList[p0].message._subject
+            } else {
+                "(no subject)"
+            }
+            emailSubject + "\n" + this.messageList[p0].message._content
+        } else {
+            this.messageList[p0].message._content
+        }
 
         var startPosition: Int = messageTitle.toLowerCase(Locale.getDefault()).trim().indexOf(queryText)
         var endPosition: Int = startPosition + queryText.length
@@ -91,7 +101,14 @@ class MessageListAdapter(private val activity:Activity,
     override fun getCount(): Int = this.messageList.size
 
     fun add(messageData: MessageWrapper){
-        messageList.add(messageData)
+        this.messageList.add(messageData)
+        notifyDataSetChanged()
+    }
+
+    fun replace(messageData: MessageWrapper){
+        for ((i, item) in messageList.withIndex()){
+            if (item.id == messageData.id) messageList[i] = messageData
+        }
         notifyDataSetChanged()
     }
 

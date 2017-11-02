@@ -12,13 +12,13 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
-import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
+import android.widget.Toast
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
@@ -56,9 +56,14 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            Utilities.MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE->{
+            Utilities.MESSAGE_CONFIGURE_ACTIVITY_REQUEST_CODE -> {
                 when(resultCode){
                     Activity.RESULT_OK -> receiveMessageAndUpdateListView(data)
+                }
+            }
+            Utilities.EDIT_MESSAGE_ACTIVITY_REQUEST_CODE -> {
+                when(resultCode){
+                    Activity.RESULT_OK -> receiveEditedMessageAndUpdateListView(data)
                 }
             }
         }
@@ -277,11 +282,22 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private fun receiveMessageAndUpdateListView(data: Intent?){
         val receivedCompleteData = data?.getParcelableExtra<MessageWrapper>(Utilities.COMPLETE_DATA)
         if(receivedCompleteData == null){
-            Log.e("MainActivity", "Received MessageData object is Null!")
+            Toast.makeText(applicationContext, "Error: failed to receive user-created message", Toast.LENGTH_SHORT).show()
         }
         else {
             messageManager?.addMessage(receivedCompleteData)
             (message_list.adapter as MessageListAdapter).add(receivedCompleteData)
+        }
+    }
+
+    private fun receiveEditedMessageAndUpdateListView(data: Intent?){
+        val receivedEditedData = data?.getParcelableExtra<MessageWrapper>(Utilities.EDITED_DATA)
+        if(receivedEditedData == null){
+            Toast.makeText(applicationContext, "Error: failed to receive user-edited message", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            messageManager?.updateMessage(receivedEditedData)
+            (message_list.adapter as MessageListAdapter).replace(receivedEditedData)
         }
     }
 }

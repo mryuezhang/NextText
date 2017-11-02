@@ -9,11 +9,12 @@
         android:id="@+id/messageList_item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
+        android:paddingBottom="0dp"
         android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="#212121"
+        android:textSize="17sp"
         android:text="Title"/>
 
     <TextView
@@ -23,7 +24,6 @@
         android:paddingBottom="8dp"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        android:textColor="#212121"
         android:lines="2"
         android:maxLines="2"
         android:text="Content"/>

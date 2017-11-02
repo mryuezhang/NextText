@@ -35,6 +35,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".UI.EditMessageActivity"
+            android:parentActivityName=".UI.MessageConfigureActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="Edit Message">
         </activity>
     </application>

@@ -307,7 +307,14 @@ public class MessageManager extends SQLiteOpenHelper {
     public void prepareData() throws Exception {
         Log.d("YASSSSS", "Reading all messages...");
         //email
-        Message msg1 = new Message("yuezhang5@cmail.carleton.ca", "dummypass", "jamesmulvenna@cmail.carleton.ca", "First Dummy", "This is the first dummy Email");
+        Message msg1 = new Message("yuezhang5@cmail.carleton.ca", "dummypass", "jamesmulvenna@cmail.carleton.ca", null,
+                "Android is a mobile operating system developed by Google, based on the Linux kernel " +
+                        "and designed primarily for touchscreen mobile devices such as smartphones and tablets. Android's user interface is mainly " +
+                        "based on direct manipulation, using touch gestures that loosely correspond to real-world actions, such as swiping, " +
+                        "tapping and pinching, to manipulate on-screen objects, along with a virtual keyboard for text input. " +
+                        "In addition to touchscreen devices, Google has further developed Android TV for televisions, " +
+                        "Android Auto for cars, and Android Wear for wrist watches, each with a specialized user interface. " +
+                        "Variants of Android are also used on game consoles, digital cameras, PCs and other electronics.");
         //Time time1 = new Time(null, null, 1, 2);
         MessageWrapper data1 = new MessageWrapper(msg1);
 
