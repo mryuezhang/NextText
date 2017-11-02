@@ -16,6 +16,7 @@ import android.view.*
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import com.example.yue.nexttext.Core.DataType.Time
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_confirm.*
@@ -83,13 +84,17 @@ class MessageConfirmActivity : AppCompatActivity() {
                 }
                 else{
                     if (Calendar.getInstance().time.after(fragment.getTime())){
-                        Utilities.invalidEmailAddressAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
+                        Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
                     }
                     else{
+                        val time = Time(fragment.getDate_Stirng(), fragment.getTime_String())
+                        receivedMessageDataObject!!.timeTrigger = time
+                        receivedMessageDataObject!!.locationTrigger = null
+                        receivedMessageDataObject!!.weatherTrigger = null
+                        intent.putExtra(Utilities.COMPLETE_DATA, receivedMessageDataObject)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
                     }
-                    intent.putExtra(Utilities.COMPLETE_DATA, receivedMessageDataObject)
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
                 }
             }
         }
@@ -189,7 +194,11 @@ class MessageConfirmActivity : AppCompatActivity() {
 
         fun getDate(): Date = Utilities.dateFormat.parse(date_display.text.toString())
 
-        fun getTime(): Date = Utilities.timeFormat.parse(date_display.text.toString())
+        fun getTime(): Date = Utilities.timeFormat.parse(time_display.text.toString())
+
+        fun getDate_Stirng(): String = date_display.text.toString()
+
+        fun getTime_String(): String = time_display.text.toString()
     }
 
 

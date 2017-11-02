@@ -82,9 +82,13 @@ class Utilities {
 
         fun invalidTimeTriggerAlertDialog(activity: Activity, type: String): AlertDialog{
             val alertDialog = if (type == DATE) {
-                AlertDialog.Builder(activity).setMessage("Picked date has passed").create()
+                AlertDialog.Builder(activity).setMessage("Picked date has passed")
+                        .setPositiveButton("Ok") { d, _ -> d.cancel() }
+                        .create()
             } else {
-                AlertDialog.Builder(activity).setMessage("Picked date has passed").create()
+                AlertDialog.Builder(activity).setMessage("Picked time has passed")
+                        .setPositiveButton("Ok") { d, _ -> d.cancel() }
+                        .create()
             }
             alertDialog.setOnShowListener {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext, R.color.colorPrimary))
