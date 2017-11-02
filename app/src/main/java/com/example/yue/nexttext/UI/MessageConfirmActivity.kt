@@ -8,12 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.app.NavUtils
+import android.support.v4.app.*
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateFormat
+import android.util.SparseArray
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TextView
@@ -22,12 +20,14 @@ import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_confirm.*
 import kotlinx.android.synthetic.main.fragment_time_trigger_picker.*
+import java.util.*
 
 /**
  * Created by yue on 2017-10-28.
  */
 class MessageConfirmActivity : AppCompatActivity() {
     private var receivedMessageDataObject: MessageWrapper? = null
+    private var triggerPickerPagerAdapter: TriggerPickerPagerAdapter? = null
 
     companion object {
         fun getStartActivityIntent(context: Context) =
@@ -43,7 +43,7 @@ class MessageConfirmActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val triggerPickerPagerAdapter = TriggerPickerPagerAdapter(supportFragmentManager)
+        triggerPickerPagerAdapter = TriggerPickerPagerAdapter(supportFragmentManager)
         viewPager_message_confirmation.adapter = triggerPickerPagerAdapter
         tabs.setupWithViewPager(viewPager_message_confirmation)
     }
@@ -73,14 +73,33 @@ class MessageConfirmActivity : AppCompatActivity() {
     // currently this function just simply forward the received MessageData object to MainActivity
     // later on it should check if any trigger is set to this object, and forward it to MainActicity
     private fun confirmMessage(){
-        intent.putExtra(Utilities.COMPLETE_DATA, receivedMessageDataObject)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        when (viewPager_message_confirmation.currentItem ){
+            0 -> {
+                val fragment: TimePickerFragment = triggerPickerPagerAdapter?.
+                        getRegisteredFragment(viewPager_message_confirmation.currentItem) as TimePickerFragment
+
+                if (Calendar.getInstance().after(fragment.getDate())){
+                    Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.DATE).show()
+                }
+                else{
+                    if (Calendar.getInstance().time.after(fragment.getTime())){
+                        Utilities.invalidEmailAddressAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
+                    }
+                    else{
+                    }
+                    intent.putExtra(Utilities.COMPLETE_DATA, receivedMessageDataObject)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
+        }
     }
 
 
     //MARK: MessageCollectionPagerAdapter class
     class TriggerPickerPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){
+        private var registeredFragments = SparseArray<Fragment>()
+
         override fun getItem(position: Int): android.support.v4.app.Fragment? = when(position){
             0 -> MessageConfirmActivity.TimePickerFragment()
             1 ->  MessageConfirmActivity.WeatherPickerFragment()
@@ -94,6 +113,19 @@ class MessageConfirmActivity : AppCompatActivity() {
             1 -> "Weather"
             else -> "Location"
         }
+
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            val fragment = super.instantiateItem(container, position) as Fragment
+            registeredFragments.put(position, fragment)
+            return fragment
+        }
+
+        override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any) {
+            registeredFragments.remove(position)
+            super.destroyItem(container, position, `object`)
+        }
+
+        fun getRegisteredFragment(position: Int): Fragment = registeredFragments.get(position)
     }
 
     //MARK: Time Picker Fragment
@@ -120,15 +152,15 @@ class MessageConfirmActivity : AppCompatActivity() {
         }
 
         //MARK: a fragment for a date picker widget
-        class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
+        class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
             var textView: TextView? = null
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
                     DatePickerDialog(activity,
                             this,
-                            Calendar.getInstance().get(Calendar.YEAR),
-                            Calendar.getInstance().get(Calendar.MONTH),
-                            Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+                            Utilities.reverseDateFormat_YEAR(textView!!.text.toString()),
+                            Utilities.reverseDateFormat_MONTH(textView!!.text.toString()),
+                            Utilities.reverseDateFormat_DAY(textView!!.text.toString()))
 
             override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
                 val calendar = Calendar.getInstance()
@@ -144,8 +176,8 @@ class MessageConfirmActivity : AppCompatActivity() {
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
                     TimePickerDialog(activity,
                             this,
-                            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                            Calendar.getInstance().get(Calendar.MINUTE),
+                            Utilities.reverseTimeFormat_HOUR(textView!!.text.toString()),
+                            Utilities.reverseTimeFormat_MINUTE(textView!!.text.toString()),
                             DateFormat.is24HourFormat(activity))
 
             override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
@@ -154,6 +186,10 @@ class MessageConfirmActivity : AppCompatActivity() {
                 textView?.text = Utilities.timeFormat.format(calendar)
             }
         }
+
+        fun getDate(): Date = Utilities.dateFormat.parse(date_display.text.toString())
+
+        fun getTime(): Date = Utilities.timeFormat.parse(date_display.text.toString())
     }
 
 
@@ -162,6 +198,7 @@ class MessageConfirmActivity : AppCompatActivity() {
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
                 inflater?.inflate(R.layout.fragment_location_trigger_picker, container, false)
     }
+
     //MARK: Weather Picker Fragment
     class WeatherPickerFragment: android.support.v4.app.Fragment(){
         private val _tag = "WeatherPickerFragment"

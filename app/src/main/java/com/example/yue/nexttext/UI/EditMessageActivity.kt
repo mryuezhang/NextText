@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
@@ -47,7 +46,6 @@ class EditMessageActivity: AppCompatActivity(), MessageDataPasser{
     }
 
     override fun onDataPass(data: MessageWrapper) {
-        Log.i("FUCK", "Yessssss")
         intent.putExtra(Utilities.EDITED_DATA, data)
         setResult(Activity.RESULT_OK, intent)
         finish()

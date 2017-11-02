@@ -67,41 +67,48 @@ class MessageConfigureActivity : AppCompatActivity() {
         when(item.itemId){
             android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
             R.id.action_save_new_message_configure -> {
-                val messageData = createNewMessage()
-                if(viewPager_message_configure.currentItem == 0 && !isNullSMS(messageData) ||
-                        viewPager_message_configure.currentItem == 1 && !isNullEmail(messageData)){
-                    forwardMessageData(messageData)
+                val message: Message?
+                val messageWrapper: MessageWrapper?
+                if(viewPager_message_configure.currentItem == 0) {
+                    //SMS
+                    val fragment: SMSObjectFragment = messageCollectionPaperAdapter?.
+                            getRegisteredFragment(viewPager_message_configure.currentItem) as SMSObjectFragment
+
+                    if (fragment.getPhoneNumber() == ""){
+                       Utilities.emptyRecipientDialog(this@MessageConfigureActivity).show()
+                    }
+                    else {
+                        message = Message(fragment.getPhoneNumber(),fragment.getSMSContent())
+
+                        messageWrapper = MessageWrapper(message)
+
+                        forwardMessageData(messageWrapper)
+                    }
+                }
+                else {
+                    //Email
+                    val fragment: EmailObjectFragment = messageCollectionPaperAdapter?.
+                            getRegisteredFragment(viewPager_message_configure.currentItem) as EmailObjectFragment
+
+                    if (fragment.getEmailAddress() == ""){
+                       Utilities.emptyRecipientDialog(this@MessageConfigureActivity).show()
+                    }
+                    else if (!Utilities.isEmailValid(fragment.getEmailAddress())){
+                        Utilities.invalidEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailAddress()).show()
+                    }
+                    else {
+                        //TODO This is probably not going to be the final implement
+                        message = Message(null, null, fragment.getEmailAddress(), fragment.getEmailSubject(), fragment.getEmailCompose())
+
+                        messageWrapper = MessageWrapper(message)
+
+                        forwardMessageData(messageWrapper)
+                    }
                 }
             }
             else -> super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-
-    //MARK: Private methods
-    private fun createNewMessage(): MessageWrapper{
-        val message: Message?
-        val messageWrapper: MessageWrapper?
-        if(viewPager_message_configure.currentItem == 0){
-            //SMS
-            val fragment: SMSObjectFragment = messageCollectionPaperAdapter?.
-                    getRegisteredFragment(viewPager_message_configure.currentItem) as SMSObjectFragment
-            message = Message(fragment.getPhoneNumber(),fragment.getSMSContent() )
-            messageWrapper = MessageWrapper(message)
-        }
-        else{
-            //Email
-            val fragment: EmailObjectFragment = messageCollectionPaperAdapter?.
-                    getRegisteredFragment(viewPager_message_configure.currentItem) as EmailObjectFragment
-
-            //TODO This is probably not going to be the final implement
-            message = Message(null, null, fragment.getEmailAddress(), fragment.getEmailSubject(), fragment.getEmailCompose())
-
-            messageWrapper = MessageWrapper(message)
-        }
-
-        return messageWrapper
     }
 
     private fun receiveCompleteMessage(data: Intent?){
@@ -122,19 +129,6 @@ class MessageConfigureActivity : AppCompatActivity() {
         startActivityForResult(messageConfirmationActivityIntent,
                 Utilities.MESSAGE_CONFIRMATION_ACTIVITY_REQUEST_CODE)
     }
-
-    /**
-     * This function is used to check whether user is completely finished input for SMS
-     */
-    private fun isNullSMS(messageData: MessageWrapper): Boolean =
-            messageData.message._to == "" || messageData.message._content == ""
-
-    /**
-     * This function is used to check whether user is completely finished input for Email
-     * TODO This function is currently not complete yet
-     */
-    private fun isNullEmail(messageData: MessageWrapper): Boolean =
-            messageData.message._to == "" || messageData.message._content == ""
 
     //MARK: MessageCollectionPagerAdapter class
     class MessageCollectionPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm){

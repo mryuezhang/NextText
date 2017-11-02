@@ -1,10 +1,8 @@
 package com.example.yue.nexttext.UI
 
-import android.app.AlertDialog
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -50,15 +48,7 @@ class EditSMSFragment: Fragment() {
         when (item.itemId) {
             R.id.action_done_edit -> {
                 if (edit_to.text.toString() == ""){
-                    val alertDialog = AlertDialog.Builder(activity)
-                            .setMessage("Recipient can't be empty")
-                            .setPositiveButton("Yes") { d, _ -> d.cancel() }.create()
-
-                    alertDialog.setOnShowListener {
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext,R.color.colorPrimary))
-                    }
-
-                    alertDialog.show()
+                    Utilities.emptyRecipientDialog(activity).show()
                 }
                 else{
                     receivedMessage!!.message._to = edit_to.text.toString()
