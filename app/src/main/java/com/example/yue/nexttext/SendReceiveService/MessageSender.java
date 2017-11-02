@@ -6,10 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.telephony.SmsManager;
 
+import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
 import com.example.yue.nexttext.Database.MessageManager;
-import com.example.yue.nexttext.EmailService.GMailSupport;
+import com.example.yue.nexttext.EmailService.GMailSender;
+import com.example.yue.nexttext.Utility.Constants;
 
 import javax.mail.MessagingException;
 
@@ -36,22 +39,43 @@ public class MessageSender extends Service {
     public int onStartCommand(Intent thisIntent, int thisFlag, int thisStartId) {
         thisManager = new MessageManager(getApplicationContext());
 
-        Bundle bundle = thisIntent.getBundleExtra("SOMEBUNDLEEXTRA");
-        thisData  = (MessageWrapper) bundle.getParcelable("SOMEMESSAGEPARCABLE");
+        Bundle bundle = thisIntent.getBundleExtra(Constants.FINAL_DATA);
+        thisData  = (MessageWrapper) bundle.getParcelable(Constants.TIME_TRIGGER_DATA);
 
         if (thisData.getMessage().get_to().contains("@")){
             //email
             sendEmail();
-            thisManager.deleteMessageById(thisData.getId());
+            //probably good practice below
+            //thisManager.deleteMessageById(thisData.getId());
         } else {
             //sms
             sendSms();
-            thisManager.deleteMessageById(thisData.getId());
+            //probably good practice below
+            //thisManager.deleteMessageById(thisData.getId());
         }
         return super.onStartCommand(thisIntent, thisFlag, thisStartId);
     }
 
-    public void sendEmail(){}
-    public void sendSms(){}
+    public void sendEmail(){
+        Message message = new Message(thisData.getMessage().get_from(), thisData.getMessage().get_password(), thisData.getMessage().get_to(), thisData.getMessage().get_subject(), thisData.getMessage().get_content());
+
+        GMailSender gMailSender = new GMailSender(message.get_from(), message.get_password());
+
+        try {
+            gMailSender.sendMail(message.get_subject(), message.get_content(), message.get_from(), message.get_to());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendSms(){
+        Message message = new Message(thisData.getMessage().get_to(), thisData.getMessage().get_content());
+        SmsManager smsManager = SmsManager.getDefault();
+
+        /* I don't believe the intents should be null, but not sure what they should be
+        https://developer.android.com/reference/android/telephony/SmsManager.html
+        */
+        smsManager.sendTextMessage(message.get_to(), null, message.get_content(), null, null);
+    }
 }
 

@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
@@ -32,5 +32,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'javax.mail:mail:1.4.1'
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
+    testCompile 'junit:junit:4.12'
 }

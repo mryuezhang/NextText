@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class Time implements Parcelable {
     private String date, time;
 
-    public Time(String newDate, String newTime, int newType, int newStatus) {
+    public Time(String newDate, String newTime) {
         this.date = newDate;
         this.time = newTime;
     }

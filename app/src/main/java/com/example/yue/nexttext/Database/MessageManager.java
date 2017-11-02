@@ -9,8 +9,8 @@ import android.util.Log;
 
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
+import com.example.yue.nexttext.DataType.Time;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +36,6 @@ public class MessageManager extends SQLiteOpenHelper {
     private static final String KEY_CREATED_TIME = "created_time";
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME = "time";
-    private static final String KEY_TYPE = "type";
-    private static final String KEY_STATUS = "status";
     private static final String KEY_LOCATION = "location";
     private static final String KEY_WEATHER = "weather";
 
@@ -50,7 +48,7 @@ public class MessageManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
                 KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_CONTENT + " TEXT," + KEY_CREATED_TIME + " TEXT," + KEY_DATE + " DATE," + KEY_TIME + " TIME," +
-                KEY_TYPE + " INTEGER," + KEY_STATUS + " INTEGER," + KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
+                KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
     }
 
@@ -92,6 +90,8 @@ public class MessageManager extends SQLiteOpenHelper {
         content.put(KEY_CREATED_TIME, data.getCreatedTime());
 
         //add time
+        content.put(KEY_DATE, data.getTimeTrigger().getDate());
+        content.put(KEY_TIME, data.getTimeTrigger().getTime());
 
         /*
         switch(checkTriggerType(data)) {
@@ -129,10 +129,8 @@ public class MessageManager extends SQLiteOpenHelper {
                 KEY_CREATED_TIME,//6
                 KEY_DATE,//7
                 KEY_TIME,//8
-                KEY_TYPE,//9
-                KEY_STATUS,//10
-                KEY_LOCATION, //11
-                KEY_WEATHER//12
+                KEY_LOCATION, //9
+                KEY_WEATHER//10
         };
         String selection = KEY_ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
@@ -150,8 +148,10 @@ public class MessageManager extends SQLiteOpenHelper {
         }
         else{
             Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            Time time = new Time(cursor.getString(7), cursor.getString(8));
             MessageWrapper messageWrapper = new MessageWrapper(message, id);
             messageWrapper.setCreatedTime(cursor.getString(6));
+            messageWrapper.setTimeTrigger(time);
             //if(!cursor.isNull(7) && !cursor.isNull(8)){
                 //Time time = new Time(cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getInt(10));
                 //set the current time to when the MessageObject first time created, not when it's queried from database
@@ -181,8 +181,10 @@ public class MessageManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Time time = new Time(cursor.getString(7), cursor.getString(8));
 
                 MessageWrapper messageData = new MessageWrapper(message, Integer.parseInt(cursor.getString(0)));
+                messageData.setTimeTrigger(time);
 
                 emailList.add(messageData);
             } while (cursor.moveToNext());
@@ -202,8 +204,10 @@ public class MessageManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Time time = new Time(cursor.getString(7), cursor.getString(8));
 
                 MessageWrapper messageWrapper = new MessageWrapper(message, Integer.parseInt(cursor.getString(0)));
+                messageWrapper.setTimeTrigger(time);
 
                 smsList.add(messageWrapper);
             } while (cursor.moveToNext());
@@ -227,7 +231,10 @@ public class MessageManager extends SQLiteOpenHelper {
             do {
                 Message message = new Message(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
                 //Time time = new Time(cursor.getString(6), cursor.getString(7), cursor.getInt(8), cursor.getInt(9));
+                Time time = new Time(cursor.getString(7), cursor.getString(8));
+
                 MessageWrapper messageWrapper = new MessageWrapper(message, Integer.parseInt(cursor.getString(0)));
+                messageWrapper.setTimeTrigger(time);
                 //use setter to set time instead of using constructor
                 //messageData.setTime(time);
                 // Adding message to list
@@ -266,6 +273,10 @@ public class MessageManager extends SQLiteOpenHelper {
         values.put(KEY_SUBJECT, data.getMessage().get_subject());
         values.put(KEY_CONTENT, data.getMessage().get_content());
         values.put(KEY_CREATED_TIME, data.getCreatedTime());
+
+        //time
+        values.put(KEY_DATE, data.getTimeTrigger().getDate());
+        values.put(KEY_TIME, data.getTimeTrigger().getTime());
 
         //add time
         /*
