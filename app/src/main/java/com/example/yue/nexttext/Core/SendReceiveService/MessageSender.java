@@ -1,20 +1,17 @@
-package com.example.yue.nexttext.SendReceiveService;
+package com.example.yue.nexttext.Core.SendReceiveService;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.telephony.SmsManager;
 
+import com.example.yue.nexttext.Core.Database.MessageManager;
+import com.example.yue.nexttext.Core.EmailService.GMailSender;
+import com.example.yue.nexttext.Core.Utility.Constants;
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
-import com.example.yue.nexttext.Database.MessageManager;
-import com.example.yue.nexttext.EmailService.GMailSender;
-import com.example.yue.nexttext.Utility.Constants;
-
-import javax.mail.MessagingException;
 
 /**
  * Created by jamesmulvenna on 2017-10-24.
@@ -40,7 +37,7 @@ public class MessageSender extends Service {
         thisManager = new MessageManager(getApplicationContext());
 
         Bundle bundle = thisIntent.getBundleExtra(Constants.FINAL_DATA);
-        thisData  = (MessageWrapper) bundle.getParcelable(Constants.TIME_TRIGGER_DATA);
+        thisData  = bundle.getParcelable(Constants.TIME_TRIGGER_DATA);
 
         if (thisData.getMessage().get_to().contains("@")){
             //email

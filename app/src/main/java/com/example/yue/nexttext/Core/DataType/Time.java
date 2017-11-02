@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.DataType;
+package com.example.yue.nexttext.Core.DataType;
 
 import android.os.Parcel;
 import android.os.Parcelable;

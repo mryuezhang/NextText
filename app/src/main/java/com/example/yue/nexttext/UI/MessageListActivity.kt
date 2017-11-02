@@ -19,8 +19,8 @@ import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.Toast
+import com.example.yue.nexttext.Core.Database.MessageManager
 import com.example.yue.nexttext.DataType.MessageWrapper
-import com.example.yue.nexttext.Database.MessageManager
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_list.*
 import kotlinx.android.synthetic.main.app_bar_message_list.*
@@ -226,12 +226,12 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
                                     p0?.finish()
                                 }
-                        val mAlertDialog = builder.create()
-                        mAlertDialog.setOnShowListener {
-                            mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
-                            mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
+                        val alertDialog = builder.create()
+                        alertDialog.setOnShowListener {
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
+                            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimary))
                         }
-                        mAlertDialog.show()
+                        alertDialog.show()
                         return true
                     }
                     else -> return false

@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.EmailService;
+package com.example.yue.nexttext.Core.EmailService;
 
 /**
  * Created by jamesmulvenna on 2017-11-01.

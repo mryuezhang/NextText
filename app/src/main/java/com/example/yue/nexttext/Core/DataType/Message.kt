@@ -17,8 +17,7 @@ data class Message(var _from: String?,
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString()) {
-    }
+            parcel.readString())
 
     constructor(_to: String, _content: String) : this(null, null, _to, null, _content)
 

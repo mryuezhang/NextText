@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Utility;
+package com.example.yue.nexttext.Core.Utility;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

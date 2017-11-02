@@ -1,7 +1,7 @@
-package com.example.yue.nexttext.EmailService;
+package com.example.yue.nexttext.Core.EmailService;
 
-import java.security.Provider;
 import java.security.AccessController;
+import java.security.Provider;
 
 /**
  * Created by jamesmulvenna on 2017-10-19.

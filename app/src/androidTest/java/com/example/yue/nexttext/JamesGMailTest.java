@@ -3,17 +3,14 @@ package com.example.yue.nexttext;
 /**
  * Created by jamesmulvenna on 2017-11-01.
  */
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.example.yue.nexttext.Core.EmailService.GMailSender;
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
-import com.example.yue.nexttext.EmailService.GMailSender;
 
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 

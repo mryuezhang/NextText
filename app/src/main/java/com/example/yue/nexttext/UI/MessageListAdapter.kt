@@ -55,10 +55,10 @@ class MessageListAdapter(private val activity:Activity,
         val messageTitle = this.messageList[p0].message._to
 
         val messageContent = if (messageTitle.contains("@")) {
-            val emailSubject = if (this.messageList[p0].message._subject != null){
-                this.messageList[p0].message._subject
-            } else {
+            val emailSubject = if (this.messageList[p0].message._subject == null || this.messageList[p0].message._subject == ""){
                 "(no subject)"
+            } else {
+                this.messageList[p0].message._subject
             }
             emailSubject + "\n" + this.messageList[p0].message._content
         } else {
@@ -101,7 +101,7 @@ class MessageListAdapter(private val activity:Activity,
     override fun getCount(): Int = this.messageList.size
 
     fun add(messageData: MessageWrapper){
-        this.messageList.add(messageData)
+        this.messageList.add(0, messageData)
         notifyDataSetChanged()
     }
 

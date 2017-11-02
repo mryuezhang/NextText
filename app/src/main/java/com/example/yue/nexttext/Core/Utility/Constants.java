@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Utility;
+package com.example.yue.nexttext.Core.Utility;
 
 /**
  * Created by jamesmulvenna on 2017-11-01.

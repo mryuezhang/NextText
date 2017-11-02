@@ -1,4 +1,4 @@
-package com.example.yue.nexttext.Database;
+package com.example.yue.nexttext.Core.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.yue.nexttext.Core.DataType.Time;
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
-import com.example.yue.nexttext.DataType.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -279,8 +279,8 @@ public class MessageManager extends SQLiteOpenHelper {
         values.put(KEY_CREATED_TIME, data.getCreatedTime());
 
         //time
-        values.put(KEY_DATE, data.getTimeTrigger().getDate());
-        values.put(KEY_TIME, data.getTimeTrigger().getTime());
+        //values.put(KEY_DATE, data.getTimeTrigger().getDate());
+        //values.put(KEY_TIME, data.getTimeTrigger().getTime());
 
         //add time
         /*

@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_edit_message.*
@@ -46,20 +46,8 @@ class EditMessageActivity: AppCompatActivity(), MessageDataPasser{
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean  = when(item.itemId) {
-            R.id.action_done_edit -> {
-                val fragment = if (fragmentManager.findFragmentByTag("SMS") != null){
-                    fragmentManager.findFragmentByTag("SMS")
-                } else {
-                    fragmentManager.findFragmentByTag("Email")
-                }
-                fragmentManager.beginTransaction().remove(fragment).commit()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-    }
-
     override fun onDataPass(data: MessageWrapper) {
+        Log.i("FUCK", "Yessssss")
         intent.putExtra(Utilities.EDITED_DATA, data)
         setResult(Activity.RESULT_OK, intent)
         finish()
