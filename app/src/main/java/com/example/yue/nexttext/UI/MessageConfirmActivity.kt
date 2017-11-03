@@ -79,11 +79,12 @@ class MessageConfirmActivity : AppCompatActivity() {
                 val fragment: TimePickerFragment = triggerPickerPagerAdapter?.
                         getRegisteredFragment(viewPager_message_confirmation.currentItem) as TimePickerFragment
 
-                if (Calendar.getInstance().after(fragment.getDate())){
+                if (Calendar.getInstance().after(fragment.getDate()) &&
+                        Utilities.dateFormat.format(Calendar.getInstance()) != fragment.getDate_Stirng()){
                     Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.DATE).show()
                 }
                 else{
-                    if (Calendar.getInstance().time.after(fragment.getTime())){
+                    if (Utilities.timeFormat.parse(Utilities.timeFormat.format(Calendar.getInstance())).after(fragment.getTime())){
                         Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
                     }
                     else{

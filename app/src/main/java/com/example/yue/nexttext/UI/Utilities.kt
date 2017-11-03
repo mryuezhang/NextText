@@ -24,7 +24,8 @@ class Utilities {
         val TIME = "TIME"
 
         val dateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
-        val timeFormat = SimpleDateFormat("h:mm a")
+        val timeFormat = SimpleDateFormat("hh:mm a")
+        val timeFormat_24_hour = SimpleDateFormat("HH:mm")
 
         fun reverseDateFormat_YEAR(string: String): Int = string.split(",")[3].trim().toInt()
 
