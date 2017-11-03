@@ -53,7 +53,6 @@ class MessageConfigureActivity : AppCompatActivity() {
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
-
     }
 
     //MARK: Action menu

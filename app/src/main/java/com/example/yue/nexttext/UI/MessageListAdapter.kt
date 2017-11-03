@@ -176,7 +176,7 @@ class MessageListAdapter(private val activity:Activity,
                 if (filteredList.size == 0) {
                     if(definedQuery == "") activity.findViewById<TextView>(R.id.no_result_text).text = "No result"
                     else {
-                        val string = "No result found for \'<b>" + p0.toString() + "<b>\'"
+                        val string = "No result found for \'<b>" + p0.toString() + "</b>\'"
                         activity.findViewById<TextView>(R.id.no_result_text).text = Html.fromHtml(string, Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH)
                     }
                 }

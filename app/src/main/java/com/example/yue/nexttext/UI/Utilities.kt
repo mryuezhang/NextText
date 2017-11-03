@@ -2,9 +2,13 @@ package com.example.yue.nexttext.UI
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.support.v4.content.ContextCompat
+import android.text.Html
 import com.example.yue.nexttext.R
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -23,25 +27,50 @@ class Utilities {
         val DATE = "DATE"
         val TIME = "TIME"
 
-        val dateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm a")
-        val timeFormat_24_hour = SimpleDateFormat("HH:mm")
+        private val dateFormat = SimpleDateFormat("EEE, MMMM, d, yyyy")
+        private val timeFormat = SimpleDateFormat("hh:mm a")
+        private val timeFormat_24_hour = SimpleDateFormat("HH:mm")
+
+        fun formatDate(p0: Calendar): String = dateFormat.format(p0)
+
+        fun formatTime(p0: Calendar, p1: Context): String =
+                if (android.text.format.DateFormat.is24HourFormat(p1)) timeFormat_24_hour.format(p0)
+                else timeFormat.format(p0)
+
+        fun parseDate(p0: String): Date = dateFormat.parse(p0)
+
+        fun parseTime(p0: String, p1: Context): Date =
+                if (android.text.format.DateFormat.is24HourFormat(p1)) timeFormat_24_hour.parse(p0)
+                else timeFormat.parse(p0)
+
+        fun isSameDate(p0: Calendar, p1: Date): Boolean =
+                dateFormat.format(p0) == dateFormat.format(p1)
+
+        /**
+         * returns 0 if they're the same, -1 if p0 is after p1, 1 if p0 is before p1
+         */
+        fun compareTime(p0: Calendar, p1: Date): Int {
+            if (timeFormat_24_hour.format(p0) == timeFormat_24_hour.format(p1)) return 0
+            else if (timeFormat_24_hour.format(p0) > timeFormat_24_hour.format(p1)) return -1
+            else return 1
+        }
+
 
         fun reverseDateFormat_YEAR(string: String): Int = string.split(",")[3].trim().toInt()
 
         fun reverseDateFormat_MONTH(string: String): Int = when(string.split(",")[1].trim()){
-                "January" ->  1
-                "February" -> 2
-                "March" -> 3
-                "April" -> 4
-                "May" -> 5
-                "June" -> 6
-                "July" -> 7
-                "August" -> 8
-                "September" -> 9
-                "October" -> 10
-                "November" -> 11
-                else -> 12
+                "January" ->  0
+                "February" -> 1
+                "March" -> 2
+                "April" -> 3
+                "May" -> 4
+                "June" -> 5
+                "July" -> 6
+                "August" -> 7
+                "September" -> 8
+                "October" -> 9
+                "November" -> 10
+                else -> 11
         }
 
         fun reverseDateFormat_DAY(string: String): Int = string.split(",")[2].trim().toInt()
@@ -83,14 +112,29 @@ class Utilities {
 
         fun invalidTimeTriggerAlertDialog(activity: Activity, type: String): AlertDialog{
             val alertDialog = if (type == DATE) {
-                AlertDialog.Builder(activity).setMessage("Picked date has passed")
+                val string = "Picked <b>date</b> has passed"
+
+                AlertDialog.Builder(activity).setMessage(Html.fromHtml(string, Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH))
                         .setPositiveButton("Ok") { d, _ -> d.cancel() }
                         .create()
             } else {
-                AlertDialog.Builder(activity).setMessage("Picked time has passed")
+                val string = "Picked <b>time</b> has passed"
+                AlertDialog.Builder(activity).setMessage(Html.fromHtml(string, Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH))
                         .setPositiveButton("Ok") { d, _ -> d.cancel() }
                         .create()
             }
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext, R.color.colorPrimary))
+            }
+
+            return alertDialog
+        }
+
+        fun avoidCurrentTimeAlertDialog(activity: Activity, invalidAddress: String): AlertDialog{
+            val alertDialog = AlertDialog.Builder(activity)
+                    .setMessage("Avoid using current time")
+                    .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
+
             alertDialog.setOnShowListener {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext, R.color.colorPrimary))
             }

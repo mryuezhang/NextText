@@ -8,7 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.support.v4.app.*
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateFormat
 import android.util.SparseArray
@@ -62,7 +65,7 @@ class MessageConfirmActivity : AppCompatActivity() {
                 confirmMessage()
                 return true
             }
-            android.R.id.home -> NavUtils.navigateUpFromSameTask(this)
+            android.R.id.home -> finish()
             else -> super.onOptionsItemSelected(item)
         }
         return true
@@ -79,13 +82,16 @@ class MessageConfirmActivity : AppCompatActivity() {
                 val fragment: TimePickerFragment = triggerPickerPagerAdapter?.
                         getRegisteredFragment(viewPager_message_confirmation.currentItem) as TimePickerFragment
 
-                if (Calendar.getInstance().after(fragment.getDate()) &&
-                        Utilities.dateFormat.format(Calendar.getInstance()) != fragment.getDate_Stirng()){
+                if (Calendar.getInstance().after(fragment.getDate()) && !Utilities.isSameDate(Calendar.getInstance(), fragment.getDate())){
                     Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.DATE).show()
                 }
                 else{
-                    if (Utilities.timeFormat.parse(Utilities.timeFormat.format(Calendar.getInstance())).after(fragment.getTime())){
+                    if (Utilities.compareTime(Calendar.getInstance(), fragment.getTime()) == -1){
                         Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
+                    }
+                    else if (Utilities.compareTime(Calendar.getInstance(), fragment.getTime()) == 0 &&
+                            Utilities.isSameDate(Calendar.getInstance(), fragment.getDate())){
+                        Utilities.avoidCurrentTimeAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
                     }
                     else{
                         val time = Time(fragment.getDate_Stirng(), fragment.getTime_String())
@@ -142,8 +148,8 @@ class MessageConfirmActivity : AppCompatActivity() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
-            date_display.text = Utilities.dateFormat.format(Calendar.getInstance())
-            time_display.text = Utilities.timeFormat.format(Calendar.getInstance())
+            date_display.text = Utilities.formatDate(Calendar.getInstance())
+            time_display.text = Utilities.formatTime(Calendar.getInstance(), activity.applicationContext)
 
             date_display.setOnClickListener {
                 val newFragment = DatePickerFragment()
@@ -171,7 +177,7 @@ class MessageConfirmActivity : AppCompatActivity() {
             override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
                 val calendar = Calendar.getInstance()
                 calendar.set(year, month, day)
-                textView?.text = Utilities.dateFormat.format(calendar)
+                textView?.text = Utilities.formatDate(calendar)
             }
         }
 
@@ -189,13 +195,13 @@ class MessageConfirmActivity : AppCompatActivity() {
             override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH,hourOfDay, minute)
-                textView?.text = Utilities.timeFormat.format(calendar)
+                textView?.text = Utilities.formatTime(calendar, activity.applicationContext)
             }
         }
 
-        fun getDate(): Date = Utilities.dateFormat.parse(date_display.text.toString())
+        fun getDate(): Date = Utilities.parseDate(date_display.text.toString())
 
-        fun getTime(): Date = Utilities.timeFormat.parse(time_display.text.toString())
+        fun getTime(): Date = Utilities.parseTime(time_display.text.toString(), activity.applicationContext)
 
         fun getDate_Stirng(): String = date_display.text.toString()
 
@@ -211,8 +217,6 @@ class MessageConfirmActivity : AppCompatActivity() {
 
     //MARK: Weather Picker Fragment
     class WeatherPickerFragment: android.support.v4.app.Fragment(){
-        private val _tag = "WeatherPickerFragment"
-
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
                 inflater?.inflate(R.layout.fragment_weather_trigger_picker, container, false)
     }
