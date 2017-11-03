@@ -50,7 +50,7 @@ public class MessageManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_FROM + " TEXT," + KEY_PASSWORD + " TEXT," +
-                KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_CONTENT + " TEXT," + KEY_CREATED_TIME + " TEXT," + KEY_DATE + " DATE," + KEY_TIME + " TIME," +
+                KEY_TO + " TEXT," + KEY_SUBJECT + " TEXT," + KEY_CONTENT + " TEXT," + KEY_CREATED_TIME + " TEXT," + KEY_DATE + " TEXT," + KEY_TIME + " TEXT," +
                 KEY_LOCATION + " LOCATION," + KEY_WEATHER + " WEATHER" + ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
     }
@@ -92,9 +92,10 @@ public class MessageManager extends SQLiteOpenHelper {
         content.put(KEY_CONTENT, data.getMessage().get_content());
         content.put(KEY_CREATED_TIME, data.getCreatedTime());
 
-        //add time
-        //content.put(KEY_DATE, data.getTimeTrigger().getDate());
-        //content.put(KEY_TIME, data.getTimeTrigger().getTime());
+        if (data.getTimeTrigger() != null) {
+            content.put(KEY_DATE, data.getTimeTrigger().getDate());
+            content.put(KEY_TIME, data.getTimeTrigger().getTime());
+        }
 
         /*
         switch(checkTriggerType(data)) {
@@ -279,8 +280,10 @@ public class MessageManager extends SQLiteOpenHelper {
         values.put(KEY_CREATED_TIME, data.getCreatedTime());
 
         //time
-        //values.put(KEY_DATE, data.getTimeTrigger().getDate());
-        //values.put(KEY_TIME, data.getTimeTrigger().getTime());
+        if (data.getTimeTrigger() != null) {
+            values.put(KEY_DATE, data.getTimeTrigger().getDate());
+            values.put(KEY_TIME, data.getTimeTrigger().getTime());
+        }
 
         //add time
         /*
@@ -344,6 +347,10 @@ public class MessageManager extends SQLiteOpenHelper {
         //Time time6 = new Time(null, null, 3, 4);
         MessageWrapper data6 = new MessageWrapper(msg6);
 
+        Time time = new Time("hello", "bye");
+
+        data6.setTimeTrigger(time);
+
         this.addMessage(data1);
         this.addMessage(data2);
         this.addMessage(data3);
@@ -358,7 +365,9 @@ public class MessageManager extends SQLiteOpenHelper {
         for (MessageWrapper data : messages) {
             String log = "Id: " + data.getId() + " ,From: " + data.getMessage().get_from() + ", password: " + data.getMessage().get_password()
                     + ", to: " + data.getMessage().get_to() + ", subject: " + data.getMessage().get_subject() + ", content: " + data.getMessage().get_content() +
-                    ", currtime: " + data.getCreatedTime();
+                    ", currtime: " + data.getCreatedTime() +
+                    ", date: " + data.getTimeTrigger().getDate() +
+                    ", time: " + data.getTimeTrigger().getTime();
             //", date: " + data.getTimeTrigger().getDate() + ", time: " + data.getTime().getTime() + ", type: " + data.getTime().getType() +
               //      ", status: " + data.getTime().getStatus() + ", location: " + data.getLocation() + ", weather: " + data.getWeather();
             Log.d("Message : :", log);
