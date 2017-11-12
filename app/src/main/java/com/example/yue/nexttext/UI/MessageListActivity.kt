@@ -1,8 +1,6 @@
 package com.example.yue.nexttext.UI
 
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.SearchManager
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +18,7 @@ import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.Toast
 import com.example.yue.nexttext.Core.Database.MessageManager
+import com.example.yue.nexttext.Core.SendReceiveService.AlarmReceiver
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_list.*
@@ -29,6 +28,7 @@ import kotlinx.android.synthetic.main.content_message_list.*
 
 class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var messageManager: MessageManager? = null
+    private var alarmManger: AlarmManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +51,8 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         messageManager = MessageManager(applicationContext)
         setupMessageList()
+
+        alarmManger = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -287,6 +289,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         else {
             messageManager?.addMessage(receivedCompleteData)
             (message_list.adapter as MessageListAdapter).add(receivedCompleteData)
+            setUpAlarm(receivedCompleteData)
         }
     }
 
@@ -298,6 +301,18 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         else {
             messageManager?.updateMessage(receivedEditedData)
             (message_list.adapter as MessageListAdapter).replace(receivedEditedData)
+        }
+    }
+
+
+    private fun setUpAlarm(messageWrapper: MessageWrapper) {
+        if (messageWrapper.timeTrigger != null){
+            val calendar = messageWrapper.timeTrigger!!.getCalendar()
+            val intent = Intent(applicationContext, AlarmReceiver::class.java)
+            intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.TIME_TRIGGER_DATA, messageWrapper)
+            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
+
+            alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
         }
     }
 }

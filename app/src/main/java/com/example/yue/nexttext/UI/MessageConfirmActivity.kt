@@ -26,9 +26,6 @@ import kotlinx.android.synthetic.main.activity_message_confirm.*
 import kotlinx.android.synthetic.main.fragment_time_trigger_picker.*
 import java.util.*
 
-/**
- * Created by yue on 2017-10-28.
- */
 class MessageConfirmActivity : AppCompatActivity() {
     private var receivedMessageDataObject: MessageWrapper? = null
     private var triggerPickerPagerAdapter: TriggerPickerPagerAdapter? = null
@@ -86,7 +83,8 @@ class MessageConfirmActivity : AppCompatActivity() {
                     Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.DATE).show()
                 }
                 else{
-                    if (Utilities.compareTime(Calendar.getInstance(), fragment.getTime()) == -1){
+                    if (Utilities.compareTime(Calendar.getInstance(), fragment.getTime()) == -1
+                            && Utilities.isSameDate(Calendar.getInstance(), fragment.getDate())){
                         Utilities.invalidTimeTriggerAlertDialog(this@MessageConfirmActivity, Utilities.TIME).show()
                     }
                     else if (Utilities.compareTime(Calendar.getInstance(), fragment.getTime()) == 0 &&

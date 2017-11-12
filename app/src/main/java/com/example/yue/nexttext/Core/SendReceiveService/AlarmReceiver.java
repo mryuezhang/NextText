@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.yue.nexttext.Core.Utility.Constants;
 import com.example.yue.nexttext.DataType.MessageWrapper;
@@ -15,6 +16,7 @@ import com.example.yue.nexttext.DataType.MessageWrapper;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context thisContext, Intent thisIntent) {
+        Log.d(null,"FUCKKKKCKKKKKKKKKKKKK");
         Bundle bundle = thisIntent.getBundleExtra(Constants.TIME_TRIGGER_ALARM);
         MessageWrapper thisData = bundle.getParcelable(Constants.TIME_TRIGGER_DATA);
 

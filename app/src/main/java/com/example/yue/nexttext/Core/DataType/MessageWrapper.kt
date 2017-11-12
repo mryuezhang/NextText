@@ -6,9 +6,6 @@ import android.os.Parcelable
 import com.example.yue.nexttext.Core.DataType.Time
 import com.example.yue.nexttext.Core.DataType.Weather
 
-/**
- * Created by yue on 2017-10-28.
- */
 class MessageWrapper(var message: Message,
                      var timeTrigger: Time?,
                      var weatherTrigger: Weather?,

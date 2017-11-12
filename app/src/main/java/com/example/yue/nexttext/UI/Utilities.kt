@@ -11,9 +11,7 @@ import com.example.yue.nexttext.R
 import java.util.*
 import java.util.regex.Pattern
 
-/**
- * Created by yue on 2017-10-28.
- */
+
 class Utilities {
 
     companion object {
@@ -50,9 +48,11 @@ class Utilities {
          * returns 0 if they're the same, -1 if p0 is after p1, 1 if p0 is before p1
          */
         fun compareTime(p0: Calendar, p1: Date): Int {
-            if (timeFormat_24_hour.format(p0) == timeFormat_24_hour.format(p1)) return 0
-            else if (timeFormat_24_hour.format(p0) > timeFormat_24_hour.format(p1)) return -1
-            else return 1
+            return when {
+                timeFormat_24_hour.format(p0) == timeFormat_24_hour.format(p1) -> 0
+                timeFormat_24_hour.format(p0) > timeFormat_24_hour.format(p1) -> -1
+                else -> 1
+            }
         }
 
 
