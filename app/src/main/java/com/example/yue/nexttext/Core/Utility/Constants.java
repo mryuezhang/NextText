@@ -5,7 +5,7 @@ package com.example.yue.nexttext.Core.Utility;
  */
 
 public class Constants {
-    public final static String TIME_TRIGGER_DATA = "TimeTriggerData";
+    public final static String FINAL_DATA_BUNDLE = "TimeTriggerData";
     public final static String FINAL_DATA = "TimeTriggerData";
     public final static String SENT_DATA = "SentData";
 }

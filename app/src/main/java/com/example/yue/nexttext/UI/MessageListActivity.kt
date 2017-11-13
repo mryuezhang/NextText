@@ -313,12 +313,13 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
 
             val calendar = messageWrapper.timeTrigger!!.getCalendar()
+            Log.d(null, calendar.timeInMillis.toString())
+            val intent = Intent(applicationContext, AlarmReceiver::class.java)
             val bundle = Bundle()
             bundle.putParcelable(Constants.FINAL_DATA, messageWrapper)
-            val intent = Intent(applicationContext, AlarmReceiver::class.java)
-            intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.TIME_TRIGGER_DATA, bundle)
+            intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.FINAL_DATA_BUNDLE, bundle)
 
-            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, 0)
+            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
         }

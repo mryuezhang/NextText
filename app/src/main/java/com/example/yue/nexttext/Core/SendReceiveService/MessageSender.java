@@ -18,39 +18,39 @@ import com.example.yue.nexttext.DataType.MessageWrapper;
  * Created by jamesmulvenna on 2017-10-24.
  */
 
+//MIGHT NEED TO HAVE A MESSAGE MANAGER IN HERE AND DELETE THE MESSAGE AFTER ITS BEEN SENT
+
 public class MessageSender extends Service {
-    MessageManager thisManager;
     MessageWrapper thisData;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(null, "DID IT GET HERE?");
         return null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(null, "DID IT GET HERE?");
     }
 
     @Override
     public int onStartCommand(Intent thisIntent, int thisFlag, int thisStartId) {
-        Log.d(null, "DID IT GET HERE?");
-        thisManager = new MessageManager(getApplicationContext());
+        Log.d(null, "IM IN THE SEND service!");
+        Bundle bundle = thisIntent.getBundleExtra(Constants.SENT_DATA);
+        thisData  = (MessageWrapper)bundle.getParcelable(Constants.FINAL_DATA);
 
-        Bundle bundle = thisIntent.getBundleExtra(Constants.FINAL_DATA);
-        thisData  = bundle.getParcelable(Constants.TIME_TRIGGER_DATA);
 
         if (thisData.getMessage().get_to().contains("@")){
             //email
-            sendEmail();
+            Log.d(null, "IM IN THE SEND EMAIL!");
+            //sendEmail();
             //probably good practice below
             //thisManager.deleteMessageById(thisData.getId());
         } else {
             //sms
-            sendSms();
+            Log.d(null, "IM IN THE SEND SMS!");
+            //sendSms();
             //probably good practice below
             //thisManager.deleteMessageById(thisData.getId());
         }

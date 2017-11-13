@@ -1,18 +1,20 @@
 package com.example.yue.nexttext.Core.EmailService;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import javax.mail.MessagingException;
 
 public class SendASync extends AsyncTask<String, Void, Integer> {
-    private static final String TAG = "SendASync";
-    private GMailSupport sender;
+    private Context context;
+    private GMailSender sender;
     private String username,password;
 
-    public SendASync(String username, String password){
+    public SendASync(Context context, String username, String password){
         super();
+        this.context = context;
         this.username= username;
         this.password = password;
 
@@ -22,18 +24,16 @@ public class SendASync extends AsyncTask<String, Void, Integer> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        sender = new GMailSupport(username,password);
+        sender = new GMailSender(username,password);
     }
 
     @Override
     protected Integer doInBackground(String... params) {
         int success = 0;
         try {
-            sender.sendMail(username, params[2], params[3], params[4]);
+            sender.sendMail(params[3], params[4], params[0], params[2]);
             success = 0;
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
             success = 1;
@@ -46,9 +46,9 @@ public class SendASync extends AsyncTask<String, Void, Integer> {
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
         if (result == 0) {
-            Log.i(TAG, "Succeeded sending Email");
+            Log.i(null, "Succeeded sending Email");
         } else {
-            Log.e(TAG, "Failed sending Email");
+            Log.e(null, "Failed sending Email");
         }
     }
 }
