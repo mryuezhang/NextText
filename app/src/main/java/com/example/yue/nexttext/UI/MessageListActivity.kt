@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +20,7 @@ import android.widget.ListView
 import android.widget.Toast
 import com.example.yue.nexttext.Core.Database.MessageManager
 import com.example.yue.nexttext.Core.SendReceiveService.AlarmReceiver
+import com.example.yue.nexttext.Core.Utility.Constants
 import com.example.yue.nexttext.DataType.MessageWrapper
 import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_list.*
@@ -307,10 +309,16 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     private fun setUpAlarm(messageWrapper: MessageWrapper) {
         if (messageWrapper.timeTrigger != null){
+            Log.d(null, "Alarm is set");
+
+
             val calendar = messageWrapper.timeTrigger!!.getCalendar()
+            val bundle = Bundle()
+            bundle.putParcelable(Constants.FINAL_DATA, messageWrapper)
             val intent = Intent(applicationContext, AlarmReceiver::class.java)
-            intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.TIME_TRIGGER_DATA, messageWrapper)
-            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
+            intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.TIME_TRIGGER_DATA, bundle)
+
+            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, 0)
 
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
         }

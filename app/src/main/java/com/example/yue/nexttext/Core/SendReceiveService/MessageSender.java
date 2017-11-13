@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.telephony.SmsManager;
+import android.util.Log;
 
 import com.example.yue.nexttext.Core.Database.MessageManager;
 import com.example.yue.nexttext.Core.EmailService.GMailSender;
@@ -24,16 +25,19 @@ public class MessageSender extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(null, "DID IT GET HERE?");
         return null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(null, "DID IT GET HERE?");
     }
 
     @Override
     public int onStartCommand(Intent thisIntent, int thisFlag, int thisStartId) {
+        Log.d(null, "DID IT GET HERE?");
         thisManager = new MessageManager(getApplicationContext());
 
         Bundle bundle = thisIntent.getBundleExtra(Constants.FINAL_DATA);

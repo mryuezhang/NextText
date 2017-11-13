@@ -40,5 +40,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="Edit Message">
         </activity>
+        <receiver android:name="com.example.yue.nexttext.Core.SendReceiveService.AlarmReceiver"></receiver>
     </application>
 </manifest>
