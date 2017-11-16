@@ -1,10 +1,13 @@
 package com.example.yue.nexttext.Core.SendReceiveService;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,12 +26,14 @@ public class AlarmReceiver extends BroadcastReceiver {
     MessageWrapper wrapperData = null;
     @Override
     public void onReceive(Context thisContext, Intent thisIntent) {
-        Toast.makeText(thisContext, "Alarm Triggered", Toast.LENGTH_LONG).show();
+        Log.d("alarmReceiver: ", "Got to the receiver.");
 
         Bundle bundle = thisIntent.getBundleExtra(Constants.FINAL_DATA_BUNDLE);
         if (bundle != null){
             wrapperData = (MessageWrapper)bundle.getParcelable(Constants.FINAL_DATA);
         }
+
+        Toast.makeText(thisContext, "Event has been triggered, your message to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
 
         if (wrapperData.getMessage().get_to().contains("@")){
             sendEmail();
@@ -43,8 +48,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public void sendEmail() {
-        final Message message = new Message("YOUR GMAIL ACCOUNT HERE", "YOUR GMAIL PASSWORD HERE", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
-        AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
+        final Message message = new Message("jamespmulvenna@gmail.com", "asklzmV!", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
+        @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(String... strings) {

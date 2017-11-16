@@ -1,10 +1,14 @@
 package com.example.yue.nexttext.UI
 
+import android.Manifest
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -26,6 +30,7 @@ import com.example.yue.nexttext.R
 import kotlinx.android.synthetic.main.activity_message_list.*
 import kotlinx.android.synthetic.main.app_bar_message_list.*
 import kotlinx.android.synthetic.main.content_message_list.*
+import java.util.*
 
 
 class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -309,11 +314,10 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     private fun setUpAlarm(messageWrapper: MessageWrapper) {
         if (messageWrapper.timeTrigger != null){
-            Log.d(null, "Alarm is set");
+            Log.d("setUpAlarm: ", "Alarm is being set.");
 
 
             val calendar = messageWrapper.timeTrigger!!.getCalendar()
-            Log.d(null, calendar.timeInMillis.toString())
             val intent = Intent(applicationContext, AlarmReceiver::class.java)
             val bundle = Bundle()
             bundle.putParcelable(Constants.FINAL_DATA, messageWrapper)
@@ -321,7 +325,36 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
             val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+            if (calendar.timeInMillis <= System.currentTimeMillis()){
+                Log.d("setUpAlarm: ", "The time picked has passed, the alarm won't work properly.")
+            }
+
+            if(!messageWrapper.message._to.contains("@")) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+                    run {
+                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.SEND_SMS),
+                                1)
+                    }
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                    run {
+                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.READ_PHONE_STATE), 1);
+                    }
+            }
+
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+            Log.d(null, "Alarm is set.")
+
+            //Something like this to remove the message from the db and listview
+
+            /*Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    deleteMessageEverywhere(messageWrapper)
+                }
+            }, calendar.timeInMillis)*/
+
+
+
+
         }
     }
 }
