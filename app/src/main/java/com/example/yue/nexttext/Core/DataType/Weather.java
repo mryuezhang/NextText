@@ -2,6 +2,7 @@ package com.example.yue.nexttext.Core.DataType;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,11 +95,11 @@ public class Weather implements Parcelable {
     }
 
 
-    public int getCondition () throws IOException, JSONException {
+    public int getConditionCode() throws IOException, JSONException {
         JSONObject json = readJsonFromUrl(this.getHost());
-        int conditionCode = json.getInt("code");
-
-        return conditionCode;
+        String conditionCode = json.getJSONObject("query").getJSONObject("results").getJSONObject("channel").getJSONObject("item").getJSONObject("condition").getString("code");
+        Log.d("condition code", conditionCode);
+        return Integer.parseInt(conditionCode);
     }
 
 
