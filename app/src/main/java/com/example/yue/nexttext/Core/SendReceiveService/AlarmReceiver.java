@@ -48,7 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public void sendEmail() {
-        final Message message = new Message("jamespmulvenna@gmail.com", "asklzmV!", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
+        final Message message = new Message("PUT EMAIL HERE", "PUT EMAIL PASSWORD HERE", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
         @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
             @Override

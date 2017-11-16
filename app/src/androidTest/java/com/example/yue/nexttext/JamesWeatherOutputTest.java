@@ -3,6 +3,7 @@ package com.example.yue.nexttext;
 import android.util.Log;
 
 import com.example.yue.nexttext.Core.DataType.Weather;
+import com.example.yue.nexttext.Core.Utility.Constants;
 
 import org.json.JSONException;
 import org.junit.Assert;
@@ -30,8 +31,8 @@ public class JamesWeatherOutputTest {
             e.printStackTrace();
         }
 
-        Log.d("condition code", Integer.toString(conditionCode));
+        Log.d("Condition code: ", Integer.toString(conditionCode));
 
-        Assert.assertEquals(conditionCode, 26);
+        Assert.assertEquals(conditionCode, Constants.WEATHER_RAIN);
     }
 }
