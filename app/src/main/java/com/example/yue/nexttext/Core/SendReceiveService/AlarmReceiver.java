@@ -33,22 +33,17 @@ public class AlarmReceiver extends BroadcastReceiver {
             wrapperData = (MessageWrapper)bundle.getParcelable(Constants.FINAL_DATA);
         }
 
-        Toast.makeText(thisContext, "Event has been triggered, your message to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
-
         if (wrapperData.getMessage().get_to().contains("@")){
             sendEmail();
+            Toast.makeText(thisContext, "Event has been triggered, your email to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
         } else {
             sendSms();
+            Toast.makeText(thisContext, "Event has been triggered, your sms to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
         }
-
-        /*Intent intent = new Intent(thisContext, MessageSender.class);
-        intent.putExtra(Constants.SENT_DATA, bundle);
-        thisContext.startService(intent);*/
-
     }
 
     public void sendEmail() {
-        final Message message = new Message("PUT EMAIL HERE", "PUT EMAIL PASSWORD HERE", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
+        final Message message = new Message("jamespmulvenna@gmail.com", "asklzmV!", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
         @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
             @Override
@@ -71,10 +66,10 @@ public class AlarmReceiver extends BroadcastReceiver {
             protected void onPostExecute(Integer result) {
                 super.onPostExecute(result);
                 if (result == 0) {
-                    //succeed
+                    //succeed, delete message from messagelist and database
 
                 } else {
-                    //failed
+                    //failed, try again?
 
                 }
             }
@@ -86,9 +81,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         Message message = new Message(wrapperData.getMessage().get_to(), wrapperData.getMessage().get_content());
         SmsManager smsManager = SmsManager.getDefault();
 
-        /* I don't believe the intents should be null, but not sure what they should be
-        https://developer.android.com/reference/android/telephony/SmsManager.html
-        */
         smsManager.sendTextMessage(message.get_to(), null, message.get_content(), null, null);
     }
 }

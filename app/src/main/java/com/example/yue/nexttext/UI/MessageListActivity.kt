@@ -119,6 +119,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 when(toolbar.title){
                     "SMS" -> setupMessageList_SMSOnly()
                     "Email" -> setupMessageList_EmailsOnly()
+                    "Settings" -> setupSettings()
                     else -> refreshMessgeList()
                 }
                 return true
@@ -136,11 +137,12 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-            R.id.developer_add_dummy_data -> {
+            /*R.id.developer_add_dummy_data -> {
                 messageManager!!.prepareData()
                 refreshMessgeList()
                 true
             }
+            */
             R.id.developer_delete_all_messages ->{
                 deleteAllMessagesEverywhere()
                 true
@@ -160,11 +162,8 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_email_only -> {
                 setupMessageList_EmailsOnly()
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            R.id.nav_settings -> {
+                setupSettings()
             }
         }
 
@@ -277,6 +276,13 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         (message_list.adapter as MessageListAdapter).setMessageList(messageManager!!.allEmails)
     }
 
+    private fun setupSettings(){
+        toolbar.title = "Email Settings"
+        emptyView_text.text = "No settings configured"
+
+        //(message_list.adapter as MessageListAdapter) not sure what to do here, must hide add button as well
+    }
+
     private fun editMessage(position: Int){
         val messageWrapper: MessageWrapper = message_list.getItemAtPosition(position) as MessageWrapper
         val mIntent: Intent = EditMessageActivity.getStartActivityIntent(applicationContext)
@@ -325,36 +331,29 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
             val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+            // For our own purposes to see why the alarm triggered unwanted
             if (calendar.timeInMillis <= System.currentTimeMillis()){
                 Log.d("setUpAlarm: ", "The time picked has passed, the alarm won't work properly.")
             }
 
             if(!messageWrapper.message._to.contains("@")) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-                    run {
-                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.SEND_SMS),
-                                1)
-                    }
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                    run {
-                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.READ_PHONE_STATE), 1);
-                    }
+                checkPermissions()
             }
 
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
             Log.d(null, "Alarm is set.")
-
-            //Something like this to remove the message from the db and listview
-
-            /*Timer().schedule(object : TimerTask() {
-                override fun run() {
-                    deleteMessageEverywhere(messageWrapper)
-                }
-            }, calendar.timeInMillis)*/
-
-
-
-
         }
+    }
+
+    private fun checkPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+            run {
+                ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.SEND_SMS),
+                        1)
+            }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            run {
+                ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.READ_PHONE_STATE), 1);
+            }
     }
 }
