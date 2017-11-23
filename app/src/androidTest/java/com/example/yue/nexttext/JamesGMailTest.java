@@ -39,7 +39,7 @@ public class JamesGMailTest {
         EmailSettings newEmail = new EmailSettings("jamespmulvenna@gmail.com", "asklzmV!");
 
         int actualCode;
-        newEmail.sendConfirmationEmail();
+        newEmail.sendEmail();
         //boolean result = newEmail.validatedEmail(8734, actualCode);
 
     }

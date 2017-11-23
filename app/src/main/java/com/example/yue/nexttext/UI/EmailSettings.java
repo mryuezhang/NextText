@@ -40,9 +40,42 @@ public class EmailSettings {
         this.password = password;
     }
 
+    public void sendEmail() {
+        final Message message = new Message("jamespmulvenna@gmail.com", "asklzmV!", "jamespmulvenna@gmail.com", "test sub", "test cont");
+        @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
+            @Override
+            protected Integer doInBackground(String... strings) {
+                GMailSender gMailSender = new GMailSender(message.get_from(), message.get_password());
 
-    public void sendConfirmationEmail() {
+                int checkError;
+
+                try {
+                    gMailSender.sendMail(message.get_subject(), message.get_content(), message.get_from(), message.get_to());
+                    checkError = 0;
+                } catch (Exception ex) {
+                    checkError = 1;
+                    ex.printStackTrace();
+                }
+                return checkError;
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                super.onPostExecute(result);
+                if (result == 0) {
+                    //succeed, delete message from messagelist and database
+
+                } else {
+                    //failed, try again?
+
+                }
+            }
+        };
+        myAsync.execute(message.get_from(), message.get_password(), message.get_subject(), message.get_content(), message.get_to());
+    }
+
+    public void configureConfirmationEmail() {
         Log.d(null, "Got to sending the email");
         Random r = new Random();
         int code = r.nextInt(9999 - 1000) + 1000;
