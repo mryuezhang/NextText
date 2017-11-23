@@ -119,6 +119,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 when(toolbar.title){
                     "SMS" -> setupMessageList_SMSOnly()
                     "Email" -> setupMessageList_EmailsOnly()
+                    "Email Settings" -> setupMessageList_EmailSettings();
                     else -> refreshMessgeList()
                 }
                 return true
@@ -136,11 +137,6 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-            R.id.developer_add_dummy_data -> {
-                messageManager!!.prepareData()
-                refreshMessgeList()
-                true
-            }
             R.id.developer_delete_all_messages ->{
                 deleteAllMessagesEverywhere()
                 true
@@ -160,11 +156,8 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_email_only -> {
                 setupMessageList_EmailsOnly()
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            R.id.nav_email_settings -> {
+                setupMessageList_EmailSettings()
             }
         }
 
@@ -275,6 +268,12 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         toolbar.title = "Email"
         emptyView_text.text = resources.getString(R.string.empty_view_no_email)
         (message_list.adapter as MessageListAdapter).setMessageList(messageManager!!.allEmails)
+    }
+
+    private fun setupMessageList_EmailSettings(){
+        toolbar.title = "Email Settings"
+        emptyView_text.text = "No settings"
+        (message_list.adapter as MessageListAdapter)
     }
 
     private fun editMessage(position: Int){

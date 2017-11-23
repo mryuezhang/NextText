@@ -8,11 +8,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
-        android:id="@+id/developer_add_dummy_data"
-        android:orderInCategory="100"
-        android:title="Add Dummy Data"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/developer_delete_all_messages"
         android:orderInCategory="100"
         android:title="Delete All Messages"
