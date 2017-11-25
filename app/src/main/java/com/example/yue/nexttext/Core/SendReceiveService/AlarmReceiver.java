@@ -40,11 +40,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             sendSms();
             Toast.makeText(thisContext, "Event has been triggered, your sms to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
         }
-
-        /*Intent intent = new Intent(thisContext, MessageSender.class);
-        intent.putExtra(Constants.SENT_DATA, bundle);
-        thisContext.startService(intent);*/
-
     }
 
     public void sendEmail() {

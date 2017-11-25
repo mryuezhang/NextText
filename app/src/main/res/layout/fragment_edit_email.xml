@@ -5,41 +5,55 @@
     android:layout_height="match_parent">
 
     <com.example.yue.nexttext.UI.EditTextViewWithPrefix
-        android:tag="To     "
         android:id="@+id/edit_to_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="24dp"
+        android:inputType="textEmailAddress|textNoSuggestions"
         android:paddingBottom="24dp"
-        android:inputType="textEmailAddress|textNoSuggestions"/>
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="24dp"
+        android:tag="From" />
 
     <EditText
         android:id="@+id/edit_subject_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top|start"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
+        android:inputType="textEmailSubject|textNoSuggestions"
         android:paddingBottom="24dp"
-        android:text="Name"
-        android:textAlignment="gravity"
-        android:inputType="textEmailSubject|textNoSuggestions"/>
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="Password"
+        android:textAlignment="gravity" />
 
     <EditText
         android:id="@+id/edit_content_email"
-        android:gravity="top|start"
-        android:textAlignment="gravity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="24dp"
+        android:gravity="top|start"
         android:inputType="textMultiLine"
-        android:text="Name" />
+        android:paddingBottom="24dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="To"
+        android:textAlignment="gravity" />
+
+    <EditText
+        android:id="@+id/edit_content_email2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="top|start"
+        android:inputType="textMultiLine"
+        android:paddingBottom="24dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="Name"
+        android:textAlignment="gravity" />
 </LinearLayout>

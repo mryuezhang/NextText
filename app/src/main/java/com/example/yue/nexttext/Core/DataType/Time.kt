@@ -15,6 +15,7 @@ class Time(val date : String,
         calendar.set(Calendar.DAY_OF_MONTH, Utilities.reverseDateFormat_DAY(this.date))
         calendar.set(Calendar.HOUR_OF_DAY, Utilities.reverseTimeFormat_HOUR(this.time))
         calendar.set(Calendar.MINUTE, Utilities.reverseTimeFormat_MINUTE(this.time))
+        calendar.set(Calendar.SECOND, 0)
         return calendar
     }
 

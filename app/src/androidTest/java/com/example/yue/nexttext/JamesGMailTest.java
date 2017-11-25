@@ -7,6 +7,7 @@ package com.example.yue.nexttext;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.example.yue.nexttext.Core.EmailService.EmailSettings;
 import com.example.yue.nexttext.Core.EmailService.GMailSender;
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
@@ -18,17 +19,7 @@ public class JamesGMailTest {
 
     @Test
     public void testGMail() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        Message message = new Message("EMAIL FROM HERE", "PASSWORD HERE", "EMAIL TO HERE", "test subject", "test content");
-        MessageWrapper messageWrapper = new MessageWrapper(message);
-
-        GMailSender gMailSender = new GMailSender(message.get_from(), message.get_password());
-
-        try {
-            gMailSender.sendMail(message.get_subject(), message.get_content(), message.get_from(), message.get_to());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        EmailSettings emailSettings = new EmailSettings("jamespmulvenna@gmail.com", "asklzmV!");
+        emailSettings.sendEmail();
     }
-
 }
