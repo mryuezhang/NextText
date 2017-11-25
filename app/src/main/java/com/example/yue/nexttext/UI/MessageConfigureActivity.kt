@@ -95,9 +95,16 @@ class MessageConfigureActivity : AppCompatActivity() {
                     else if (!Utilities.isEmailValid(fragment.getEmailAddress())){
                         Utilities.invalidEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailAddress()).show()
                     }
+                    else if (!fragment.getEmailFrom().contains("@gmail.com")) {
+                        Utilities.invalidEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailFrom()).show()
+                    }
+                    else if (fragment.getEmailPass() == ""){
+                        Utilities.emptyRecipientDialog(this@MessageConfigureActivity).show()
+                    }
                     else {
                         //TODO This is probably not going to be the final implement
-                        message = Message(null, null, fragment.getEmailAddress(), fragment.getEmailSubject(), fragment.getEmailCompose())
+                        //from, password, to, subject, content
+                        message = Message(fragment.getEmailFrom(), fragment.getEmailPass(), fragment.getEmailAddress(), fragment.getEmailSubject(), fragment.getEmailCompose())
 
                         messageWrapper = MessageWrapper(message)
 
@@ -174,6 +181,8 @@ class MessageConfigureActivity : AppCompatActivity() {
                 inflater?.inflate(R.layout.fragment_email, container, false)
 
         fun getEmailAddress(): String = editTextViewWithPrefix_emailAddress.text.toString()
+        fun getEmailFrom(): String = editTextViewWithPrefix_emailFromAddress.text.toString()
+        fun getEmailPass(): String = editTextViewWithPrefix_emailFromPassword.text.toString()
         fun getEmailSubject(): String = editText_emailSubject.text.toString()
         fun getEmailCompose(): String = editText_composeEmail.text.toString()
     }

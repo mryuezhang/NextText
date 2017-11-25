@@ -14,7 +14,7 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:paddingTop="24dp"
-        android:tag="From" />
+        android:tag="To " />
 
     <EditText
         android:id="@+id/edit_subject_email"
@@ -26,7 +26,7 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="Password"
+        android:text="Subject"
         android:textAlignment="gravity" />
 
     <EditText
@@ -40,20 +40,6 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="To"
-        android:textAlignment="gravity" />
-
-    <EditText
-        android:id="@+id/edit_content_email2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="top|start"
-        android:inputType="textMultiLine"
-        android:paddingBottom="24dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:text="Name"
+        android:text="Content"
         android:textAlignment="gravity" />
 </LinearLayout>

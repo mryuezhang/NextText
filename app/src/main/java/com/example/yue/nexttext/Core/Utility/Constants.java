@@ -9,6 +9,7 @@ public class Constants {
     public final static String FINAL_DATA = "TimeTriggerData";
     public final static String SENT_DATA = "SentData";
 
+
     //COMPRESSED WEATHER CODES
     public final static int WEATHER_SUNNY = 1;
     public final static int WEATHER_CLOUDS = 2;

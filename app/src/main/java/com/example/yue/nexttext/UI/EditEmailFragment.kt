@@ -60,8 +60,6 @@ class EditEmailFragment: Fragment() {
                 else{
                     receivedMessage!!.message._to = edit_to_email.text.toString()
 
-                    receivedMessage!!.message._subject = edit_subject_email.text.toString()
-
                     receivedMessage!!.message._content = edit_content_email.text.toString()
 
                     messageDataPasser!!.onDataPass(receivedMessage!!)

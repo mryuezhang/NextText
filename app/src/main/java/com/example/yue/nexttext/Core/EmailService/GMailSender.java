@@ -4,6 +4,8 @@ package com.example.yue.nexttext.Core.EmailService;
  * Created by jamesmulvenna on 2017-11-01.
  */
 
+import android.util.Log;
+
 import java.security.Security;
 import java.util.Properties;
 
@@ -24,9 +26,20 @@ public class GMailSender extends javax.mail.Authenticator {
     private String password;
     private Session session;
 
+    public String getUser(){ return user; }
+    public String getPassword(){ return password; }
+
+    public void setUser(String newUser){
+        user = newUser;
+    }
+
+    public void setPassword(String newPass){
+        password = newPass;
+    }
+
     public GMailSender(String user, String password) {
-        this.user = user;
-        this.password = password;
+        setUser(user);
+        setPassword(password);
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
@@ -37,20 +50,25 @@ public class GMailSender extends javax.mail.Authenticator {
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.socketFactory.fallback", "false");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.setProperty("mail.smtp.quitwait", "false");
 
         session = Session.getDefaultInstance(props, this);
     }
 
     protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(user, password);
+        return new PasswordAuthentication(getUser(), getPassword());
     }
 
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
+        /*
+        Recipient email must have this link set to on
+        https://myaccount.google.com/lesssecureapps?pli=1
+         */
 
         MimeMessage message = new MimeMessage(session);
         DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-        message.setSender(new InternetAddress(sender));
+        message.setFrom(new InternetAddress(sender));
         message.setSubject(subject);
         message.setDataHandler(handler);
 
@@ -59,6 +77,12 @@ public class GMailSender extends javax.mail.Authenticator {
         else
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
 
-        Transport.send(message);
+        Transport transport = session.getTransport();
+        //Connect to Host (Mail Server)
+        transport.connect(getUser(), getPassword());
+        //Send Email
+        transport.sendMessage(message, message.getAllRecipients());
+        //Close Connection
+        transport.close();
     }
 }

@@ -13,19 +13,37 @@
         android:padding="16dp"
         android:backgroundTint="@color/colorPrimaryVeryLight"/>
 
+    <com.example.yue.nexttext.UI.EditTextViewWithPrefix
+        android:id="@+id/editTextViewWithPrefix_emailFromAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:inputType="textEmailAddress|textNoSuggestions"
+        android:padding="16dp"
+        android:tag="From     " />
+
+    <com.example.yue.nexttext.UI.EditTextViewWithPrefix
+        android:id="@+id/editTextViewWithPrefix_emailFromPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:tag="Password     " />
+
     <EditText
         android:id="@+id/editText_emailSubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/email_subject_hint"
         android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:hint="Subject"
         android:inputType="textEmailSubject|textNoSuggestions"
         android:padding="16dp" />
 
     <EditText
         android:id="@+id/editText_composeEmail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="286dp"
         android:background="#FFF"
         android:ems="10"
         android:gravity="top|start"

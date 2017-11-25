@@ -343,13 +343,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
             Log.d(null, "Alarm is set.")
 
-            //Something like this to remove the message from the db and listview
-
-            /*Timer().schedule(object : TimerTask() {
-                override fun run() {
-                    deleteMessageEverywhere(messageWrapper)
-                }
-            }, calendar.timeInMillis)*/
+            //calendar.timeInMillis
 
 
 

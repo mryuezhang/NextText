@@ -24,6 +24,7 @@ import com.example.yue.nexttext.DataType.MessageWrapper;
 
 public class AlarmReceiver extends BroadcastReceiver {
     MessageWrapper wrapperData = null;
+
     @Override
     public void onReceive(Context thisContext, Intent thisIntent) {
         Log.d("alarmReceiver: ", "Got to the receiver.");
@@ -35,7 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (wrapperData.getMessage().get_to().contains("@")){
             sendEmail();
-            Toast.makeText(thisContext, "Event has been triggered, your email to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
+            Toast.makeText(thisContext, "Event has been triggered, your email to " + wrapperData.getMessage().get_to() + ", and from " + wrapperData.getMessage().get_from() + " is sending now.", Toast.LENGTH_LONG).show();
         } else {
             sendSms();
             Toast.makeText(thisContext, "Event has been triggered, your sms to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
@@ -43,47 +44,45 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public void sendEmail() {
-        final Message message = new Message("jamespmulvenna@gmail.com", "asklzmV!", wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
-        @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
+            final Message message = new Message(wrapperData.getMessage().get_from(), wrapperData.getMessage().get_password(), wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
+            @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
-            @Override
-            protected Integer doInBackground(String... strings) {
-                GMailSender gMailSender = new GMailSender(message.get_from(), message.get_password());
+                @Override
+                protected Integer doInBackground(String... strings) {
+                    GMailSender gMailSender = new GMailSender(message.get_from(), message.get_password());
 
-                int checkError;
+                    int checkError;
 
-                try {
-                    gMailSender.sendMail(message.get_subject(), message.get_content(), message.get_from(), message.get_to());
-                    checkError = 0;
-                } catch (Exception ex) {
-                    checkError = 1;
-                    ex.printStackTrace();
+                    try {
+                        gMailSender.sendMail(message.get_subject(), message.get_content(), message.get_from(), message.get_to());
+                        checkError = 0;
+                    } catch (Exception ex) {
+                        checkError = 1;
+                        ex.printStackTrace();
+                    }
+                    return checkError;
                 }
-                return checkError;
-            }
+                @Override
+                protected void onPostExecute(Integer result) {
+                    super.onPostExecute(result);
+                    if (result == 0) {
+                        //succeed
 
-            @Override
-            protected void onPostExecute(Integer result) {
-                super.onPostExecute(result);
-                if (result == 0) {
-                    //succeed
 
-                } else {
-                    //failed
+                    } else {
+                        //failed
 
+
+                    }
                 }
-            }
-        };
-        myAsync.execute(message.get_from(), message.get_password(), message.get_subject(), message.get_content(), message.get_to());
+            };
+            myAsync.execute(message.get_from(), message.get_password(), message.get_subject(), message.get_content(), message.get_to());
     }
 
     public void sendSms(){
         Message message = new Message(wrapperData.getMessage().get_to(), wrapperData.getMessage().get_content());
         SmsManager smsManager = SmsManager.getDefault();
 
-        /* I don't believe the intents should be null, but not sure what they should be
-        https://developer.android.com/reference/android/telephony/SmsManager.html
-        */
         smsManager.sendTextMessage(message.get_to(), null, message.get_content(), null, null);
     }
 }
