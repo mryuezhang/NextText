@@ -119,7 +119,6 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 when(toolbar.title){
                     "SMS" -> setupMessageList_SMSOnly()
                     "Email" -> setupMessageList_EmailsOnly()
-                    "Email Settings" -> setupMessageList_EmailSettings();
                     else -> refreshMessgeList()
                 }
                 return true
@@ -155,9 +154,6 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
             R.id.nav_email_only -> {
                 setupMessageList_EmailsOnly()
-            }
-            R.id.nav_email_settings -> {
-                setupMessageList_EmailSettings()
             }
         }
 
@@ -328,26 +324,24 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 Log.d("setUpAlarm: ", "The time picked has passed, the alarm won't work properly.")
             }
 
-            if(!messageWrapper.message._to.contains("@")) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-                    run {
-                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.SEND_SMS),
-                                1)
-                    }
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                    run {
-                        ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.READ_PHONE_STATE), 1);
-                    }
-            }
+            checkSmsPermissions(messageWrapper)
 
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
             Log.d(null, "Alarm is set.")
+        }
+    }
 
-            //calendar.timeInMillis
-
-
-
-
+    private fun checkSmsPermissions(messageWrapper: MessageWrapper){
+        if(!messageWrapper.message._to.contains("@")) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+                run {
+                    ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.SEND_SMS),
+                            1)
+                }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                run {
+                    ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(Manifest.permission.READ_PHONE_STATE), 1);
+                }
         }
     }
 }

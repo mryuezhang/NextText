@@ -31,6 +31,15 @@
         android:padding="16dp"
         android:tag="Password     " />
 
+    <com.example.yue.nexttext.UI.EditTextViewWithPrefix
+        android:id="@+id/editTextViewWithPrefix_emailFromPasswordConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryVeryLight"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:tag="Confirm Password     " />
+
     <EditText
         android:id="@+id/editText_emailSubject"
         android:layout_width="match_parent"

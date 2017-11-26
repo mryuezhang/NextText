@@ -17,10 +17,6 @@
             android:id="@+id/nav_email_only"
             android:icon="@drawable/ic_email"
             android:title="Email" />
-        <item
-            android:id="@+id/nav_email_settings"
-            android:icon="@drawable/ic_email_settings"
-            android:title="Email Settings" />
     </group>
 
 </menu>

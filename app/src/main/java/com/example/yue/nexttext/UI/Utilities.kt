@@ -98,9 +98,57 @@ class Utilities {
             return alertDialog
         }
 
+        fun emptyContentDialog(activity: Activity): AlertDialog{
+            val alertDialog = AlertDialog.Builder(activity)
+                    .setMessage("Content can't be empty")
+                    .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
+
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext,R.color.colorPrimary))
+            }
+
+            return alertDialog
+        }
+
+        fun emptyPasswordDialog(activity: Activity): AlertDialog{
+            val alertDialog = AlertDialog.Builder(activity)
+                    .setMessage("Password can't be empty")
+                    .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
+
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext,R.color.colorPrimary))
+            }
+
+            return alertDialog
+        }
+
+        fun mismatchedPasswordDialog(activity: Activity): AlertDialog{
+            val alertDialog = AlertDialog.Builder(activity)
+                    .setMessage("Passwords don't match, please try again")
+                    .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
+
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext,R.color.colorPrimary))
+            }
+
+            return alertDialog
+        }
+
         fun invalidEmailAddressAlertDialog(activity: Activity, invalidAddress: String): AlertDialog{
             val alertDialog = AlertDialog.Builder(activity)
                     .setMessage("The address <$invalidAddress> is invalid")
+                    .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
+
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity.applicationContext, R.color.colorPrimary))
+            }
+
+            return alertDialog
+        }
+
+        fun invalidFromEmailAddressAlertDialog(activity: Activity, invalidAddress: String): AlertDialog{
+            val alertDialog = AlertDialog.Builder(activity)
+                    .setMessage("The address <$invalidAddress> is invalid, must be from @gmail.com!")
                     .setPositiveButton("Ok") { d, _ -> d.cancel() }.create()
 
             alertDialog.setOnShowListener {

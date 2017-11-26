@@ -76,6 +76,9 @@ class MessageConfigureActivity : AppCompatActivity() {
                     if (fragment.getPhoneNumber() == ""){
                        Utilities.emptyRecipientDialog(this@MessageConfigureActivity).show()
                     }
+                    else if (fragment.getSMSContent() == ""){
+                        Utilities.emptyContentDialog(this@MessageConfigureActivity).show()
+                    }
                     else {
                         message = Message(fragment.getPhoneNumber(),fragment.getSMSContent())
 
@@ -96,10 +99,13 @@ class MessageConfigureActivity : AppCompatActivity() {
                         Utilities.invalidEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailAddress()).show()
                     }
                     else if (!fragment.getEmailFrom().contains("@gmail.com")) {
-                        Utilities.invalidEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailFrom()).show()
+                        Utilities.invalidFromEmailAddressAlertDialog(this@MessageConfigureActivity, fragment.getEmailFrom()).show()
                     }
                     else if (fragment.getEmailPass() == ""){
-                        Utilities.emptyRecipientDialog(this@MessageConfigureActivity).show()
+                        Utilities.emptyPasswordDialog(this@MessageConfigureActivity).show()
+                    }
+                    else if (fragment.getEmailPass() != fragment.getConfirmPass()){
+                        Utilities.mismatchedPasswordDialog(this@MessageConfigureActivity).show()
                     }
                     else {
                         //TODO This is probably not going to be the final implement
@@ -183,6 +189,7 @@ class MessageConfigureActivity : AppCompatActivity() {
         fun getEmailAddress(): String = editTextViewWithPrefix_emailAddress.text.toString()
         fun getEmailFrom(): String = editTextViewWithPrefix_emailFromAddress.text.toString()
         fun getEmailPass(): String = editTextViewWithPrefix_emailFromPassword.text.toString()
+        fun getConfirmPass(): String = editTextViewWithPrefix_emailFromPasswordConfirm.text.toString()
         fun getEmailSubject(): String = editText_emailSubject.text.toString()
         fun getEmailCompose(): String = editText_composeEmail.text.toString()
     }

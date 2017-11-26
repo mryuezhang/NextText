@@ -2,11 +2,14 @@ package com.example.yue.nexttext.Core.SendReceiveService;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -35,15 +38,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         if (wrapperData.getMessage().get_to().contains("@")){
-            sendEmail();
-            Toast.makeText(thisContext, "Event has been triggered, your email to " + wrapperData.getMessage().get_to() + ", and from " + wrapperData.getMessage().get_from() + " is sending now.", Toast.LENGTH_LONG).show();
+            sendEmail(thisContext);
         } else {
-            sendSms();
-            Toast.makeText(thisContext, "Event has been triggered, your sms to " + wrapperData.getMessage().get_to() + " is sending now.", Toast.LENGTH_LONG).show();
+            sendSms(thisContext);
         }
     }
 
-    public void sendEmail() {
+    public void sendEmail(final Context context) {
             final Message message = new Message(wrapperData.getMessage().get_from(), wrapperData.getMessage().get_password(), wrapperData.getMessage().get_to(), wrapperData.getMessage().get_subject(), wrapperData.getMessage().get_content());
             @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Integer> myAsync = new AsyncTask<String, Void, Integer>() {
 
@@ -67,11 +68,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                     super.onPostExecute(result);
                     if (result == 0) {
                         //succeed
+                        Toast.makeText(context, "Your email to " + wrapperData.getMessage().get_to() + ", and from " + wrapperData.getMessage().get_from() + " has sent.", Toast.LENGTH_LONG).show();
 
 
                     } else {
                         //failed
-
+                        Toast.makeText(context, "Your email to " + wrapperData.getMessage().get_to() + " failed to send, please retry making sure your password is correct.", Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -79,10 +81,13 @@ public class AlarmReceiver extends BroadcastReceiver {
             myAsync.execute(message.get_from(), message.get_password(), message.get_subject(), message.get_content(), message.get_to());
     }
 
-    public void sendSms(){
+    public void sendSms(Context context){
         Message message = new Message(wrapperData.getMessage().get_to(), wrapperData.getMessage().get_content());
         SmsManager smsManager = SmsManager.getDefault();
 
         smsManager.sendTextMessage(message.get_to(), null, message.get_content(), null, null);
+
+        Toast.makeText(context, "Your sms to " + wrapperData.getMessage().get_to() + " has sent.", Toast.LENGTH_LONG).show();
+
     }
 }
