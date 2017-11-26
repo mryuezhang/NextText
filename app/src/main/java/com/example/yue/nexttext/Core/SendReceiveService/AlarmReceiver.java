@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -15,11 +16,13 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.yue.nexttext.Core.Database.MessageManager;
 import com.example.yue.nexttext.Core.EmailService.GMailSender;
 import com.example.yue.nexttext.Core.EmailService.SendASync;
 import com.example.yue.nexttext.Core.Utility.Constants;
 import com.example.yue.nexttext.DataType.Message;
 import com.example.yue.nexttext.DataType.MessageWrapper;
+import com.example.yue.nexttext.UI.MessageListActivity;
 
 /**
  * Created by jamesmulvenna on 2017-10-24.
@@ -69,12 +72,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                     if (result == 0) {
                         //succeed
                         Toast.makeText(context, "Your email to " + wrapperData.getMessage().get_to() + ", and from " + wrapperData.getMessage().get_from() + " has sent.", Toast.LENGTH_LONG).show();
-
-
                     } else {
                         //failed
                         Toast.makeText(context, "Your email to " + wrapperData.getMessage().get_to() + " failed to send, please retry making sure your password is correct.", Toast.LENGTH_LONG).show();
-
                     }
                 }
             };

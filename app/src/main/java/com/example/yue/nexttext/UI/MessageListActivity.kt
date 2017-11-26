@@ -36,6 +36,7 @@ import java.util.*
 class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var messageManager: MessageManager? = null
     private var alarmManger: AlarmManager? = null
+    private var pendingId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -239,13 +240,32 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
     private fun deleteAllMessagesEverywhere(){
+        if ((message_list.adapter as MessageListAdapter).count > 0) {
+            for (i in 0..pendingId) {
+                //intents wrong
+                val intent = Intent(applicationContext, AlarmReceiver::class.java)
+                var thisAlarmIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, i, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                alarmManger!!.cancel(thisAlarmIntent)
+                Log.d("Cancelled sent message: ", "With the pending id of" + i)
+            }
+        }
         messageManager?.deleteAllMessages()
         (message_list.adapter as MessageListAdapter).deleteAll()
     }
 
     private fun deleteMessageEverywhere(messageWrapper: MessageWrapper){
+        //NOT WORKING PROPERLY, WILL BE EASY TO CANCEL ALARM ONCE WORKS PROPERLY, NOT DELETING MESSAGE ON FIRST TRY, MUST DELETE TWICE
+        //NOT SURE HOW TO FIX
+        /*
+        val intent = Intent(applicationContext, AlarmReceiver::class.java)
+        var thisAlarmIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, messageWrapper.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManger!!.cancel(thisAlarmIntent)
+        */
+
+
         messageManager?.deleteMessageById(messageWrapper.id)
         (message_list.adapter as MessageListAdapter).delete(messageWrapper)
+
     }
 
     private fun refreshMessgeList(){
@@ -264,12 +284,6 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         toolbar.title = "Email"
         emptyView_text.text = resources.getString(R.string.empty_view_no_email)
         (message_list.adapter as MessageListAdapter).setMessageList(messageManager!!.allEmails)
-    }
-
-    private fun setupMessageList_EmailSettings(){
-        toolbar.title = "Email Settings"
-        emptyView_text.text = "No settings"
-        (message_list.adapter as MessageListAdapter)
     }
 
     private fun editMessage(position: Int){
@@ -292,6 +306,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             messageManager?.addMessage(receivedCompleteData)
             (message_list.adapter as MessageListAdapter).add(receivedCompleteData)
             setUpAlarm(receivedCompleteData)
+
         }
     }
 
@@ -318,7 +333,7 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             bundle.putParcelable(Constants.FINAL_DATA, messageWrapper)
             intent.putExtra(com.example.yue.nexttext.Core.Utility.Constants.FINAL_DATA_BUNDLE, bundle)
 
-            val alarmIntent = PendingIntent.getBroadcast(applicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            var alarmIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, pendingId++, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
             if (calendar.timeInMillis <= System.currentTimeMillis()){
                 Log.d("setUpAlarm: ", "The time picked has passed, the alarm won't work properly.")
@@ -327,7 +342,9 @@ class MessageListActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             checkSmsPermissions(messageWrapper)
 
             alarmManger!!.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+
             Log.d(null, "Alarm is set.")
+
         }
     }
 
