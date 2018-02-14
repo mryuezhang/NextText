@@ -10,11 +10,6 @@ Developers(From A to Z [Last name]):
   - Completion: Backend(Database, Models, Services, Backend Utilities, Backend portion of Weather interface (used Yahoo Weather API)), all documentation, scripts, promo video
   - Language: Java/Kotlin
 
-[Devon Plouffe](https://github.com/devon-mp)
- - Task: Back end(Google Maps API)
- - Completion: No implementation, unfinished component diagram for D3
- - Language: Java
-
 [Yue Zhang](https://github.com/mryuezhang)
   - Task: Entire front end
   - Completion: Entire front end, except weather due to time, location was dropped as the backend implementation was incomplete, help with documentation where applicable
